@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.Controllers
 {
-    [Route("api/[controller]/[]action")]
+    [Route("api/[controller]/[action]")]
     [Authorize(Roles = "Admin")]
     public class UserApiController : Controller
     {
