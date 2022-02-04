@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace HomeTechRepair.Models.Identiy
 {
-    public class ApplicationUser
+    public class ApplicationUser: IdentityUser
     {
         [Required, StringLength(50)]
         [PersonalData]
         public string Name { get; set; }
         [Required, StringLength(50)]
         [PersonalData]
-        public string SurName { get; set; }
+        public string Surname { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
     }
