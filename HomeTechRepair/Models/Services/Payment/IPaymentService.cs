@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeTechRepair.Models.Services.Payment
 {
-    interface IPaymentService
+    public interface IPaymentService
     {
         public InstallmentModel CheckInstalment(string binNumber, decimal Price);
         public PaymentResponseModel Pay(PaymentModel model);

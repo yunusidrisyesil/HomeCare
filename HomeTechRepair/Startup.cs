@@ -1,6 +1,8 @@
 using HomeTechRepair.Data;
+using HomeTechRepair.MapperProfiles;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Models.Services;
+using HomeTechRepair.Models.Services.Payment;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -61,10 +63,12 @@ namespace HomeTechRepair
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
-
+            services.AddScoped<IPaymentService, IyzicoPaymentService>();
+            services.AddAutoMapper(options =>
+            {
+                options.AddProfile(typeof(PaymentProfile));
+            });
             services.AddControllersWithViews();
-            //todo payment service eklenecek
-            //todo automapper conf. eklenecek
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,9 +84,12 @@ namespace HomeTechRepair
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller=Home}/{action=index}/{id?}"
-                    );
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapAreaControllerRoute(
+                    name: "admin",
+                    areaName: "admin",
+                    pattern: "admin/{controller=Manage}/{action=Index}/{id?}");
             });
         }
     }
