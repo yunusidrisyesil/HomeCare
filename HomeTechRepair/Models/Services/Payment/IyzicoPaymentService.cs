@@ -15,6 +15,7 @@ namespace HomeTechRepair.Models.Services.Payment
 {
     public class IyzicoPaymentService : IPaymentService
     {
+        //todo adres vb bilgiler düzenlenebilir
         private readonly IConfiguration _configuration;
         private readonly IyzicoPaymentOptions _options;
         private readonly IMapper _mapper;
@@ -24,12 +25,16 @@ namespace HomeTechRepair.Models.Services.Payment
             _configuration = configuration;
             _mapper = mapper;
             _userManager = userManager;
+
+            var section = _configuration.GetSection(IyzicoPaymentOptions.Key);
+            _options = new IyzicoPaymentOptions()
+            {
+                ApiKey = section["ApiKey"],
+                SecretKey = section["SecretKey"],
+                BaseUrl = section["BaseUrl"],
+                ThreedsCallbackUrl = section["ThreedsCallbackUrl "]
+            };
         }
-
-        public string PaymentChannel { get; private set; }
-        public string PaymentGroup { get; private set; }
-        public PaymentCard PaymentCard { get; private set; }
-
         private string GenerateConversationId()
         {
             Random rnd = new Random();
@@ -96,12 +101,35 @@ namespace HomeTechRepair.Models.Services.Payment
         }
         public InstallmentModel CheckInstalment(string binNumber, decimal Price)
         {
-            throw new NotImplementedException();
+            if (binNumber.Length > 6)
+                binNumber = binNumber.Substring(0, 6);
+            var conversationId = GenerateConversationId();
+            var request = new RetrieveInstallmentInfoRequest
+            {
+                Locale = Locale.TR.ToString(),
+                ConversationId = conversationId,
+                BinNumber = binNumber,
+                Price = Price.ToString(new CultureInfo("en-US")),
+            };
+            var result = InstallmentInfo.Retrieve(request, _options);
+            if (result.Status == "Failure")
+            {
+                throw new Exception(result.ErrorMessage);
+            }
+            if (result.ConversationId != conversationId)
+            {
+                throw new Exception("Hatalı istek oluşturuldu.");
+            }
+            var resultModel = _mapper.Map<InstallmentModel>(result.InstallmentDetails[0]);
+
+            return resultModel;
         }
 
         public PaymentResponseModel Pay(PaymentModel model)
         {
-            throw new NotImplementedException();
+            var request = InitialPaymentRequest(model);
+            var payment = Payment.Create(request, _options);
+            return _mapper.Map<PaymentResponseModel>(payment);
         }
     }
 }
