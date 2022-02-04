@@ -22,7 +22,8 @@ namespace HomeTechRepair
 
 
             services.AddControllersWithViews();
-
+            //todo payment service eklenecek
+            //todo automapper conf. eklenecek
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
