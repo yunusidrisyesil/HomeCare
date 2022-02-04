@@ -1,4 +1,5 @@
-﻿@{
+﻿@model RegisterViewModel
+@{
     ViewBag.Title = "Register";
 }
 
@@ -21,7 +22,7 @@
                             </div>
 
                             <!-- Register Form -->
-                            <form>
+                            <form asp-action="Register" asp-controller="Account" method="post">
                                 <div class="form-group form-focus">
                                     <input type="text" class="form-control floating">
                                     <label class="focus-label">Name</label>
