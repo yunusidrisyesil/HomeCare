@@ -7,7 +7,7 @@ namespace HomeTechRepair.Models.Services
 {
     public interface IEmailSender
     {
-        //Task SendAsync(EmailMessage message);
+        Task SendAsync(EmailMessage message);
 
 
 
