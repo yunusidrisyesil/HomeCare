@@ -1,4 +1,5 @@
-﻿@*todo information yapılacak*@
+﻿@model PaymentViewModel
+@*todo information yapılacak*@
 <!-- Page Content -->
 <div class="content">
     <div class="container">
@@ -9,7 +10,7 @@
                     <div class="card-body">
 
                         <!-- Checkout Form -->
-                        <form action="https://dreamguys.co.in/demo/doccure/booking-success.html">
+                        <form action="Index" method="post">
 
                             <!-- Personal Information -->
                             <div class="info-widget">
@@ -57,31 +58,31 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group card-label">
-                                                <label for="card_name">Kart Üzerindeki İsim</label>
+                                                <label for="CardModel.CardHolderName">Kart Üzerindeki İsim</label>
                                                 <input class="form-control" id="card_name" type="text">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group card-label">
-                                                <label for="card_number">Kart Numarası</label>
+                                                <label for="CardModel.CardNumber">Kart Numarası</label>
                                                 <input class="form-control" id="card_number" placeholder="1234  5678  9876  5432" type="text">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group card-label">
-                                                <label for="expiry_month">S.K. Ay</label>
+                                                <label for="CardModel.ExpireMonth">S.K. Ay</label>
                                                 <input class="form-control" id="expiry_month" placeholder="MM" type="text">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group card-label">
-                                                <label for="expiry_year">S.K. Yıl</label>
+                                                <label for="CardModel.ExpireYear">S.K. Yıl</label>
                                                 <input class="form-control" id="expiry_year" placeholder="YY" type="text">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group card-label">
-                                                <label for="cvv">CVV</label>
+                                                <label for="CardModel.Cvc">CVV</label>
                                                 <input class="form-control" id="cvv" type="text">
                                             </div>
                                         </div>
