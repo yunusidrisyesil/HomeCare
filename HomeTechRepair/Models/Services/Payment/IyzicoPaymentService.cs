@@ -128,7 +128,7 @@ namespace HomeTechRepair.Models.Services.Payment
         public PaymentResponseModel Pay(PaymentModel model)
         {
             var request = InitialPaymentRequest(model);
-            var payment = Payment.Create(request, _options);
+            var payment = Iyzipay.Model.Payment.Create(request, _options);
             return _mapper.Map<PaymentResponseModel>(payment);
         }
     }

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Iyzipay;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace HomeTechRepair.Models.Payment
 {
-    public class IyzicoPaymentOptions
+    public class IyzicoPaymentOptions:Options
     {
         public const string Key = "IyzicoOptions";
         public string ThreedsCallbackUrl { get; set; }
