@@ -8,12 +8,10 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace HomeTechRepair.Models.Services.Payment
+namespace HomeTechRepair.Services.Payment
 {
-    public class IyzicoPaymentService : IPaymentService
+    public class IyzicoPaymentService:IPaymentService
     {
         //todo adres vb bilgiler düzenlenebilir
         private readonly IConfiguration _configuration;

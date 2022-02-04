@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using HomeTechRepair.Models;
 using System.Threading.Tasks;
 
-namespace HomeTechRepair.Models.Services
+namespace HomeTechRepair.Services
 {
     public interface IEmailSender
     {
         Task SendAsync(EmailMessage message);
-
-
-
     }
 }
