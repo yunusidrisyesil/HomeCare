@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+   
+    <link rel="shortcut icon" href="~/admin-aset/img/favicon.png" />
+    <link rel="stylesheet" href="~/admin-aset/css/bootstrap.min.css" />
+    <link href="~/admin-aset/css/feathericon.min.css" rel="stylesheet" />
+    <link href="~/admin-aset/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/admin-aset/css/select2.min.css" rel="stylesheet" />
+    <link href="~/admin-aset/css/style.css" rel="stylesheet" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+    @RenderSection("styles", false)
+</head>
+<body>
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>
