@@ -44,6 +44,7 @@ namespace HomeTechRepair
                 options.Password.RequireLowercase = false;
                 options.Password.RequiredLength = 5;
                 options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
 
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
                 options.Lockout.MaxFailedAccessAttempts = 3;
