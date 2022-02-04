@@ -26,6 +26,13 @@ namespace HomeTechRepair.Controllers
 		[HttpPost]
 		public IActionResult Register(RegisterViewModel model)
 		{
+            if (!ModelState.IsValid)
+            {
+				return View(model);
+            }
+
+			var result = _userManager.Users;
+
 			return View();
 		}
 	}
