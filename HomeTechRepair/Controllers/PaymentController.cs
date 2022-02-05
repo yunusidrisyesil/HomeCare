@@ -1,4 +1,5 @@
-﻿using HomeTechRepair.Models.Payment;
+﻿using HomeTechRepair.Extensions;
+using HomeTechRepair.Models.Payment;
 using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -40,7 +41,7 @@ namespace HomeTechRepair.Controllers
                 Customer = new CustomerModel(),
                 CardModel = model.CardModel,
                 Price = 1000,
-                UserId = HttpContext.User.Claims.First(x=> x.Type == ClaimTypes.NameIdentifier).Value,
+                UserId = HttpContext.GetUserId(),
                 Ip = Request.HttpContext.Connection.RemoteIpAddress?.ToString()
             };
             var installmentInfo = _paymentService.CheckInstalment(paymentModel.CardModel.CardNumber, paymentModel.Price);
