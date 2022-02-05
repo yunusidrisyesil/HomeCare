@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 
 namespace HomeTechRepair.Models.Identiy
 {
-    public class ApplicationRole:IdentityRole
+    public class ApplicationRole : IdentityRole
     {
         public ApplicationRole()
         {
 
         }
-        public ApplicationRole(string name, String description)
+        public ApplicationRole(string name)
         {
             this.Name = name;
-            this.Description = description;
         }
-        [StringLength(100)]
-        public string Description { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using HomeTechRepair.Models.Identiy;
+﻿using HomeTechRepair.Models;
+using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,11 +14,26 @@ namespace HomeTechRepair.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+            CheckAndAddRoles();
+        }
+
+        //This method will be moved to admin controller
+        private void CheckAndAddRoles()
+        {
+            foreach (var role in RoleModels.Roles)
+            {
+                if (!_roleManager.RoleExistsAsync(role).Result)
+                {
+                   var result = _roleManager.CreateAsync(new ApplicationRole(role)).Result;
+                }
+            }
         }
 
         [HttpGet]
@@ -61,6 +77,7 @@ namespace HomeTechRepair.Controllers
             return View();
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -72,19 +89,26 @@ namespace HomeTechRepair.Controllers
             var isExist = await _userManager.FindByEmailAsync(model.Email);
             if (isExist == null)
             {
-                var count = _userManager.Users.Count(); // For username 
+                var count = _userManager.Users.Count() + 1; // For username 
                 var user = new ApplicationUser
                 {
                     Name = model.Name,
                     Surname = model.Surname,
                     Email = model.Email,
-                    UserName = (count + 1).ToString(),
+                    UserName = count.ToString(),
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    //TODO Email confirmation and user role 
+                    var role = "Passive";
+                    if (count == 1)
+                    {
+                        role = "Admin";
+                    }
+                    await _userManager.AddToRoleAsync(user, role);
+                    
+                    //TODO Email confirmation
 
                     return RedirectToAction("Login", "Account");
                 }
@@ -97,12 +121,14 @@ namespace HomeTechRepair.Controllers
             }
             return View();
         }
+
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return View("Index", "Homr");
+            return View("Index", "Home");
         }
     }
 }
