@@ -32,6 +32,7 @@ namespace HomeTechRepair.Controllers
             {
                 return View(model);
             }
+
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null)
             {
@@ -40,12 +41,16 @@ namespace HomeTechRepair.Controllers
                 {
                     return RedirectToAction("Index", "Home");
                 }
+                else
+                {
+                    ModelState.AddModelError(nameof(model.Password), "Password is wrong");
+                    return View(model);
+                }
             }
             else
             {
                 return View(model);
             }
-            return View();
         }
 
 
