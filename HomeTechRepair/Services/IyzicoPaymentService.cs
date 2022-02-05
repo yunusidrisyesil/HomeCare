@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace HomeTechRepair.Services.Payment
+namespace HomeTechRepair.Services
 {
     public class IyzicoPaymentService:IPaymentService
     {
@@ -49,7 +49,7 @@ namespace HomeTechRepair.Services.Payment
                 Price = model.Price.ToString(new CultureInfo("en-US")),
                 PaidPrice = model.PaidPrice.ToString(new CultureInfo("en-US")),
                 Currency = Currency.TRY.ToString(),
-                BasketId = GenerateConversationId(),
+                BasketId = GenerateUniqueCode(),
                 PaymentChannel = PaymentChannel.WEB.ToString(),
                 PaymentGroup = PaymentGroup.SUBSCRIPTION.ToString(),
                 PaymentCard = _mapper.Map<PaymentCard>(model.CardModel)
@@ -126,8 +126,15 @@ namespace HomeTechRepair.Services.Payment
         public PaymentResponseModel Pay(PaymentModel model)
         {
             var request = InitialPaymentRequest(model);
-            var payment = Iyzipay.Model.Payment.Create(request, _options);
+            var payment = Payment.Create(request, _options);
             return _mapper.Map<PaymentResponseModel>(payment);
+        }
+        public static string GenerateUniqueCode()
+        {
+            string base64String = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            base64String = System.Text.RegularExpressions.Regex.Replace(base64String, "[/+=]", "");
+
+            return base64String.ToLower(new CultureInfo("en-US", false));
         }
     }
 }
