@@ -1,5 +1,6 @@
 ﻿using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -95,6 +96,13 @@ namespace HomeTechRepair.Controllers
                 return View(model);
             }
             return View();
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return View("Index", "Homr");
         }
     }
 }

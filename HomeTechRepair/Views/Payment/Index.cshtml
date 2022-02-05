@@ -10,8 +10,8 @@
                     <div class="card-body">
 
                         <!-- Checkout Form -->
-                        <form action="Index" method="post">
-
+                        <form asp-action="Index" method="post">
+                            <input asp-for="Installment" type="hidden" id="hdInstallment" value="1" />
                             <!-- Personal Information -->
                             <div class="info-widget">
                                 <h4 class="card-title">Kişisel Bilgiler</h4>
@@ -58,38 +58,61 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group card-label">
-                                                <label for="CardModel.CardHolderName">Kart Üzerindeki İsim</label>
-                                                <input class="form-control" id="card_name" type="text">
+                                                <label asp-for="CardModel.CardHolderName">Kart Üzerindeki İsim</label>
+                                                <input asp-for="CardModel.CardHolderName" class="form-control" id="card_name" type="text">
+                                                <span asp-validation-for="CardModel.CardHolderName"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group card-label">
-                                                <label for="CardModel.CardNumber">Kart Numarası</label>
-                                                <input class="form-control" id="card_number" placeholder="1234  5678  9876  5432" type="text">
+                                                <label asp-for="CardModel.CardNumber">Kart Numarası</label>
+                                                <input asp-for="CardModel.CardNumber" class="form-control" id="card_number" placeholder="1234  5678  9876  5432" type="text">
+                                                <span asp-validation-for="CardModel.CardNumber"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group card-label">
-                                                <label for="CardModel.ExpireMonth">S.K. Ay</label>
-                                                <input class="form-control" id="expiry_month" placeholder="MM" type="text">
+                                                <label asp-for="CardModel.ExpireMonth">S.K. Ay</label>
+                                                <input asp-for="CardModel.ExpireMonth" class="form-control" id="expiry_month" placeholder="MM" type="text">
+                                                <span asp-validation-for="CardModel.ExpireMonth"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group card-label">
-                                                <label for="CardModel.ExpireYear">S.K. Yıl</label>
-                                                <input class="form-control" id="expiry_year" placeholder="YY" type="text">
+                                                <label asp-for="CardModel.ExpireYear">S.K. Yıl</label>
+                                                <input asp-for="CardModel.ExpireYear" class="form-control" id="expiry_year" placeholder="YY" type="text">
+                                                <span asp-validation-for="CardModel.ExpireYear"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group card-label">
-                                                <label for="CardModel.Cvc">CVV</label>
-                                                <input class="form-control" id="cvv" type="text">
+                                                <label asp-for="CardModel.Cvc">CVV</label>
+                                                <input asp-for="CardModel.Cvc" class="form-control" id="cvv" type="text">
+                                                <span asp-validation-for="CardModel.Cvc"></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- /Credit Card Payment -->
+                                <div class="col-lg-6">
+                                <div class="payment-widget">
+                                    <h3 class="title">Taksit Seçenekleri </h3>
+                                    <div class="payment-widget table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Taksit Sayısı</th>
+                                                    <th>Ödenecek Tutar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="table-installment">
+                                            </tbody>
+                                        </table>
+                                    </div>
 
+                                </div>
+                                </div>
                                 <!-- Terms Accept -->
                                 <div class="terms-accept">
                                     <div class="custom-checkbox">
@@ -176,3 +199,69 @@
 
 </div>
 <!-- /Page Content -->
+@section Scripts
+{
+<script>
+    $(document).ready(function() {
+        console.log("Jquery OK");
+        $("#card_number").keyup(function() {
+            var binNumber = $(this).val();
+            if (binNumber.length === 6) {
+                console.log("taksit bilgisi istenecek");
+            }
+        });
+        $("#card_number").blur(function() {
+            var binNumber = $(this).val();
+            if (binNumber.length >= 6 && binNumber.length <= 16) {
+                console.log("taksit bilgisi istenecek: " + binNumber);
+                $.ajax({
+                    url: '@Url.Action("CheckInstallment", "Payment")',
+                    method: 'POST',
+                    data: {
+                        binNumber: binNumber,
+                        price: 1000
+                    },
+                    success: function(response) {
+                        fillInstallments(response.installmentPrices);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+        function fillInstallments(installmentPrices) {
+            $("#table-installment").empty();
+            for (var i = 0; i < installmentPrices.length; i++) {
+                var data = installmentPrices[i];
+                console.log(data);
+                var tr = document.createElement("tr");
+                var td1 = document.createElement("td");
+                var td2 = document.createElement("td");
+                var td3 = document.createElement("td");
+                var radio = document.createElement("input");
+                var label = document.createElement("label");
+                $(radio)
+                    .attr("type", "radio")
+                    .attr("name", "install-radio")
+                    .attr("data", data.installmentNumber)
+                    .attr("id","rd"+i)
+                    .appendTo(td1);
+                $(label)
+                    .attr("for", "rd" + i)
+                    .html(data.installmentNumber)
+                    .appendTo(td1);
+                $(radio).on('change', function() {
+                    $("#hdInstallment").val($(this).attr("data"));
+                });
+                if (i == 0) {
+                    $(radio).prop('checked',true);
+                }
+                $(td2).html(data.price);
+                $(td3).html(data.totalPrice);
+                $(tr).append(td1).append(td2).append(td3).appendTo($("#table-installment"));
+            }
+        }
+    });
+</script>
+}

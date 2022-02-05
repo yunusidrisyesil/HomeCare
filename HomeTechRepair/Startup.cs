@@ -1,8 +1,7 @@
 using HomeTechRepair.Data;
 using HomeTechRepair.MapperProfiles;
 using HomeTechRepair.Models.Identiy;
-using HomeTechRepair.Models.Services;
-using HomeTechRepair.Models.Services.Payment;
+using HomeTechRepair.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -78,9 +77,11 @@ namespace HomeTechRepair
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseRouting();
             app.UseStaticFiles();
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

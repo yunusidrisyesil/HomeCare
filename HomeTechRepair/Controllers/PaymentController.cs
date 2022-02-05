@@ -1,5 +1,6 @@
-﻿using HomeTechRepair.Models.Payment;
-using HomeTechRepair.Services.Payment;
+﻿using HomeTechRepair.Extensions;
+using HomeTechRepair.Models.Payment;
+using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace HomeTechRepair.Controllers
 {
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
@@ -39,10 +41,15 @@ namespace HomeTechRepair.Controllers
                 Customer = new CustomerModel(),
                 CardModel = model.CardModel,
                 Price = 1000,
-                UserId = HttpContext.User.Claims.First(x=> x.Type == ClaimTypes.NameIdentifier).Value,
-                Ip = Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                UserId = HttpContext.GetUserId(),
+                Ip = Request.HttpContext.Connection.RemoteIpAddress?.ToString()
             };
+            var installmentInfo = _paymentService.CheckInstalment(paymentModel.CardModel.CardNumber, paymentModel.Price);
 
+            var installmentNumber =
+                installmentInfo.InstallmentPrices.FirstOrDefault(x => x.InstallmentNumber == model.Installment);
+
+            paymentModel.PaidPrice = decimal.Parse(installmentNumber != null ? installmentNumber.TotalPrice.Replace('.', ',') : installmentInfo.InstallmentPrices[0].TotalPrice.Replace('.', ','));
             var result = _paymentService.Pay(paymentModel);
             return View();
         }

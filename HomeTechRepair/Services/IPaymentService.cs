@@ -1,6 +1,6 @@
 ﻿using HomeTechRepair.Models.Payment;
 
-namespace HomeTechRepair.Services.Payment
+namespace HomeTechRepair.Services
 {
     public interface IPaymentService
     {
