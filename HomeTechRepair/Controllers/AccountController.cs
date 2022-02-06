@@ -14,27 +14,27 @@ namespace HomeTechRepair.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        //private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager )
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager;
-            CheckAndAddRoles();
+         
         }
 
         //This method will be moved to admin controller
-        private void CheckAndAddRoles()
-        {
-            foreach (var role in RoleModels.Roles)
-            {
-                if (!_roleManager.RoleExistsAsync(role).Result)
-                {
-                   var result = _roleManager.CreateAsync(new ApplicationRole(role)).Result;
-                }
-            }
-        }
+        //private void CheckAndAddRoles()
+        //{
+        //    foreach (var role in RoleModels.Roles)
+        //    {
+        //        if (!_roleManager.RoleExistsAsync(role).Result)
+        //        {
+        //           var result = _roleManager.CreateAsync(new ApplicationRole(role)).Result;
+        //        }
+        //    }
+        //}
+
 
         [HttpGet]
         public IActionResult Login()
