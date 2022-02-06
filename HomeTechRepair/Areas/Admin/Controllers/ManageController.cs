@@ -19,8 +19,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             _roleManager = roleManager;
             CheckAndAddRoles();
-
-
         }
 
         private void CheckAndAddRoles()

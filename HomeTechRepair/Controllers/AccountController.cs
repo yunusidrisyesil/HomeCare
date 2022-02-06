@@ -1,10 +1,14 @@
 ﻿using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
+using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace HomeTechRepair.Controllers
@@ -14,27 +18,16 @@ namespace HomeTechRepair.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        //private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IEmailSender _emailSender;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager )
+        public byte[] Encode { get; private set; }
+
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-         
+            _emailSender = emailSender;
         }
-
-        //This method will be moved to admin controller
-        //private void CheckAndAddRoles()
-        //{
-        //    foreach (var role in RoleModels.Roles)
-        //    {
-        //        if (!_roleManager.RoleExistsAsync(role).Result)
-        //        {
-        //           var result = _roleManager.CreateAsync(new ApplicationRole(role)).Result;
-        //        }
-        //    }
-        //}
-
 
         [HttpGet]
         public IActionResult Login()
@@ -108,8 +101,17 @@ namespace HomeTechRepair.Controllers
                     }
                     await _userManager.AddToRoleAsync(user, role);
                     
-                    //TODO Email confirmation
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Scheme);
 
+                    var email = new EmailMessage()
+                    {
+                        Contacts = new string[] { user.Email },
+                        Subject = "Email Confirmation",
+                        Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click Here</a>",
+                    };
+                    await _emailSender.SendAsync(email);
                     return RedirectToAction("Login", "Account");
                 }
 
