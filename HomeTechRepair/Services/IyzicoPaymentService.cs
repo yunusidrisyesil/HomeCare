@@ -49,7 +49,7 @@ namespace HomeTechRepair.Services
                 Price = model.Price.ToString(new CultureInfo("en-US")),
                 PaidPrice = model.PaidPrice.ToString(new CultureInfo("en-US")),
                 Currency = Currency.TRY.ToString(),
-                BasketId = GenerateUniqueCode(),
+                BasketId = GenerateUniqueCode(),//TODO
                 PaymentChannel = PaymentChannel.WEB.ToString(),
                 PaymentGroup = PaymentGroup.SUBSCRIPTION.ToString(),
                 PaymentCard = _mapper.Map<PaymentCard>(model.CardModel)
