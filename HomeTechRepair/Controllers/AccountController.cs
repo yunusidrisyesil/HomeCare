@@ -113,7 +113,7 @@ namespace HomeTechRepair.Controllers
                         role = "Admin";
                     }
                     await _userManager.AddToRoleAsync(user, role);
-                    
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Scheme);
@@ -137,13 +137,96 @@ namespace HomeTechRepair.Controllers
             return View();
         }
 
-
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Logout()
+        public IActionResult ResetPassword()
         {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index","Home");
+            return View();
+        }
+
+     
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                ViewBag.Message = "Not found E-mail";
+            }
+            else
+            {
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Action("ConfirmResetPassword", "Account", new { userId = user.Id, code = code },
+                    protocol: Request.Scheme);
+
+                var emailMessage = new EmailMessage()
+                {
+                    Contacts = new string[] { user.Email },
+                    Body =
+                        $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click Here</a>",
+                    Subject = "Reset Password",
+                };
+                await _emailSender.SendAsync(emailMessage);
+                ViewBag.Message = "Our password update instruction has been sent to your e-mail.";
+            }
+
+            return View();
+        }
+       
+        [HttpGet]
+        public IActionResult ConfirmResetPassword(string userId, string code)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
+            {
+                return BadRequest("Incorrect request");
+            }
+
+            ViewBag.Code = code;
+            ViewBag.UserId = userId;
+
+            return View();
+        }
+
+        
+        [HttpPost]
+        public async Task<IActionResult> ConfirmResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "User not found");
+                return View();
+            }
+
+            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Code));
+
+            var result = await _userManager.ResetPasswordAsync(user, code, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                
+                TempData["Message"] = "Your password has been changed";
+                return View();
+            }
+            else
+            {
+                var message = string.Join("<br>", result.Errors.Select(x => x.Description));
+                TempData["Message"] = message;
+                return View();
+            }
+        }
+
+            [HttpGet]
+            [Authorize]
+            public async Task<IActionResult> Logout()
+            {
+                await _signInManager.SignOutAsync();
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
-}
