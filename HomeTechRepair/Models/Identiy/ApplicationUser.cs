@@ -17,5 +17,8 @@ namespace HomeTechRepair.Models.Identiy
         public string Surname { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
+        //This property is needed if we decide to implement a sms service in the future //https://www.twilio.com/docs/sms/quickstart/csharp-dotnet-core
+        //public bool NotificationPreference { get; set; } //True : mail False: sms
+
     }
 }

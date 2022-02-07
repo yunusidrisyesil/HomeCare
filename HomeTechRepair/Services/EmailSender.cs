@@ -1,18 +1,17 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using HomeTechRepair.Models;
+using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeTechRepair.Models.Services
+namespace HomeTechRepair.Services
 {
     public class EmailSender : IEmailSender
     {
         private readonly IConfiguration _configuration;
-        public EmailSender (IConfiguration configuration)
+        public EmailSender(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -24,27 +23,27 @@ namespace HomeTechRepair.Models.Services
         public string Smtp => _configuration.GetSection
             ("EmailOptions:Smtp").Value;
         public int SmtpPort => Convert.ToInt32
-            (_configuration.GetSection("EmailOption:SmtpPort").Value);
+            (_configuration.GetSection("EmailOptions:SmtpPort").Value);
 
         public async Task SendAsync(EmailMessage message)
         {
             var mail = new MailMessage { From = new MailAddress(this.SenderMail) };
 
-            foreach( var c in message.Contacts)
+            foreach (var c in message.Contacts)
             {
                 mail.To.Add(c);
             }
-            if(message.Cc != null && message.Cc.Length > 0)
+            if (message.Cc != null && message.Cc.Length > 0)
             {
-                foreach( var cc in message.Cc)
+                foreach (var cc in message.Cc)
                 {
                     mail.CC.Add(new MailAddress(cc));
                 }
             }
 
-            if(message.Bcc != null && message.Bcc.Length > 0)
+            if (message.Bcc != null && message.Bcc.Length > 0)
             {
-                foreach(var bcc in message.Bcc)
+                foreach (var bcc in message.Bcc)
                 {
                     mail.Bcc.Add(new MailAddress(bcc));
                 }
@@ -64,11 +63,6 @@ namespace HomeTechRepair.Models.Services
                 EnableSsl = true
             };
             await smptClient.SendMailAsync(mail);
-
-
-
-
-
         }
     }
 }

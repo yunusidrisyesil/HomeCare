@@ -1,0 +1,67 @@
+﻿@model RoleRegisterViewModel
+@*@model HomeTechRepair.Models.RoleModels
+ *@
+@{
+    ViewBag.Title = "RolesRegister";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div>
+            <span></span>
+        </div>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+
+
+                <div class="account-content">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-md-7 col-lg-6 login-left">
+                            <img src="~/assets/img/login-banner.png" class="img-fluid" alt="Doccure Register">
+                        </div>
+                        <div class="col-md-12 col-lg-6 login-right">
+                            <div class="login-header">
+                                <h3>Patient Register <a href="doctor-register.html">Are you a Doctor?</a></h3>
+                            </div>
+                            <form asp-action="RolesRegister" asp-controller="Manage" method="post">
+                                <div class="form-group form-focus">
+                                    <input asp-for="Name" class="form-control floating">
+                                    <label class="focus-label" asp-for="Name"></label>
+                                    <span asp-validation-for="Name"></span>
+                                </div>
+                                <div class="form-group form-focus">
+                                    <input asp-for="Surname" class="form-control floating">
+                                    <label class="focus-label" asp-for="Surname"></label>
+                                    <span asp-validation-for="Surname"></span>
+                                </div>
+                                <div class="form-group form-focus">
+                                    <input asp-for="Email" class="form-control floating">
+                                    <label class="focus-label" asp-for="Email"></label>
+                                    <span asp-validation-for="Email"></span>
+                                </div>
+                                <div class="form-group form-focus">
+                                    <input asp-for="Password" class="form-control floating">
+                                    <label class="focus-label" asp-for="Password"></label>
+                                    <span asp-validation-for="Password"></span>
+                                </div>
+                                <div class="form-group form-focus">
+                                    <input asp-for="ConfirmPassword" class="form-control floating">
+                                    <label class="focus-label" asp-for="ConfirmPassword"></label>
+                                    <span asp-validation-for="ConfirmPassword"></span>
+                                </div>
+
+                                @*@Html.DropDownList("Roles")*@
+                                @* dropdownlist structure will be added for roles models*@
+                            </form>
+                        </div>
+                    </div>
+                </div>
+              
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+

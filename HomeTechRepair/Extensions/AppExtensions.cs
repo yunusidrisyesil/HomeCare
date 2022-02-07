@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace HomeTechRepair.Extensions
@@ -20,6 +22,10 @@ namespace HomeTechRepair.Extensions
 
 
             return string.Join(" ", message);
+        }
+        public static string GetUserId(this HttpContext context)
+        {
+            return context.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
         }
     }
 }

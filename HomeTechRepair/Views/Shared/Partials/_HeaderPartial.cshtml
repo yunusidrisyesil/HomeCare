@@ -1,4 +1,6 @@
-﻿<!-- Header -->
+﻿@inject SignInManager<ApplicationUser> signInManager
+@inject RoleManager<ApplicationRole> roleManager
+<!-- Header -->
 <header class="header">
     <nav class="navbar navbar-expand-lg header-nav">
         <div class="navbar-header">
@@ -9,7 +11,7 @@
                     <span></span>
                 </span>
             </a>
-            <a href="index-2.html" class="navbar-brand logo">
+            <a asp-controller="Home" asp-action="Index" class="navbar-brand logo">
                 <img src="~/assets/img/logo.png" class="img-fluid" alt="Logo">
             </a>
         </div>
@@ -41,14 +43,17 @@
                                 <li><a href="invoice-view.html">Invoice View</a></li>
                             </ul>
                         </li>
-                        <li><a asp-action="Login" asp-controller="Account" >Login</a></li>
-                        <li><a asp-action="Register" asp-controller= "Account">Register</a></li>
+                        <li><a asp-action="Login" asp-controller="Account">Login</a></li>
+                        <li><a asp-action="Register" asp-controller="Account">Register</a></li>
                         <li><a href="forgot-password.html">Forgot Password</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="admin/index.html" target="_blank">Admin</a>
-                </li>
+                @if (Context.User.IsInRole("Admin"))
+                {
+                    <li>
+                        <a href="admin/index.html" target="_blank">Admin</a>
+                    </li>
+                }
                 <li class="login-link">
                     <a asp-action="Login" asp-controller="Account">Login / Signup</a>
                 </li>
@@ -65,7 +70,14 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link header-login" asp-action="Login" asp-controller="Account" >login / Signup </a>
+                @if (signInManager.IsSignedIn(Context.User))
+                {
+                    <a class="nav-link header-login" asp-action="Logout" asp-controller="Account">Logout</a>
+                }
+                else
+                {
+                    <a class="nav-link header-login" asp-action="Login" asp-controller="Account">Login / Signup </a>
+                }
             </li>
         </ul>
     </nav>
