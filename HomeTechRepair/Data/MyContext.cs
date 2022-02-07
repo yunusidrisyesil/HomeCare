@@ -14,6 +14,5 @@ namespace HomeTechRepair.Data
 
         public virtual DbSet<Appointment> Appointments { get; set; }
         public virtual DbSet<SupportTicket> SupportTickets { get; set; }
-        public virtual DbSet<SupportTicketAssign> SupportTicketAssigns{ get; set; }
     }
 }
