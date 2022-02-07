@@ -20,17 +20,6 @@ namespace HomeTechRepair.Extensions
 
 
             return string.Join(" ", message);
-
-
-
-
         }
-
-
-
-
-
-
-
     }
 }
