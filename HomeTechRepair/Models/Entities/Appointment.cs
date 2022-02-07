@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HomeTechRepair.Models.Identiy;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeTechRepair.Models.Entities
@@ -8,7 +9,8 @@ namespace HomeTechRepair.Models.Entities
 		public Guid Id { get; set; }
 		public Guid SupportTicketId { get; set; }
 		public DateTime AppointmentDate { get; set; }
+
 		[ForeignKey(nameof(SupportTicketId))]
 		public virtual SupportTicket SupportTicket { get; set; }
-	}
+    }
 }
