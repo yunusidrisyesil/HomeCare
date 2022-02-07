@@ -1,6 +1,5 @@
 ﻿@model RoleRegisterViewModel
-@*@model HomeTechRepair.Models.RoleModels
- *@
+
 @{
     ViewBag.Title = "RolesRegister";
 }
@@ -49,9 +48,17 @@
                                     <label class="focus-label" asp-for="ConfirmPassword"></label>
                                     <span asp-validation-for="ConfirmPassword"></span>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Roles</label>
+                                        <select class="form-control select">
+                                           @foreach(var item in RoleModels.Roles)
+            {
 
-                                @*@Html.DropDownList("Roles")*@
-                                @* dropdownlist structure will be added for roles models*@
+            }
+                                        </select>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
