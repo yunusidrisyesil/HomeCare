@@ -229,54 +229,6 @@ namespace HomeTechRepair.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Profile()
-        {
-
-            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
-            var model = new UserProfileViewModel()
-            {
-                Email = user.Email,
-                Name = user.Name,
-                Surname = user.Surname,
-                
-            };
-            return View(model);
-        }
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Profile(UserProfileViewModel model)
-        {
-            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
-            user.Name = model.Name;
-            user.Surname = model.Surname;
-            if (user.Email != model.Email)
-            {
-                await _userManager.RemoveFromRoleAsync(user, RoleModels.User);
-                await _userManager.AddToRoleAsync(user, RoleModels.Passive);
-
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                //TODO Email Confirmation
-                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Scheme);
-
-                var emailMessage = new EmailMessage()
-                {
-                    Contacts = new string[] { user.Email },
-                    Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> clicking here</a>",
-                    Subject = "Email Confirmation"
-                };
-                await _emailSender.SendAsync(emailMessage);
-            }
-            var result = await _userManager.UpdateAsync(user);
-            if (!result.Succeeded)
-            {
-                ModelState.AddModelError(string.Empty, ModelState.ToFullErrorString());
-            }
-            return View(model);
-        }
-
         [HttpGet]        
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
