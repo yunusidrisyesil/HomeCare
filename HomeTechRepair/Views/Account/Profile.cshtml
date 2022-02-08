@@ -1,7 +1,59 @@
-﻿@model LoginViewModel
+﻿@model UserProfileViewModel
 
-<div class="control-section">
-    <div class="control_wrapper accordion-control-section">
-        <ejs-textbox asp-for="Password" id="firstname"></ejs-textbox>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                
+                <!-- Profile Settings Form -->
+                <div class="col-md-7 col-lg-8 col-xl-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <form asp-controller="Account" asp-action="Profile" method="post">
+                                <div class="row form-row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="Name"></label>
+                                            <input asp-for="Name" class="form-control" />
+                                            <span asp-validation-for="Name"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="Surname"></label>
+                                            <input asp-for="Surname" class="form-control" />
+                                            <span asp-validation-for="Surname"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>Date of Birth</label>
+                                            <div class="cal-icon">
+                                                <input type="text" class="form-control datetimepicker" value="24-07-1983">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label asp-for="Email"></label>
+                                            <input asp-for="Email" class="form-control" />
+                                            <span asp-validation-for="Email"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <label>Mobile</label>
+                                            <input type="text" value="+1 202-555-0125" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="submit-section">
+                                    <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    <!-- /Profile Settings Form -->
