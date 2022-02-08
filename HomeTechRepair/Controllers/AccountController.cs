@@ -24,7 +24,7 @@ namespace HomeTechRepair.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IEmailSender _emailSender;
-        private readonly MyContext _dbContext;
+     
         public byte[] Encode { get; private set; }
 
         public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, RoleManager<ApplicationRole> roleManager)
@@ -34,8 +34,8 @@ namespace HomeTechRepair.Controllers
             _roleManager = roleManager;
             CheckAndAddRoles();
             _emailSender = emailSender;
-            _roleManager = roleManager;
-            CheckAndAddRoles();
+            
+       
         }
         private void CheckAndAddRoles()
         {
