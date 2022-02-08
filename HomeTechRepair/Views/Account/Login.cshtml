@@ -32,7 +32,8 @@
                                     <span asp-validation-for="Password"></span>
                                 </div>
                                 <div class="text-right">
-                                    <a class="forgot-link" href="forgot-password.html">Forgot Password ?</a>
+                                    <a class="forgot-link" asp-action="ResetPassword" asp-controller="Account">Reset Password ?</a>
+                                 
                                 </div>
                                 <button class="btn btn-primary btn-block btn-lg login-btn" type="submit">Login</button>
                                 <div class="text-center dont-have">Don’t have an account? <a asp-action="Register" asp-controller="Account">Register</a></div>
