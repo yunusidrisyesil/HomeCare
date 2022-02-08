@@ -1,4 +1,7 @@
-﻿using HomeTechRepair.Models;
+﻿using HomeTechRepair.Data;
+using HomeTechRepair.Extensions;
+using HomeTechRepair.Models;
+using HomeTechRepair.Models.Entities;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;
@@ -16,21 +19,24 @@ namespace HomeTechRepair.Controllers
 {
     public class AccountController : Controller
     {
-
+     
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IEmailSender _emailSender;
+        private readonly MyContext _dbContext;
+        public byte[] Encode { get; private set; }
 
         public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+            CheckAndAddRoles();
             _emailSender = emailSender;
             _roleManager = roleManager;
             CheckAndAddRoles();
         }
-
         private void CheckAndAddRoles()
         {
             foreach (var role in RoleModels.Roles)
@@ -41,7 +47,6 @@ namespace HomeTechRepair.Controllers
                 }
             }
         }
-
         [HttpGet]
         public IActionResult Login()
         {
@@ -75,7 +80,6 @@ namespace HomeTechRepair.Controllers
                 return View(model);
             }
         }
-
 
         [HttpGet]
         public IActionResult Register()
@@ -137,6 +141,89 @@ namespace HomeTechRepair.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                ViewBag.Message = "Not found E-mail";
+            }
+            else
+            {
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Action("ConfirmResetPassword", "Account", new { userId = user.Id, code = code },
+                    protocol: Request.Scheme);
+
+                var emailMessage = new EmailMessage()
+                {
+                    Contacts = new string[] { user.Email },
+                    Body =
+                        $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click Here</a>",
+                    Subject = "Reset Password",
+                };
+                await _emailSender.SendAsync(emailMessage);
+                ViewBag.Message = "Our password update instruction has been sent to your e-mail.";
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ConfirmResetPassword(string userId, string code)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
+            {
+                return BadRequest("Incorrect request");
+            }
+
+            ViewBag.Code = code;
+            ViewBag.UserId = userId;
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "User not found");
+                return View();
+            }
+
+            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Code));
+
+            var result = await _userManager.ResetPasswordAsync(user, code, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+
+                TempData["Message"] = "Your password has been changed";
+                return View();
+            }
+            else
+            {
+                var message = string.Join("<br>", result.Errors.Select(x => x.Description));
+                TempData["Message"] = message;
+                return View();
+            }
+        }
 
         [HttpGet]
         [Authorize]
@@ -144,6 +231,52 @@ namespace HomeTechRepair.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> Profile()
+        {
+
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+            var model = new UserProfileViewModel()
+            {
+                Email = user.Email,
+                Name = user.Name,
+                Surname = user.Surname,
+                
+            };
+            return View(model);
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Profile(UserProfileViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+            user.Name = model.Name;
+            user.Surname = model.Surname;
+            if (user.Email != model.Email)
+            {
+                await _userManager.RemoveFromRoleAsync(user, RoleModels.User);
+                await _userManager.AddToRoleAsync(user, RoleModels.Passive);
+
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                //TODO Email Confirmation
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Scheme);
+
+                var emailMessage = new EmailMessage()
+                {
+                    Contacts = new string[] { user.Email },
+                    Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> clicking here</a>",
+                    Subject = "Email Confirmation"
+                };
+                await _emailSender.SendAsync(emailMessage);
+            }
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, ModelState.ToFullErrorString());
+            }
+            return View(model);
         }
     }
 }
