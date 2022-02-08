@@ -19,17 +19,29 @@ namespace HomeTechRepair.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IEmailSender _emailSender;
 
         public byte[] Encode { get; private set; }
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,RoleManager<ApplicationRole> roleManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+            CheckAndAddRoles();
             _emailSender = emailSender;
         }
-
+        private void CheckAndAddRoles()
+        {
+            foreach (var role in RoleModels.Roles)
+            {
+                if (!_roleManager.RoleExistsAsync(role).Result)
+                {
+                    var result = _roleManager.CreateAsync(new ApplicationRole(role)).Result;
+                }
+            }
+        }
         [HttpGet]
         public IActionResult Login()
         {
