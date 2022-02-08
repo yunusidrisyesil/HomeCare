@@ -140,14 +140,14 @@ namespace HomeTechRepair.Controllers
             }
             return View();
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult ResetPassword()
         {
             return View();
         }
 
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> ResetPassword(string email)
         {
