@@ -24,17 +24,15 @@ namespace HomeTechRepair.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly MyContext _dbContext;
         public byte[] Encode { get; private set; }
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, RoleManager<ApplicationRole> roleManager, MyContext dbContext)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _roleManager = roleManager;
             CheckAndAddRoles();
-            _dbContext = dbContext;
         }
         private void CheckAndAddRoles()
         {
@@ -236,8 +234,6 @@ namespace HomeTechRepair.Controllers
         {
 
             var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
-            var address = _dbContext.Addresses.FirstOrDefault(x => x.UserId == user.Id);
-            //TODO how to show
             var model = new UserProfileViewModel()
             {
                 Email = user.Email,
