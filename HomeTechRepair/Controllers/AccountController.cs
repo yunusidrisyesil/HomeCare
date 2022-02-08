@@ -19,12 +19,12 @@ namespace HomeTechRepair.Controllers
 {
     public class AccountController : Controller
     {
-
+     
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IEmailSender _emailSender;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly MyContext _dbContext;
         public byte[] Encode { get; private set; }
 
         public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, RoleManager<ApplicationRole> roleManager)
