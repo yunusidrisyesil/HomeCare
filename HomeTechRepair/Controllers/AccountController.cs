@@ -34,6 +34,7 @@ namespace HomeTechRepair.Controllers
             _roleManager = roleManager;
             CheckAndAddRoles();
             _emailSender = emailSender;
+
         }
         private void CheckAndAddRoles()
         {
