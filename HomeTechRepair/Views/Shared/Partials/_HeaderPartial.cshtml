@@ -48,6 +48,9 @@
                         <li><a href="forgot-password.html">Forgot Password</a></li>
                     </ul>
                 </li>
+                <li>
+                    <a asp-action="CreateTicket" asp-controller="Ticket">Support Ticket</a>
+                </li>
                 @if (Context.User.IsInRole("Admin"))
                 {
                     <li>
