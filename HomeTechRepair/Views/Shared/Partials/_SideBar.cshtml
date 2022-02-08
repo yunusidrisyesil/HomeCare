@@ -1,4 +1,6 @@
-﻿<div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
+﻿@*TODO patient details & invoices etc. must be organised later*@
+
+<div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
     <div class="profile-sidebar">
         <div class="widget-profile pro-widget-content">
             <div class="profile-info-widget">
@@ -15,15 +17,9 @@
             <nav class="dashboard-menu">
                 <ul>
                     <li class="active">
-                        <a asp-controller="Profile" asp-action="Index">
+                        <a asp-controller="Profile" asp-action="Profile">
                             <i class="fas fa-user-cog"></i>
                             <span>Profile Settings</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fas fa-columns"></i>
-                            <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
@@ -40,7 +36,7 @@
                         </a>
                     </li>
                     <li>
-                        <a asp-controller="Account" asp-action="ChangePassword">
+                        <a asp-controller="Profie" asp-action="UpdatePassword">
                             <i class="fas fa-lock"></i>
                             <span>Change Password</span>
                         </a>

@@ -35,8 +35,12 @@ namespace HomeTechRepair.Controllers
         [Authorize]
         public async Task<IActionResult> Details()
         {
-
             var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+            bool isPassive = User.IsInRole(RoleModels.Passive);
+            if (isPassive)
+            {
+                return RedirectToAction("ConfirmEmail", "Profile" );
+            }
             var model = new UserProfileViewModel()
             {
                 Email = user.Email,
@@ -77,6 +81,22 @@ namespace HomeTechRepair.Controllers
                 ModelState.AddModelError(string.Empty, ModelState.ToFullErrorString());
             }
             return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail()
+        {
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var callbackUrl = Url.Action("ConfirmEmail", "Profile", new { userId = user.Id, code = code }, protocol: Request.Scheme);
+            var email = new EmailMessage()
+            {
+                Contacts = new string[] { user.Email },
+                Subject = "Email Confirmation",
+                Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click Here</a>",
+            };
+            await _emailSender.SendAsync(email);
+            return View();
         }
     }
 }
