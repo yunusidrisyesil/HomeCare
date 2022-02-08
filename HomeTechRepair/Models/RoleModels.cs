@@ -2,7 +2,7 @@
 
 namespace HomeTechRepair.Models
 {
-    public class RoleModels
+    public static class RoleModels
     {
         public static string Admin = "Admin";
         public static string Operator = "Operator";

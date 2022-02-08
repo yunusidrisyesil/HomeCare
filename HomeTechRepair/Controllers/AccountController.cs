@@ -233,6 +233,8 @@ namespace HomeTechRepair.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Profile()
         {
 
@@ -277,6 +279,30 @@ namespace HomeTechRepair.Controllers
                 ModelState.AddModelError(string.Empty, ModelState.ToFullErrorString());
             }
             return View(model);
+        }
+
+        [HttpGet]        
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+
+            if(user == null || _userManager.IsInRoleAsync(user,RoleModels.User).Result)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+                
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+
+            if (result.Succeeded)
+            {
+                await _userManager.RemoveFromRoleAsync(user,RoleModels.Passive);
+                await _userManager.AddToRoleAsync(user,RoleModels.User);
+            }
+            return View();
         }
     }
 }
