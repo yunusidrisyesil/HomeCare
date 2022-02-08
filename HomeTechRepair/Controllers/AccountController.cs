@@ -20,14 +20,26 @@ namespace HomeTechRepair.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public byte[] Encode { get; private set; }
-
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _roleManager = roleManager;
+            CheckAndAddRoles();
+        }
+
+        private void CheckAndAddRoles()
+        {
+            foreach (var role in RoleModels.Roles)
+            {
+                if (!_roleManager.RoleExistsAsync(role).Result)
+                {
+                    var result = _roleManager.CreateAsync(new ApplicationRole(role)).Result;
+                }
+            }
         }
 
         [HttpGet]
@@ -101,7 +113,7 @@ namespace HomeTechRepair.Controllers
                         role = "Admin";
                     }
                     await _userManager.AddToRoleAsync(user, role);
-                    
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Scheme);
@@ -131,7 +143,7 @@ namespace HomeTechRepair.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
