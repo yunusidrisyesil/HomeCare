@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -20,9 +20,12 @@
     <link rel="stylesheet" href="~/assets/plugins/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="~/assets/plugins/fontawesome/css/all.min.css">
 
+    <!-- Syncfusion Essential JS 2 Styles -->
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
+
     <!-- Main CSS -->
     <link rel="stylesheet" href="~/assets/css/style.css">
-    @await RenderSectionAsync("Styles",false)
+    @await RenderSectionAsync("Styles", false)
 
 </head>
 <body>
@@ -46,8 +49,12 @@
     <!-- Slick JS -->
     <script src="~/assets/js/slick.js"></script>
 
+    <!-- Syncfusion Essential JS 2 Scripts -->
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+
     <!-- Custom JS -->
     <script src="~/assets/js/script.js"></script>
-    @await RenderSectionAsync("Scripts",false)
+    @await RenderSectionAsync("Scripts", false)
+    <ejs-scripts></ejs-scripts>
 </body>
 </html>
