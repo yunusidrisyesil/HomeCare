@@ -13,31 +13,31 @@ namespace HomeTechRepair.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class ManageController : Controller
     {
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        //private readonly RoleManager<ApplicationRole> _roleManager;
 
         public ManageController(RoleManager<ApplicationRole> roleManager)
         {
-            _roleManager = roleManager;
-            CheckAndAddRoles();
+            //_roleManager = roleManager;
+            //CheckAndAddRoles();
         }
 
-        private void CheckAndAddRoles()
-        {
-            foreach (var role in RoleModels.Roles)
-            {
-                if (!_roleManager.RoleExistsAsync(role).Result)
-                {
-                    var result = _roleManager.CreateAsync(new ApplicationRole(role)).Result;
-                }
-            }
-        }
+        //private void CheckAndAddRoles()
+        //{
+        //    foreach (var role in RoleModels.Roles)
+        //    {
+        //        if (!_roleManager.RoleExistsAsync(role).Result)
+        //        {
+        //            var result = _roleManager.CreateAsync(new ApplicationRole(role)).Result;
+        //        }
+        //    }
+        //}
 
 
-        [HttpGet]
-        public IActionResult RolesRegister()
-        {
-            return View();
-        }
+        //[HttpGet]
+        //public IActionResult RolesRegister()
+        //{
+        //    return View();
+        //}
 
         //method will be posted
 

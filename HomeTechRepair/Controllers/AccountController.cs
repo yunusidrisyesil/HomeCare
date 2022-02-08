@@ -22,6 +22,7 @@ namespace HomeTechRepair.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<ApplicationRole> _roleManager;
         public byte[] Encode { get; private set; }
@@ -30,6 +31,8 @@ namespace HomeTechRepair.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+            CheckAndAddRoles();
             _emailSender = emailSender;
             _roleManager = roleManager;
             CheckAndAddRoles();
