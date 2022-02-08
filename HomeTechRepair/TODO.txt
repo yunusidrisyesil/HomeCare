@@ -1,0 +1,18 @@
+﻿--AcoountController
+Update & Reset Password
+Profile
+
+Address
+
+*Syncfusion*
+
+Ticket all
+
+repository
+
+payment düzenleme 
+billing UI
+
+doctor UI
+
+calender
