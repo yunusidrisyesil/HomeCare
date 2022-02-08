@@ -232,7 +232,8 @@ namespace HomeTechRepair.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Profile()
         {
 
