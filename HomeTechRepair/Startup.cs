@@ -66,6 +66,7 @@ namespace HomeTechRepair
             services.AddAutoMapper(options =>
             {
                 options.AddProfile(typeof(PaymentProfile));
+                options.AddProfile(typeof(AddressProfile));
             });
             services.AddControllersWithViews();
         }

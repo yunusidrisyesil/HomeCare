@@ -36,6 +36,7 @@ namespace HomeTechRepair.Controllers
         public async Task<IActionResult> Details()
         {
             var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+
             bool isPassive = User.IsInRole(RoleModels.Passive);
             if (isPassive)
             {
@@ -83,6 +84,7 @@ namespace HomeTechRepair.Controllers
             return View(model);
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> ConfirmEmail()
         {
             var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());

@@ -1,8 +1,4 @@
-﻿--AcoountController
-Update & Reset Password 
-Profile
-
-Address
+﻿Address
 
 *Syncfusion*
 
