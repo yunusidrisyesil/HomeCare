@@ -1,7 +1,8 @@
-﻿@model RoleRegisterViewModel
+﻿@model EmployeeRegisterViewModel
+@*@model List<RoleDropdownViewModel>*@
 
 @{
-    ViewBag.Title = "RolesRegister";
+    ViewBag.Title = "EmployeeRegister";
 }
 
 <div class="content">
@@ -14,55 +15,51 @@
                 <div class="account-content">
                     <div class="row align-items-center justify-content-center">
                         <div class="col-md-7 col-lg-6 login-left">
-                            <img src="~/assets/img/login-banner.png" class="img-fluid" alt="Doccure Register">
+                           
                         </div>
                         <div class="col-md-12 col-lg-6 login-right">
                             <div class="login-header">
-                                <h3>Patient Register <a href="doctor-register.html">Are you a Doctor?</a></h3>
+                             
                             </div>
-                            <form asp-action="RolesRegister" asp-controller="Manage" method="post">
+                            <form  asp-action="EmployeeRegister" asp-controller="Manage" asp-area="Admin" method="post">
                                 <div class="form-group form-focus">
-                                    <input asp-for="Name" class="form-control floating">
                                     <label class="focus-label" asp-for="Name"></label>
+                                    <input asp-for="Name" class="form-control floating">
+
                                     <span asp-validation-for="Name"></span>
                                 </div>
                                 <div class="form-group form-focus">
-                                    <input asp-for="Surname" class="form-control floating">
                                     <label class="focus-label" asp-for="Surname"></label>
+                                    <input asp-for="Surname" class="form-control floating">
                                     <span asp-validation-for="Surname"></span>
                                 </div>
                                 <div class="form-group form-focus">
-                                    <input asp-for="Email" class="form-control floating">
                                     <label class="focus-label" asp-for="Email"></label>
+                                    <input asp-for="Email" class="form-control floating">
                                     <span asp-validation-for="Email"></span>
                                 </div>
                                 <div class="form-group form-focus">
-                                    <input asp-for="Password" class="form-control floating">
                                     <label class="focus-label" asp-for="Password"></label>
+                                    <input asp-for="Password" class="form-control floating">
                                     <span asp-validation-for="Password"></span>
-                                </div>
-                                <div class="form-group form-focus">
-                                    <input asp-for="ConfirmPassword" class="form-control floating">
-                                    <label class="focus-label" asp-for="ConfirmPassword"></label>
-                                    <span asp-validation-for="ConfirmPassword"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Roles</label>
-                                        <select class="form-control select">
-                                           @foreach(var item in RoleModels.Roles)
-            {
-
-            }
+                                        <select id="DropdownViewModel" class="form-control" asp-for="RoleName" asp-items="@(new SelectList(Model.Roles, "Value", "Text"))">
+                                            <option value="">--Select--</option>
                                         </select>
+                                        <input type="hidden" asp-for="RoleName" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="payment-box mt-30">
+                                        <input type="submit" class="main-btn" value="Add" />
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-              
-
             </div>
         </div>
 

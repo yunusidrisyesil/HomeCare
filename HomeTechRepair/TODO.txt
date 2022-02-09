@@ -1,8 +1,4 @@
-﻿--AcoountController
-Update & Reset Password 
-Profile
-
-Address
+﻿Address
 
 *Syncfusion*
 
@@ -12,6 +8,14 @@ repository
 
 payment düzenleme 
 billing UI
+
+operatorlerın sayfası  tıcketlera doctor ve randevu
+
+
+
+
+
+
 
 doctor UI
 

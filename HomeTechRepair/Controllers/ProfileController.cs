@@ -1,4 +1,5 @@
-﻿using HomeTechRepair.Extensions;
+﻿using AutoMapper;
+using HomeTechRepair.Extensions;
 using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Services;
@@ -31,12 +32,21 @@ namespace HomeTechRepair.Controllers
             _emailSender = emailSender;
         }
 
+    
+
+
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Details()
         {
-
             var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+
+            bool isPassive = User.IsInRole(RoleModels.Passive);
+            if (isPassive)
+            {
+                return RedirectToAction("ConfirmEmail", "Profile" );
+            }
             var model = new UserProfileViewModel()
             {
                 Email = user.Email,
@@ -78,5 +88,44 @@ namespace HomeTechRepair.Controllers
             }
             return View(model);
         }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult UpdatePassword()
+        {
+            return View();
+
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordViewModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                ViewBag.Message = "Password update successful";
+                return RedirectToAction(nameof(Details));
+            }
+            else
+            {
+                ViewBag.Message = $"An error has occurred: {ModelState.ToFullErrorString()}";
+            }
+
+            return RedirectToAction(nameof(Profile));
+
+        }
+
+
+
     }
 }
