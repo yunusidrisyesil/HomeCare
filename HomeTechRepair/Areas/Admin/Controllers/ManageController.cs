@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Authorize(Roles = "Admin")]
     public class ManageController : Controller
     {

@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "My Tickets";
+}
+
+
+<!-- Page Content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h5>My Tickets</h5>
+
+                <ejs-grid id="Grid" dataSource="@ViewBag.DataSource" allowPaging="true">
+                    <e-grid-pagesettings pageSize="5"></e-grid-pagesettings>
+                    <e-grid-columns>
+                        <e-grid-column field="Id" headerText="Ticket ID" textAlign="Right" width="120"></e-grid-column>
+                        <e-grid-column field="Description" headerText="Description" width="150"></e-grid-column>
+                        <e-grid-column field="CreatedDate" headerText="Created Date" width="130" textAlign="Right" format="yMd"></e-grid-column>
+                        <e-grid-column field="ResolutionDate" headerText="Resolution Date" width="120" format="yMd"></e-grid-column>
+                        <e-grid-column field="DoctorName" headerText="DoctorName" width="120"></e-grid-column>
+                    </e-grid-columns>
+                </ejs-grid>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /Page Content -->

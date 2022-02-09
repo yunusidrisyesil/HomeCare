@@ -84,17 +84,18 @@ namespace HomeTechRepair
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller=Home}/{action=index}/{id?}"
-                    );
                 endpoints.MapAreaControllerRoute(
                    name: "admin",
                    areaName: "admin",
                    pattern: "admin/{controller=Manage}/{action=Index}/{id?}"
                    );
+                endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=index}/{id?}"
+                    );
+
             });
-          
+
         }
     }
 }

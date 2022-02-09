@@ -31,11 +31,7 @@
                 <li class="has-submenu">
                     <a href="#">Pages <i class="fas fa-chevron-down"></i></a>
                     <ul class="submenu">
-                        <li><a href="voice-call.html">Voice Call</a></li>
-                        <li><a href="video-call.html">Video Call</a></li>
-                        <li><a href="search.html">Search Doctors</a></li>
-                        <li><a href="calendar.html">Calendar</a></li>
-                        <li><a href="components.html">Components</a></li>
+                        <li><a asp-action="GetTickets" asp-controller="Ticket">My Tickets</a></li>
                         <li class="has-submenu">
                             <a href="invoices.html">Invoices</a>
                             <ul class="submenu">
@@ -43,9 +39,6 @@
                                 <li><a href="invoice-view.html">Invoice View</a></li>
                             </ul>
                         </li>
-                        <li><a asp-action="Login" asp-controller="Account">Login</a></li>
-                        <li><a asp-action="Register" asp-controller="Account">Register</a></li>
-                        <li><a href="forgot-password.html">Forgot Password</a></li>
                     </ul>
                 </li>
                 <li>
@@ -54,7 +47,7 @@
                 @if (Context.User.IsInRole("Admin"))
                 {
                     <li>
-                        <a href="admin/index.html" target="_blank">Admin</a>
+                        <a asp-action="Index" asp-area="admin" asp-controller="Manage">Admin</a>
                     </li>
                 }
                 <li class="login-link">
@@ -68,13 +61,18 @@
                     <i class="far fa-hospital"></i>
                 </div>
                 <div class="header-contact-detail">
-                    <p class="contact-header">Contact</p>
-                    <p class="contact-info-header"> +1 315 369 5943</p>
+                    @if (signInManager.IsSignedIn(Context.User))
+                    {
+                        <a class="nav-link header-login" asp-action="Details" asp-controller="Profile">Profile</a>
+                    }
+                    @*<p class="contact-header">Contact</p>
+                        <p class="contact-info-header"> +1 315 369 5943</p>*@
                 </div>
             </li>
             <li class="nav-item">
                 @if (signInManager.IsSignedIn(Context.User))
                 {
+
                     <a class="nav-link header-login" asp-action="Logout" asp-controller="Account">Logout</a>
                 }
                 else

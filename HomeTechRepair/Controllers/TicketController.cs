@@ -5,7 +5,9 @@ using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HomeTechRepair.Controllers
@@ -58,6 +60,14 @@ namespace HomeTechRepair.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+        }
+
+        public IActionResult GetTickets()
+        {
+            //TODO Get Doctor Name
+            var data = _dbContext.SupportTickets.ToList().Where(x => x.UserId == HttpContext.GetUserId()).ToList();
+            ViewBag.DataSource = data;
+            return View();
         }
     }
 }
