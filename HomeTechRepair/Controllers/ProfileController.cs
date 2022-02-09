@@ -40,8 +40,13 @@ namespace HomeTechRepair.Controllers
         [Authorize]
         public async Task<IActionResult> Details()
         {
-
             var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+
+            bool isPassive = User.IsInRole(RoleModels.Passive);
+            if (isPassive)
+            {
+                return RedirectToAction("ConfirmEmail", "Profile" );
+            }
             var model = new UserProfileViewModel()
             {
                 Email = user.Email,

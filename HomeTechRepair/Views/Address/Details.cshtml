@@ -1,0 +1,60 @@
+﻿@model AddressViewModel
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <partial name="Partials/_SideBar" />
+            <!-- Profile Settings Form -->
+            <div class="col-md-7 col-lg-8 col-xl-9">
+                <div class="card">
+                    <div class="card-body">
+                        <form asp-controller="Address" asp-action="Details" method="post">
+                            <div class="row form-row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="DoorNo"></label>
+                                        <input asp-for="DoorNo" class="form-control" />
+                                        <span asp-validation-for="DoorNo"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="StreetName"></label>
+                                        <input asp-for="StreetName" class="form-control" />
+                                        <span asp-validation-for="StreetName"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="BuildingNo"></label>
+                                        <input asp-for="BuildingNo" class="form-control" />
+                                        <span asp-validation-for="BuildingNo"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Line"></label>
+                                        <input asp-for="Line" class="form-control" />
+                                        <span asp-validation-for="Line"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label asp-for="Description"></label>
+                                        <textarea asp-for="Description" class="form-control form-group" rows="3"></textarea>
+                                        @*<input asp-for="Description" class="form-control form-group"  />*@
+                                        <span asp-validation-for="Description"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="submit-section">
+                                <button type="submit" class="btn btn-primary submit-btn">Save Changes</button>
+                                <button asp-controller="Address" asp-action="Delete" type="submit" class="btn btn-primary submit-btn">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

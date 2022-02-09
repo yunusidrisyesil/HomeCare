@@ -83,7 +83,6 @@ namespace HomeTechRepair.Controllers
             return View();
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
