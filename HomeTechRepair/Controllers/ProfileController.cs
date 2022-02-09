@@ -1,4 +1,5 @@
-﻿using HomeTechRepair.Extensions;
+﻿using AutoMapper;
+using HomeTechRepair.Extensions;
 using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Services;
@@ -30,6 +31,10 @@ namespace HomeTechRepair.Controllers
             _roleManager = roleManager;
             _emailSender = emailSender;
         }
+
+    
+
+
 
         [HttpGet]
         [Authorize]
@@ -83,22 +88,44 @@ namespace HomeTechRepair.Controllers
             }
             return View(model);
         }
-        [HttpGet]
+
         [Authorize]
-        public async Task<IActionResult> ConfirmEmail()
+        [HttpGet]
+        public IActionResult UpdatePassword()
         {
-            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Action("ConfirmEmail", "Profile", new { userId = user.Id, code = code }, protocol: Request.Scheme);
-            var email = new EmailMessage()
-            {
-                Contacts = new string[] { user.Email },
-                Subject = "Email Confirmation",
-                Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click Here</a>",
-            };
-            await _emailSender.SendAsync(email);
             return View();
+
         }
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordViewModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                ViewBag.Message = "Password update successful";
+                return RedirectToAction(nameof(Details));
+            }
+            else
+            {
+                ViewBag.Message = $"An error has occurred: {ModelState.ToFullErrorString()}";
+            }
+
+            return RedirectToAction(nameof(Profile));
+
+        }
+
+
+
     }
 }
