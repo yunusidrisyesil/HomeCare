@@ -41,46 +41,79 @@ namespace HomeTechRepair.Controllers
         }
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> DetailsAsync(AddressViewModel model)
+        public async Task<IActionResult> Details(AddressViewModel model)
         {
-            model.UserId = HttpContext.GetUserId();
-            if (model.UserId == null)
+            if (!ModelState.IsValid)
             {
-                var newAddress = new Address()
-                {
-                    UserId = HttpContext.GetUserId(),
-                    BuildingNo = model.BuildingNo,
-                    Description = model.Description,
-                    DoorNo = model.DoorNo,
-                    Line = model.Line,
-                    StreetName = model.StreetName,
-                    StateId = 1,
-                };
-                _dbContext.Addresses.Add(newAddress);
-                await _dbContext.SaveChangesAsync();
                 return View(model);
             }
-            var address = _dbContext.Addresses.FirstOrDefault(x => x.UserId == model.UserId);
-            address.BuildingNo = model.BuildingNo;
-            address.Description = model.Description;
-            address.DoorNo = model.DoorNo;
-            address.Line = model.Line;
-            address.StreetName = model.StreetName;
-            var result = await _dbContext.SaveChangesAsync();
+            var addres = _dbContext.Addresses.FirstOrDefault(x => x.UserId == HttpContext.GetUserId());
+            if (addres is null)
+            {
+                try
+                {
+                    var newAddress = new Address()
+                    {
+                        UserId = HttpContext.GetUserId(),
+                        BuildingNo = model.BuildingNo,
+                        Description = model.Description,
+                        DoorNo = model.DoorNo,
+                        Line = model.Line,
+                        StreetName = model.StreetName,
+                        StateId = 1,
+                    };
 
-            return View(model);
+                    _dbContext.Addresses.Add(newAddress);
+                    await _dbContext.SaveChangesAsync();
+
+
+                    return View(model);
+                }
+                catch (Exception ex)
+                {
+
+                    ModelState.AddModelError(string.Empty, "New Address cannot added. Please try again");
+                    return View(model);
+                }
+
+            }
+            try
+            {
+                var address = _dbContext.Addresses.FirstOrDefault(x => x.UserId == model.UserId);
+                address.BuildingNo = model.BuildingNo;
+                address.Description = model.Description;
+                address.DoorNo = model.DoorNo;
+                address.Line = model.Line;
+                address.StreetName = model.StreetName;
+                var result = await _dbContext.SaveChangesAsync();
+
+                return View(model);
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Address cannot changed. Please try again");
+                return View(model);
+            }
+
         }
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Delete(AddressViewModel model)
+        public async Task<IActionResult> Delete()
         {
-            model.UserId = HttpContext.GetUserId();
-            var data = _dbContext.Addresses.FirstOrDefault(x=>x.UserId==model.UserId);
+            try
+            {
+                var data = _dbContext.Addresses.FirstOrDefault(x => x.UserId == HttpContext.GetUserId());
 
-            _dbContext.Addresses.Remove(data);
-            var result = await _dbContext.SaveChangesAsync();
+                _dbContext.Addresses.Remove(data);
+                var result = await _dbContext.SaveChangesAsync();
+                return RedirectToAction("Details", "Address");
 
-            return RedirectToAction("Details", "Address");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Address cannot deleted. Please try again");
+                return RedirectToAction("Details", "Address");
+            }
 
         }
     }
