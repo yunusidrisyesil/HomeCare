@@ -7,6 +7,7 @@ using HomeTechRepair.Models.Entities;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -68,6 +69,19 @@ namespace HomeTechRepair.Controllers
             var result = await _dbContext.SaveChangesAsync();
 
             return View(model);
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Delete(AddressViewModel model)
+        {
+            model.UserId = HttpContext.GetUserId();
+            var data = _dbContext.Addresses.FirstOrDefault(x=>x.UserId==model.UserId);
+
+            _dbContext.Addresses.Remove(data);
+            var result = await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Address");
+
         }
     }
 }
