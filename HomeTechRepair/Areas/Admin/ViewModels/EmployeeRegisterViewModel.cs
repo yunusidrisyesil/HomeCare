@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HomeTechRepair.Areas.Admin.ViewModels
 {
-	public class RoleRegisterViewModel
+	public class EmployeeRegisterViewModel
 	{
 		[Required]
 		[Display(Name = "Name")]
@@ -21,16 +21,11 @@ namespace HomeTechRepair.Areas.Admin.ViewModels
 		[DataType(DataType.Password)]
 		[Display(Name = "Password")]
 		public string Password { get; set; }
-		[Required(ErrorMessage = "Password cannot be empty")]
-		[DataType(DataType.Password)]
-		[Display(Name = "Confirm Password")]
-		[Compare(nameof(Password),ErrorMessage ="Passwords don't match")]
-		public string ConfirmPassword { get; set; }
-		[Required]
-		[DataType(DataType.Text)]
 		[Display(Name ="Roles Type")]
-		public static List<string> Roles { get; set; }
+		public List<DropdownViewModel> Roles { get; set; }
+		[Required]
+        public string RoleName { get; set; }
 
 
-	}
+    }
 }

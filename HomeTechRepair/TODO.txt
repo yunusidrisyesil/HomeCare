@@ -13,6 +13,14 @@ repository
 payment düzenleme 
 billing UI
 
+operatorlerın sayfası  tıcketlera doctor ve randevu
+
+
+
+
+
+
+
 doctor UI
 
 calender
