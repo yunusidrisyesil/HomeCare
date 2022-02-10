@@ -30,6 +30,7 @@ namespace HomeTechRepair.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _emailSender = emailSender;
             CheckAndAddRoles();
         }
 
@@ -126,7 +127,6 @@ namespace HomeTechRepair.Controllers
                     await _emailSender.SendAsync(email);
                     return RedirectToAction("Login", "Account");
                 }
-
             }
             else
             {
