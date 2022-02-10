@@ -4,40 +4,64 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-   
-    <link rel="shortcut icon" href="~/admin-aset/img/favicon.png" />
-    <link rel="stylesheet" href="~/admin-aset/css/bootstrap.min.css" />
-    <link href="~/admin-aset/css/feathericon.min.css" rel="stylesheet" />
-    <link href="~/admin-aset/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="~/admin-aset/css/select2.min.css" rel="stylesheet" />
-    <link href="~/admin-aset/css/style.css" rel="stylesheet" />
+    <meta charset="utf-8">
+    <title>Doccure - Dashboard</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/admin-aset/img/favicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/admin-aset/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="~/admin-aset/css/font-awesome.min.css">
+
+    <!-- Feathericon CSS -->
+    <link rel="stylesheet" href="~/admin-aset/css/feathericon.min.css">
+
+    <link rel="stylesheet" href="~/admin-aset/plugins/morris/morris.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="~/admin-aset/css/style.css">
+    <!-- Syncfusion Essential JS 2 Styles -->
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
 
     @await RenderSectionAsync("Styles", required: false)
 
-    @RenderSection("styles", false)
 </head>
 <body>
 
+    <!--====== Header Part Start ======-->
+    @*<partial name="Partials/_HeaderPartial" />*@
+    <!--====== Header Part End ======-->
+    @RenderBody()
 
-    
-
-
-
-
-
-
+    @*<partial name="Partials/_SidebarPartial" />*@
 
 
+    <!-- jQuery -->
+    <script src="~/admin-aset/js/jquery-3.2.1.min.js"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="~/admin-aset/js/popper.min.js"></script>
+    <script src="~/admin-aset/js/bootstrap.min.js"></script>
+
+    <!-- Slimscroll JS -->
+    <script src="~/admin-aset/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <script src="~/admin-aset/plugins/raphael/raphael.min.js"></script>
+    <script src="~/admin-aset/plugins/morris/morris.min.js"></script>
+    <script src="~/admin-aset/js/chart.morris.js"></script>
+
+    <!-- Custom JS -->
+    <script src="~/admin-aset/js/script.js"></script>
 
 
+    <!-- Syncfusion Essential JS 2 Scripts -->
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+    <ejs-scripts></ejs-scripts>
 
+    @await RenderSectionAsync("Scripts", false)
 
-
-
-
-
-    <div>
-        @RenderBody()
-    </div>
 </body>
 </html>

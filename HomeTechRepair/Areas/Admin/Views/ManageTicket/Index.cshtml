@@ -1,0 +1,34 @@
+﻿
+@{
+
+    List<object> commands = new List<object>();
+    commands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit", cssClass = "e-flat" } });
+    commands.Add(new { type = "Delete", buttonOption = new { iconCss = "e-icons e-delete", cssClass = "e-flat" } });
+    commands.Add(new { type = "Save", buttonOption = new { iconCss = "e-icons e-update", cssClass = "e-flat" } });
+    commands.Add(new { type = "Cancel", buttonOption = new { iconCss = "e-icons e-cancel-icon", cssClass = "e-flat" } });
+
+}
+@{
+    var DropDownList = new Syncfusion.EJ2.DropDowns.DropDownList() { DataSource = ViewBag.DropDownData, Query = "new ej.data.Query()", AllowFiltering = true, Fields = new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings() { Value = "Value", Text = "Text" }, ActionComplete = "actionComplete" };
+}
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h5>My Tickets</h5>
+                <ejs-grid id="Grid" dataSource="ViewBag.DataSource" allowPaging="true">
+                    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true"></e-grid-editSettings>
+                    <e-grid-pagesettings pageCount="20"></e-grid-pagesettings>
+                    <e-grid-columns>
+                        <e-grid-column field="Id" headerText="Ticket ID" textAlign="Right" width="120"></e-grid-column>
+                        <e-grid-column field="Description" headerText="Description" width="150"></e-grid-column>
+                        <e-grid-column field="CreatedDate" headerText="Created Date" width="130" textAlign="Right" format="yMd"></e-grid-column>
+                        <e-grid-column field="ResolutionDate" headerText="Resolution Date" editType="datepickeredit" width="120" format="yMd"></e-grid-column>
+                        <e-grid-column field="DoctorName" headerText="DoctorName" width="120" editType="dropdownedit"  ></e-grid-column>
+                        <e-grid-column headerText="Manage Records" width="150" commands="commands"></e-grid-column>
+                    </e-grid-columns>
+                </ejs-grid>
+            </div>
+        </div>
+    </div>
+</div>
