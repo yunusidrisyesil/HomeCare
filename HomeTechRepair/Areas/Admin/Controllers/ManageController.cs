@@ -55,15 +55,14 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             foreach (var role in RoleModels.Roles)
             {
                 var data = await _roleManager.FindByNameAsync(role);
-               model.Roles.Add(new DropdownViewModel {
+                model.Roles.Add(new DropdownViewModel
+                {
                     Text = data.Name,
                     Value = data.Name
                 });
             }
             return View(model);
         }
-
-
 
         [HttpPost]
         public async Task<IActionResult> EmployeeRegister(EmployeeRegisterViewModel model)
@@ -73,14 +72,14 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 return View(model);
             }
             var user = await _userManager.FindByNameAsync(model.Name);
-            if(user != null)
+            if (user != null)
             {
                 ModelState.AddModelError(nameof(model.Name), "This user has already been registered.");
                 return View(model);
             }
 
             user = await _userManager.FindByEmailAsync(model.Email);
-            if(user != null)
+            if (user != null)
             {
                 ModelState.AddModelError(nameof(model.Email), "This email has already been registered");
                 return View(model);
@@ -93,11 +92,11 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 Email = model.Email,
                 UserName = count.ToString()
             };
-            
+
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-              await  _userManager.AddToRoleAsync(user, model.RoleName);
+                await _userManager.AddToRoleAsync(user, model.RoleName);
                 //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
@@ -109,7 +108,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 //        $"User registered successfully",
                 //    Subject = "...."
                 //};
-              
+
 
                 return RedirectToAction("Login", "Account");
             }
@@ -119,11 +118,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 return View(model);
             }
         }
+    }
+}
 
-
-            }
-
-
-        }
-
- 
