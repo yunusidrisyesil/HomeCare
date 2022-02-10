@@ -1,4 +1,5 @@
-﻿using HomeTechRepair.Data;
+﻿using AutoMapper;
+using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using HomeTechRepair.Models.Entities;
 using HomeTechRepair.Models.Identiy;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,10 +18,12 @@ namespace HomeTechRepair.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly MyContext _dbContext;
-        public TicketController(UserManager<ApplicationUser> userManager, MyContext dbContext)
+        private readonly IMapper _mapper;
+        public TicketController(UserManager<ApplicationUser> userManager, MyContext dbContext, IMapper mapper)
         {
             _userManager = userManager;
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public IActionResult CreateTicket()
@@ -62,11 +66,21 @@ namespace HomeTechRepair.Controllers
             }
         }
 
-        public IActionResult GetTickets()
+        public async Task<IActionResult> GetTicketsAsync()
         {
-            //TODO Get Doctor Name
-            var data = _dbContext.SupportTickets.ToList().Where(x => x.UserId == HttpContext.GetUserId()).ToList();
-            ViewBag.DataSource = data;
+            var ticketList = _dbContext.SupportTickets.Where(x => x.UserId == HttpContext.GetUserId());
+            List<UserTicketViewModel> model = new List<UserTicketViewModel>();
+            foreach (var item in ticketList)
+            {
+                var data = _mapper.Map<UserTicketViewModel>(item);
+                if (item.DoctorId != null)
+                {
+                    var doctor = await _userManager.FindByIdAsync(item.DoctorId);
+                    data.DoctorName = doctor.Name;
+                }
+                model.Add(data);
+            }
+            ViewBag.DataSource = model;
             return View();
         }
     }

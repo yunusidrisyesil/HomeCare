@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace HomeTechRepair.MapperProfiles
 {
-    public class AddressProfile:Profile
+    public class EntityProfile : Profile
     {
-        public AddressProfile()
+        public EntityProfile()
         {
             CreateMap<AddressViewModel, Address>().ReverseMap();
+            CreateMap<UserTicketViewModel, SupportTicket>().ReverseMap();
         }
     }
 }
