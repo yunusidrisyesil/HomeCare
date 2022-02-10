@@ -1,0 +1,27 @@
+﻿@{ 
+    ViewBag.Title = "Appoinment";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1>Appoinmnets</h1>
+                <ejs-grid id="Grid" dataSource="@ViewBag.DataSource" allowPaging="true">
+                    <e-grid-columns>
+                        <e-grid-column field="AppoinmnetDate" headerText="AppoinmentDate" textAlign="Right" width="120"></e-grid-column>
+                        <e-grid-column field="Id" headerText="Id" width="150"></e-grid-column>
+                        <e-grid-column field="SupportTicketId" headerText="SupportTicket Id" width="150"></e-grid-column>
+                        <e-grid-column field="AppoinmentDate" headerText=" Appoinment Date" textAlign="Right" format="yMd" width="130"></e-grid-column>
+                    </e-grid-columns>
+
+                </ejs-grid>
+            </div>
+
+        </div>
+        </div>
+         </div>
+
+
+
+
