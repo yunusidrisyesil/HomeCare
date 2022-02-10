@@ -5,6 +5,7 @@ using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +29,13 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             ViewBag.DataSource = _dbContext.SupportTickets.ToList().Where(x => x.UserId == HttpContext.GetUserId()).ToList();
             var data = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
-            var ddl = new List<DropdownViewModel>();
+            List<object> ddl = new List<object>();
             foreach (var item in data)
             {
-                ddl.Add(new DropdownViewModel
+                ddl.Add(new
                 {
-                    Text = item.Name,
-                    Value = item.Id
+                    text = item.Name,
+                    id = item.UserName
                 });
             }
             ViewBag.DropDownData = ddl;

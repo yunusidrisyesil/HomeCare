@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
 
     List<object> commands = new List<object>();
     commands.Add(new { type = "Edit", buttonOption = new { iconCss = "e-icons e-edit", cssClass = "e-flat" } });
@@ -9,7 +8,11 @@
 
 }
 @{
-    var DropDownList = new Syncfusion.EJ2.DropDowns.DropDownList() { DataSource = ViewBag.DropDownData, Query = "new ej.data.Query()", AllowFiltering = true, Fields = new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings() { Value = "Value", Text = "Text" }, ActionComplete = "actionComplete" };
+    var DropDownList = new Syncfusion.EJ2.DropDowns.DropDownList() {
+        DataSource = ViewBag.DropDownData,
+        Query = "new ej.data.Query()",
+        AllowFiltering = true,
+        Fields = new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings() { Value = "id", Text = "text" }};
 }
 <div class="content">
     <div class="container-fluid">
@@ -24,7 +27,7 @@
                         <e-grid-column field="Description" headerText="Description" width="150"></e-grid-column>
                         <e-grid-column field="CreatedDate" headerText="Created Date" width="130" textAlign="Right" format="yMd"></e-grid-column>
                         <e-grid-column field="ResolutionDate" headerText="Resolution Date" editType="datepickeredit" width="120" format="yMd"></e-grid-column>
-                        <e-grid-column field="DoctorName" headerText="DoctorName" width="120" editType="dropdownedit"  ></e-grid-column>
+                        <e-grid-column field="Name" headerText="Name" width="120" editType="dropdownedit" edit="new {@params = DropDownList}"></e-grid-column>
                         <e-grid-column headerText="Manage Records" width="150" commands="commands"></e-grid-column>
                     </e-grid-columns>
                 </ejs-grid>
@@ -32,3 +35,14 @@
         </div>
     </div>
 </div>
+
+@*@section Scripts{
+
+    <script>
+        $(document).ready(function() {
+        console.log("Jquery OKa");
+    });
+    </script>
+}
+
+*@
