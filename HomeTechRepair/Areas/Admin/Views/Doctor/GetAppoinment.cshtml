@@ -1,26 +1,28 @@
-﻿@{ 
-    ViewBag.Title = "Appoinment";
-}
+﻿
+    <div class="control-section">
+        <ejs-schedule id="schedule" height="650" selectedDate="new DateTime(DateTime.Today.Year, 2, 15)" eventRendered="onEventRendered">
+            <e-schedule-eventsettings dataSource="@ViewBag.DataSource"></e-schedule-eventsettings>
+        </ejs-schedule>
+    </div>
 
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <h1>Appoinmnets</h1>
-                <ejs-grid id="Grid" dataSource="@ViewBag.DataSource" allowPaging="true">
-                    <e-grid-columns>
-                        <e-grid-column field="AppoinmnetDate" headerText="AppoinmentDate" textAlign="Right" width="120"></e-grid-column>
-                        <e-grid-column field="Id" headerText="Id" width="150"></e-grid-column>
-                        <e-grid-column field="SupportTicketId" headerText="SupportTicket Id" width="150"></e-grid-column>
-                        <e-grid-column field="AppoinmentDate" headerText=" Appoinment Date" textAlign="Right" format="yMd" width="130"></e-grid-column>
-                    </e-grid-columns>
+    <script src="~/scripts/schedule/applyCategoryColor.js"></script>
+    <script type="text/javascript">
+        function onEventRendered(args) {
+            var scheduleObj = document.getElementById('Sschedule').ej2_instances[0];
+            var categoryColor = args.data.CategoryColor;
+            if (!args.element || !categoryColor) {
+                return;
+            }
+            if (scheduleObj.currentView === 'Agenda') {
+                (args.element.firstChild).style.borderLeftColor = categoryColor;
+            } else {
+                args.element.style.backgroundColor = categoryColor;
+            }
+        }
+    </script>
 
-                </ejs-grid>
-            </div>
 
-        </div>
-        </div>
-         </div>
+
 
 
 

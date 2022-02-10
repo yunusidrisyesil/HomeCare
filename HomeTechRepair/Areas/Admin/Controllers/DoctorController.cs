@@ -23,17 +23,14 @@ namespace HomeTechRepair.Areas.Admin.Controllers
 
         public IActionResult GetAppoinment()
         {
-
-            //var data = _dbContex.SupportTickets.Include(x =>x.)    .Where(x => x.DoctorId == HttpContext.GetUserId());
-            //ViewBag.DataSource = data;
-           
-
-
+            var data = _dbContex.Appointments.Include(x => x.SupportTicket).Where(x => x.SupportTicket.DoctorId== HttpContext.GetUserId()).ToList();
+            ViewBag.DataSource = data;
             return View();
         }
 
 
 
+     
 
 
 
