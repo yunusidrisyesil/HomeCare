@@ -4,16 +4,12 @@ using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HomeTechRepair
 {
@@ -26,8 +22,6 @@ namespace HomeTechRepair
             Configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IEmailSender, EmailSender>();
@@ -66,9 +60,9 @@ namespace HomeTechRepair
             services.AddAutoMapper(options =>
             {
                 options.AddProfile(typeof(PaymentProfile));
-                options.AddProfile(typeof(AddressProfile));
+                options.AddProfile(typeof(EntityProfile));
             });
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,7 +74,7 @@ namespace HomeTechRepair
             }
             app.UseStaticFiles();
             app.UseRouting();
-
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTc5OTcwQDMxMzkyZTM0MmUzMGJzT0Q1UFFxOXRMUnBWUC9CWDhIclU3YXMzaXFVQmcxOFg5a1ovckdFWjQ9");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

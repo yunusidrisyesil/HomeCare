@@ -17,6 +17,7 @@ namespace HomeTechRepair.Models.Entities
         public string UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public virtual ApplicationUser User { get; set; }
+        public virtual Appointment Appointment { get; set; }
 
     }
 }

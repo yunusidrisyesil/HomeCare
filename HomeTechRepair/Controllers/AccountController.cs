@@ -127,7 +127,6 @@ namespace HomeTechRepair.Controllers
                     await _emailSender.SendAsync(email);
                     return RedirectToAction("Login", "Account");
                 }
-
             }
             else
             {
