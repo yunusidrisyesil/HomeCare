@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/HomeTechRepair/Migrations/20220211223516_first.cs
+/HomeTechRepair/Migrations/20220211223516_first.Designer.cs

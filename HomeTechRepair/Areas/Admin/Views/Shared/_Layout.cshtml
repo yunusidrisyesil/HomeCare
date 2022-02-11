@@ -23,9 +23,8 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="~/admin-aset/css/style.css">
-    <link rel="stylesheet" href="~/vendor/devextreme/dist/css/dx.light.css">
-@*    <!-- Syncfusion Essential JS 2 Styles -->
-    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />*@
+
+    <link rel="stylesheet" href="~/vendor/devextreme/dist/css/dx.light.css" />
 
     @await RenderSectionAsync("Styles", required: false)
 
@@ -58,16 +57,7 @@
     <!-- Custom JS -->
     <script src="~/admin-aset/js/script.js"></script>
 
-    <script type="text/javascript" src="~/vendor/exceljs/dist/exceljs.min.js"></script>
-    <script type="text/javascript" src="~/vendor/file-saver/dist/fileSaver.min.js"></script>
-    <script type="text/javascript" src="~/vendor/jszip/dist/jszip.min.js"></script>
-    <script type="text/javascript" src="~/vendor/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="~/vendor/devextreme/dist/js/dx.all.js"></script>
-
-
-    <!-- Syncfusion Essential JS 2 Scripts -->
-@*    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
-    <ejs-scripts></ejs-scripts>*@
 
     @await RenderSectionAsync("Scripts", false)
 
