@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.ViewModels
 {
-    public class DoctorViewModel
+    public class AppoinmentViewModel
     {
-
+       
        
 
     }
