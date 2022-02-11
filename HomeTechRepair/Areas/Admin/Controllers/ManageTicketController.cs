@@ -5,6 +5,7 @@ using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,8 +27,18 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         }
 
         public async Task<IActionResult> IndexAsync()
-        {
-            ViewBag.DataSource = _dbContext.SupportTickets.ToList().Where(x => x.UserId == HttpContext.GetUserId()).ToList();
+        {            
+            ViewBag.DataSource = _dbContext.SupportTickets.Include(x=>x.Appointment).Select(x=>new SupportTicketViewModel
+            {
+                Id=x.Id,
+                Description =x.Description,
+                CreatedDate = x.CreatedDate,
+                AppointmentDate = x.Appointment.AppointmentDate,
+                ResolutionDate = x.ResolutionDate,
+                DoctorId = x.DoctorId
+            }).ToArray();
+
+
             var data = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
             List<object> ddl = new List<object>();
             foreach (var item in data)
@@ -35,7 +46,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 ddl.Add(new
                 {
                     text = item.Name,
-                    id = item.UserName
+                    id = item.Id
                 });
             }
             ViewBag.DropDownData = ddl;
