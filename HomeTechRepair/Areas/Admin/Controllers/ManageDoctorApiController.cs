@@ -33,7 +33,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                     docList.Add(user);
                 }
             }
-            return Json(new {Items = docList, Count = docList.Count});
+            return Ok(docList);
         }
     }
 }
