@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "All Doctros";
+}
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="page-title">List of Doctors</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:(0);">Users</a></li>
+                        <li class="breadcrumb-item active">Doctor</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+
+        <div class="control-section">
+            <ejs-grid id="Grid">
+                <e-data-manager url="/api/ManageDoctorApi/GetAllDoctors" adaptor="WebApiAdaptor" crossDomain="true"></e-data-manager>
+                <e-grid-columns>
+                    <e-grid-column field="id" headerText="Order ID" type="number" textAlign="Right" width="120"></e-grid-column>
+                    <e-grid-column field="name" headerText="Customer ID" type="string" width="140"></e-grid-column>
+                    <e-grid-column field="surname" headerText="Freight" textAlign="Right" format="C2" width="120"></e-grid-column>
+                    <e-grid-column field="createdDate" headerText="Order Date" format='yMd' textAlign="Right" width="140"></e-grid-column>
+                </e-grid-columns>
+            </ejs-grid>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    ClearAll();
+    Highlight("doctor");
+</script>
+}

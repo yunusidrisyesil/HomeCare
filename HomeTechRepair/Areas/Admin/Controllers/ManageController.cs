@@ -118,6 +118,11 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 return View(model);
             }
         }
+
+        public IActionResult GetAllDoctors()
+        {
+            return View();
+        }
     }
 }
 

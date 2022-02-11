@@ -1,25 +1,26 @@
-﻿
-    <div class="control-section">
-        <ejs-schedule id="schedule" height="650" selectedDate="new DateTime(DateTime.Today.Year, 2, 15)" eventRendered="onEventRendered">
-            <e-schedule-eventsettings dataSource="@ViewBag.DataSource"></e-schedule-eventsettings>
-        </ejs-schedule>
-    </div>
+﻿<div class="control-section">
+    <ejs-schedule id="schedule" height="650" selectedDate="new DateTime(DateTime.Today.Year, 2, 15)" eventRendered="onEventRendered">
+        <e-schedule-eventsettings dataSource="@ViewBag.DataSource"></e-schedule-eventsettings>
+    </ejs-schedule>
+</div>
 
-    <script src="~/scripts/schedule/applyCategoryColor.js"></script>
-    <script type="text/javascript">
-        function onEventRendered(args) {
-            var scheduleObj = document.getElementById('Sschedule').ej2_instances[0];
-            var categoryColor = args.data.CategoryColor;
-            if (!args.element || !categoryColor) {
-                return;
-            }
-            if (scheduleObj.currentView === 'Agenda') {
-                (args.element.firstChild).style.borderLeftColor = categoryColor;
-            } else {
-                args.element.style.backgroundColor = categoryColor;
-            }
+<script src="~/scripts/schedule/applyCategoryColor.js"></script>
+<script type="text/javascript">
+    function onEventRendered(args) {
+        var scheduleObj = document.getElementById('schedule').ej2_instances[0];
+        var categoryColor = args.data.CategoryColor;
+        if (!args.element || !categoryColor) {
+            return;
         }
-    </script>
+        if (scheduleObj.currentView === 'Agenda') {
+            (args.element.firstChild).style.borderLeftColor = categoryColor;
+        } else {
+            args.element.style.backgroundColor = categoryColor;
+        }
+    }
+</script>
+
+
 
 
 
