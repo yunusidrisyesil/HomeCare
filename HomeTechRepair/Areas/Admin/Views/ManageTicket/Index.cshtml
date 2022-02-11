@@ -16,43 +16,19 @@
         Fields = new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings() { Value = "id", Text = "text" }
     };
 }
-@*<div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <h5>My Tickets</h5>
-                    <ejs-grid id="Grid"allowPaging="true">
-                        <e-data-manager json="@ViewBag.datasource" adaptor="RemoteSaveAdaptor" insertUrl="/Home/Insert" updateUrl="/api/ManageTicketApi/Update" removeUrl="/Home/Delete"></e-data-manager>
-
-                        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true"></e-grid-editSettings>
-                        <e-grid-pagesettings pageCount="20"></e-grid-pagesettings>
-                        <e-grid-columns>
-                            <e-grid-column field="Id" headerText="Ticket ID" textAlign="Right" width="120"></e-grid-column>
-                            <e-grid-column field="Description" headerText="Description" width="150"></e-grid-column>
-                            <e-grid-column field="CreatedDate" headerText="Created Date" width="130" textAlign="Right" format="yMd"></e-grid-column>
-                            <e-grid-column field="Appointment" headerText="Appointment Date" editType="datepickeredit" width="120" format="yMd"></e-grid-column>
-                            <e-grid-column field="ResolutionDate" headerText="Resolution Date" editType="datepickeredit" width="120" format="yMd"></e-grid-column>
-                            <e-grid-column field="Doctor" headerText="Doctor" width="120" editType="dropdownedit" edit="new {@params = DropDownList}"></e-grid-column>
-                            <e-grid-column headerText="Manage Records" width="150" commands="commands"></e-grid-column>
-                        </e-grid-columns>
-                    </ejs-grid>
-                </div>
-            </div>
-        </div>
-    </div>*@
 
 <div class="control-section">
     <ejs-grid id="Grid" toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Update", "Cancel" })" allowPaging="true">
-        <e-data-manager json="@ViewBag.DataSource" adaptor="RemoteSaveAdaptor" insertUrl="/Home/Insert" updateUrl="/api/ManageTicketApi/Update" removeUrl="/Home/Delete"></e-data-manager>
+        <e-data-manager url="/api/ManageTicketApi/Get" adaptor="WebApiAdaptor" insertUrl="/Home/Insert" updateUrl="/api/ManageTicketApi/Update" removeUrl="/Home/Delete"></e-data-manager>
         <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog"></e-grid-editSettings>
         <e-grid-pagesettings pageCount="5 "></e-grid-pagesettings>
         <e-grid-columns>
-            <e-grid-column field="Id" headerText="Ticket ID" textAlign="Right" width="120"></e-grid-column>
-            <e-grid-column field="Description" headerText="Description" width="150"></e-grid-column>
-            <e-grid-column field="CreatedDate" headerText="Created Date" width="130" textAlign="Right" format="yMd"></e-grid-column>
-            <e-grid-column field="AppointmentDate" headerText="Appointment Date" editType="datepickeredit" width="120" format="yMd"></e-grid-column>
-            <e-grid-column field="ResolutionDate" headerText="Resolution Date" editType="datepickeredit" width="120" format="yMd"></e-grid-column>
-            <e-grid-column field="DoctorId" headerText="Doctor" width="120" editType="dropdownedit" edit="new {@params = DropDownList}"></e-grid-column>
+            <e-grid-column field="id" headerText="Ticket ID" textAlign="Right" width="120"></e-grid-column>
+            <e-grid-column field="description" headerText="Description" width="150"></e-grid-column>
+            <e-grid-column field="createdDate" headerText="Created Date" width="130" textAlign="Right" format="yMd"></e-grid-column>
+            <e-grid-column field="appointmentDate" headerText="Appointment Date" editType="datepickeredit" width="120" format="yMd"></e-grid-column>
+            <e-grid-column field="resolutionDate" headerText="Resolution Date" editType="datepickeredit" width="120" format="yMd"></e-grid-column>
+            <e-grid-column field="doctorId" headerText="Doctor" width="120" editType="dropdownedit" edit="new {@params = DropDownList}"></e-grid-column>
         </e-grid-columns>
     </ejs-grid>
 </div>

@@ -26,23 +26,14 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {            
-            ViewBag.DataSource = _dbContext.SupportTickets.Include(x=>x.Appointment).Select(x=>new SupportTicketViewModel
-            {
-                Id=x.Id,
-                Description =x.Description,
-                CreatedDate = x.CreatedDate,
-                AppointmentDate = x.Appointment.AppointmentDate,
-                ResolutionDate = x.ResolutionDate,
-                DoctorId = x.DoctorId
-            }).ToArray();
-
-
             var data = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
             List<object> ddl = new List<object>();
             foreach (var item in data)
             {
+
+
                 ddl.Add(new
                 {
                     text = item.Name,
@@ -52,5 +43,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             ViewBag.DropDownData = ddl;
             return View();
         }
+       
+
     }
 }

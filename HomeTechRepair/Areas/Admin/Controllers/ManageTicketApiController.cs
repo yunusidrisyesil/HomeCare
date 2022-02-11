@@ -44,6 +44,20 @@ namespace HomeTechRepair.Areas.Admin.Controllers
 
             _dbContext.SaveChanges();
             return Ok(value.value);
+
+        }
+        public IActionResult Get()
+        {
+            var data = _dbContext.SupportTickets.Include(x => x.Appointment).Select(x => new SupportTicketViewModel
+            {
+                Id = x.Id,
+                Description = x.Description,
+                CreatedDate = x.CreatedDate,
+                AppointmentDate = x.Appointment.AppointmentDate,
+                ResolutionDate = x.ResolutionDate,
+                DoctorId = x.DoctorId
+            }).ToArray();
+            return Ok(data);
         }
     }
 }
