@@ -13,5 +13,6 @@ namespace HomeTechRepair.Areas.Admin.ViewModels
         public DateTime? ResolutionDate { get; set; }
         public string? DoctorId { get; set; }
         public DateTime? AppointmentDate { get; set; }
+        public string Patient { get; set; }
     }
 }

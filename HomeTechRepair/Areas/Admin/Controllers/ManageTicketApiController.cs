@@ -1,15 +1,16 @@
-﻿using HomeTechRepair.Areas.Admin.ViewModels;
+﻿using System;
+using System.Linq;
+using DevExtreme.AspNet.Data;
+using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
+using HomeTechRepair.Extensions;
 using HomeTechRepair.Models.Entities;
-using HomeTechRepair.Models.Identiy;
+using HomeTechRepair.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace HomeTechRepair.Areas.Admin.Controllers
 {
@@ -22,42 +23,43 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             _dbContext = dbContext;
         }
-        public IActionResult Update([FromBody]CRUDModel<SupportTicketViewModel> value)
-        {
-            var st = value.value;
-            var updatedTicket = _dbContext.SupportTickets.Include(x=>x.Appointment).Where(x => x.Id == st.Id).FirstOrDefault();
-            if (updatedTicket.Appointment == null)
-            {
-                updatedTicket.Appointment = new Appointment()
-                {
-                    AppointmentDate = st.AppointmentDate,
-                    SupportTicketId = st.Id,
-                };
-                _dbContext.Appointments.Add(updatedTicket.Appointment);
-            }
-            else
-            {
-                updatedTicket.Appointment.AppointmentDate = st.AppointmentDate;
-            }
-            updatedTicket.DoctorId = st.DoctorId;
-            updatedTicket.ResolutionDate = st.ResolutionDate;
+        //    public IActionResult Update()
+        //    {
+        //        var updatedTicket = _dbContext.SupportTickets.Include(x => x.Appointment).Where(x => x.Id == st.Id).FirstOrDefault();
+        //        if (updatedTicket.Appointment == null)
+        //        {
+        //            updatedTicket.Appointment = new Appointment()
+        //            {
+        //                AppointmentDate = st.AppointmentDate,
+        //                SupportTicketId = st.Id,
+        //            };
+        //            _dbContext.Appointments.Add(updatedTicket.Appointment);
+        //        }
+        //        else
+        //        {
+        //            updatedTicket.Appointment.AppointmentDate = st.AppointmentDate;
+        //        }
+        //        updatedTicket.DoctorId = st.DoctorId;
+        //        updatedTicket.ResolutionDate = st.ResolutionDate;
 
-            _dbContext.SaveChanges();
-            return Ok(value.value);
+        //        _dbContext.SaveChanges();
+        //        return Ok();
 
-        }
-        public IActionResult Get()
+        //    }
+        [HttpGet]
+        public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var data = _dbContext.SupportTickets.Include(x => x.Appointment).Select(x => new SupportTicketViewModel
+            var data = _dbContext.SupportTickets.Include(x => x.Appointment).Include(x=>x.User).Select(x => new SupportTicketViewModel
             {
                 Id = x.Id,
+                Patient=x.User.Name,
                 Description = x.Description,
                 CreatedDate = x.CreatedDate,
                 AppointmentDate = x.Appointment.AppointmentDate,
                 ResolutionDate = x.ResolutionDate,
-                DoctorId = x.DoctorId
+                //DoctorId = x.DoctorId
             }).ToArray();
-            return Ok(data);
+            return Ok(DataSourceLoader.Load(data,loadOptions));
         }
     }
 }
