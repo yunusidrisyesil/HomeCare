@@ -13,10 +13,10 @@ using System.Linq;
 namespace HomeTechRepair.Areas.Admin.Controllers
 {
     [Route("api/[controller]/[action]")]
-    public class ManageTicketApi2Controller : Controller
+    public class ManageTicketApiController : Controller
     {
         private readonly MyContext _dbContext;
-        public ManageTicketApi2Controller(MyContext dbContext)
+        public ManageTicketApiController(MyContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -31,21 +31,32 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 CreatedDate = x.CreatedDate,
                 AppointmentDate = x.Appointment.AppointmentDate,
                 ResolutionDate = x.ResolutionDate,
-                //DoctorId = x.DoctorId
+                DoctorId = x.DoctorId
             }).ToArray();
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }
         [HttpPut]
         public IActionResult Update(Guid key, string values)
         {
-            var data = _dbContext.SupportTickets.Find(key);
+            var data = _dbContext.SupportTickets.Include(x => x.Appointment).Where(x => x.Id == key).FirstOrDefault();
             if (data == null)
                 return BadRequest(new JsonResponseViewModel()
                 {
                     IsSuccess = false,
                     ErrorMessage = ModelState.ToFullErrorString()
                 });
+            if (data.Appointment == null)
+            {
+                var appointment = new Appointment()
+                {
+                    SupportTicketId = data.Id,
+                    AppointmentDate = DateTime.Now
+                };
+                _dbContext.Appointments.Add(appointment);
+                _dbContext.SaveChanges();
+            }
             JsonConvert.PopulateObject(values, data);
+            JsonConvert.PopulateObject(values, data.Appointment);
             if (!TryValidateModel(data))
                 return BadRequest(ModelState.ToFullErrorString());
             var result = _dbContext.SaveChanges();
