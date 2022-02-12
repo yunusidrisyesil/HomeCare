@@ -1,4 +1,5 @@
-﻿using HomeTechRepair.Models;
+﻿using HomeTechRepair.Areas.Admin.ViewModels;
+using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,18 +32,14 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         //        }
         //    }
         //}
+        //model.EmployeesList= data.Select(x => new Itemlist { Value = x.EmployeeId, Text = x.EmployeeName }).ToList();
 
-
-        //[HttpGet]
-        //public IActionResult RolesRegister()
-        //{
-        //    return View();
-        //}
-
-        //method will be posted
-
-
-
+    [HttpGet]
+        public IActionResult RolesRegister()
+        {
+            return View();
+        }
+    
         public IActionResult Index()
         {
             return View();

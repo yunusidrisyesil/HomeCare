@@ -28,7 +28,8 @@ namespace HomeTechRepair.Areas.Admin.ViewModels
 		public string ConfirmPassword { get; set; }
 		[Required]
 		[DataType(DataType.Text)]
-		[Display(Name ="Roles Type")]
+		[Display(Name = "Role Name")]
+		public string RoleName  { get; set; }
 		public static List<string> Roles { get; set; }
 
 
