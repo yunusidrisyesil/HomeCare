@@ -18,10 +18,11 @@
 @section Scripts
 {
 <script src="~/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
-<script>
 
+<script>
     var dataGrid = null;
     $(() => {
+        var doctors =@Html.Raw(Json.Serialize(@ViewBag.DropDownData));
         var url = '../../../api/ManageTicketApi';
         dataGrid = $("#dxGrid").dxDataGrid({
             remoteOperations: { paging: true, filtering: true, sorting: true, grouping: true, summary: true, groupPaging: true },
@@ -37,33 +38,11 @@
                 }
             }),
             editing: {
-                mode: 'popup',
+                mode: 'form',
                 allowUpdating: true,
                 allowAdding: true,
                 allowDeleting: false,
-                popup:{
-                    title: 'Ticket Info',
-                    showTitle: true,
-                    width:700,
-                    height:525,
                 },
-      form: {
-        items: [{
-          itemType: 'group',
-          colCount: 1,
-          colSpan: 1,
-          items: [ 'patient', 'createdDate', 'appointmentDate', 'resolutionDate', 'doctorId', {
-            dataField: 'Notes',
-            editorType: 'dxTextArea',
-            colSpan: 1,
-            editorOptions: {
-              height: 100,
-            },
-          }],
-        },
-			],
-      },
-    },
             allowColumnResizing: true,
             showColumnLines: true,
             showRowLines: true,
@@ -103,7 +82,7 @@
                     dataField: "id",
                     visible: false,
                     allowFiltering: false,
-                    formItem: { visible: false }
+                    formItem: { visible: true }
                 },
                 {
                     caption: 'patient',
@@ -134,9 +113,13 @@
                 {
                     caption: 'doctorId',
                     dataField: "doctorId",
-
+                    lookup: {
+                        dataSource: doctors,
+                        displayExpr: 'name',
+                        valueExpr: 'id'
+                            },
                 }
-                ]
+              ]
         }).dxDataGrid("instance");
     });
 </script>

@@ -36,7 +36,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
 
                 ddl.Add(new
                 {
-                    text = item.Name,
+                    name = item.Name,
                     id = item.Id
                 });
             }

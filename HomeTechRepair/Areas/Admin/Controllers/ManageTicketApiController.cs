@@ -64,7 +64,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         [HttpPut]
         public IActionResult Update(Guid key,string values)
         {
-            var data = _dbContext.SupportTickets.Find(key);
+              var data = _dbContext.SupportTickets.Find(key);
             if (data == null)
                 return BadRequest(new JsonResponseViewModel()
                 {
