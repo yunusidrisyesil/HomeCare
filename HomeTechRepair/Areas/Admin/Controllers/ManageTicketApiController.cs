@@ -61,5 +61,49 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             }).ToArray();
             return Ok(DataSourceLoader.Load(data,loadOptions));
         }
+        [HttpPut]
+        public IActionResult Update(Guid key,string values)
+        {
+            var data = _dbContext.SupportTickets.Find(key);
+            if (data == null)
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
+            JsonConvert.PopulateObject(values, data);
+            if (!TryValidateModel(data))
+                return BadRequest(ModelState.ToFullErrorString());
+            var result = _dbContext.SaveChanges();
+            if (result == 0)
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Support ticket could not edited."
+                });
+            return Ok(new JsonResponseViewModel());
+        }
+        [HttpPost]
+        public IActionResult Insert(string values)
+        {
+            var data = new SupportTicket();
+            JsonConvert.PopulateObject(values, data);
+            if (!TryValidateModel(data))
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
+            _dbContext.SupportTickets.Add(data);
+
+            var result = _dbContext.SaveChanges();
+            if (result == 0)
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "New support ticket could not added."
+                });
+            return Ok(new JsonResponseViewModel());
+        }
     }
 }
