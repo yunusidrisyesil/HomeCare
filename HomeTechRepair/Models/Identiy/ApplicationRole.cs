@@ -12,6 +12,13 @@ namespace HomeTechRepair.Models.Identiy
         public ApplicationRole()
         {
 
+
+
+
+
+
+
+
         }
         public ApplicationRole(string name)
         {

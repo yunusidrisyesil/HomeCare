@@ -2,17 +2,6 @@
 
 <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
     <div class="profile-sidebar">
-        <div class="widget-profile pro-widget-content">
-            <div class="profile-info-widget">
-                <div class="profile-det-info">
-                    <h3>@Model.Name</h3>
-                    <div class="patient-details">
-                        <h5><i class="fas fa-birthday-cake"></i> 24 Jul 1983, 38 years</h5>
-                        <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> Newyork, USA</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="dashboard-widget">
             <nav class="dashboard-menu">
                 <ul>
@@ -20,6 +9,12 @@
                         <a asp-controller="Profile" asp-action="Profile">
                             <i class="fas fa-user-cog"></i>
                             <span>Profile Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Address" asp-action="Details">
+                            <i class="fas fa-bookmark"></i>
+                            <span>Address</span>
                         </a>
                     </li>
                     <li>

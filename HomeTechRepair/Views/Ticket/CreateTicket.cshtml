@@ -32,16 +32,3 @@
     </div>
 </div>
 <!-- /Page Content -->
-@section Scripts{
-<script>
-     const button = document.getElementById("btn_send");
-
-      button.addEventListener('click', e => {
-      e.preventDefault();
-      console.log("Cortlak");
-      var daterangeObj = document.getElementById("daterangepicker").ej2_instances[0];
-      console.log(daterangeObj.getSelectedRange().startDate);
-      console.log(daterangeObj.getSelectedRange());
-    });
-</script>
-}

@@ -19,7 +19,7 @@ namespace HomeTechRepair.Controllers
 {
     public class AccountController : Controller
     {
-     
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
@@ -30,6 +30,7 @@ namespace HomeTechRepair.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _emailSender = emailSender;
             CheckAndAddRoles();
         }
 
@@ -63,6 +64,12 @@ namespace HomeTechRepair.Controllers
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
                 if (result.Succeeded)
                 {
+                    if (await _userManager.IsInRoleAsync(user,RoleModels.Admin))
+                    {
+
+                        return RedirectToAction("Index", "Manage", new { area = "Admin" });
+
+                    }
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -126,7 +133,6 @@ namespace HomeTechRepair.Controllers
                     await _emailSender.SendAsync(email);
                     return RedirectToAction("Login", "Account");
                 }
-
             }
             else
             {
@@ -219,7 +225,7 @@ namespace HomeTechRepair.Controllers
                 return View();
             }
         }
-      
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Logout()
@@ -228,26 +234,26 @@ namespace HomeTechRepair.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]        
+        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);
 
 
-            if(user == null || _userManager.IsInRoleAsync(user,RoleModels.User).Result)
+            if (user == null || _userManager.IsInRoleAsync(user, RoleModels.User).Result)
             {
                 return RedirectToAction("Index", "Home");
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-                
+
             var result = await _userManager.ConfirmEmailAsync(user, code);
 
             if (result.Succeeded)
             {
-                await _userManager.RemoveFromRoleAsync(user,RoleModels.Passive);
-                await _userManager.AddToRoleAsync(user,RoleModels.User);
+                await _userManager.RemoveFromRoleAsync(user, RoleModels.Passive);
+                await _userManager.AddToRoleAsync(user, RoleModels.User);
             }
             return View();
         }

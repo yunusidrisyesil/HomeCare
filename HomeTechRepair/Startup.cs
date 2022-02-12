@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace HomeTechRepair
 {
@@ -26,8 +26,6 @@ namespace HomeTechRepair
             Configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IEmailSender, EmailSender>();
@@ -66,8 +64,13 @@ namespace HomeTechRepair
             services.AddAutoMapper(options =>
             {
                 options.AddProfile(typeof(PaymentProfile));
+                options.AddProfile(typeof(EntityProfile));
             });
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+  
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,23 +81,29 @@ namespace HomeTechRepair
                 app.UseDeveloperExceptionPage();
             }
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"node_modules")),
+                RequestPath = new PathString("/vendor")
+            });
             app.UseRouting();
-
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTc5OTcwQDMxMzkyZTM0MmUzMGJzT0Q1UFFxOXRMUnBWUC9CWDhIclU3YXMzaXFVQmcxOFg5a1ovckdFWjQ9");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller=Home}/{action=index}/{id?}"
-                    );
                 endpoints.MapAreaControllerRoute(
                    name: "admin",
                    areaName: "admin",
                    pattern: "admin/{controller=Manage}/{action=Index}/{id?}"
                    );
+                endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{controller=Home}/{action=index}/{id?}"
+                    );
+
             });
-          
+
         }
     }
 }

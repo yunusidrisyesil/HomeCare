@@ -10,7 +10,7 @@ namespace HomeTechRepair.Models.Entities
 		[Key]
 		public Guid Id { get; set; }
 		public Guid SupportTicketId { get; set; }
-		public DateTime AppointmentDate { get; set; }
+		public DateTime? AppointmentDate { get; set; }
 
 		[ForeignKey(nameof(SupportTicketId))]
 		public virtual SupportTicket SupportTicket { get; set; }
