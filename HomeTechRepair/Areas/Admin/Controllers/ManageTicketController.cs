@@ -3,6 +3,7 @@ using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 namespace HomeTechRepair.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin,Operator")]
     public class ManageTicketController : Controller
     {
         private readonly MyContext _dbContext;

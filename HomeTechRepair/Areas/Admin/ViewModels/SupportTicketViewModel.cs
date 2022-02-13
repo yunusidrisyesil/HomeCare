@@ -14,5 +14,6 @@ namespace HomeTechRepair.Areas.Admin.ViewModels
         public string? DoctorId { get; set; }
         public DateTime? AppointmentDate { get; set; }
         public string Patient { get; set; }
+        public bool isActive { get; set; }
     }
 }
