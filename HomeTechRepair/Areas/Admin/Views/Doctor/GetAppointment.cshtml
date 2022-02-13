@@ -1,0 +1,31 @@
+﻿@using HomeTechRepair.Models.Entities
+@*Arkadaşlar burası komple eksik 
+    Bir şeyler denedim ama tam olmadı bakarız artık beraber :( *@
+
+@*<script>
+    function isWeekEnd(date) {
+        let day = date.getDay();
+        return day === 0 || day === 6;
+    }
+
+    function getCurrentTraining(date, Id) {
+        let result = (date + Id) % 3;
+        let currentTraining = "training-background-" + result;
+
+        return currentTraining;
+    }
+
+    function dataCellTemplate(cellData, index, container) {
+        let Id = cellData.groups.Id
+        let currentTraining = getCurrentTraining(cellData.startDate.getDate(), Id);
+        let wrapper = $('<div>')
+            .toggleClass('appointment-weekend-' + Id, isWeekEnd(cellData.startDate)).appendTo(container)
+            .addClass('appointment-' + Id)
+            .addClass('dx-template-wrapper');
+        wrapper.append($('<div>')
+            .text(cellData.text)
+            .addClass(currentTraining)
+            .addClass('day-cell')
+        );
+    }
+</script>*@

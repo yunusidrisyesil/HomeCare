@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeTechRepair.Models.Entities
 {
-	public class Appointment
+	public  class Appointment
 	{
 		[Key]
 		public Guid Id { get; set; }
