@@ -27,6 +27,8 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
+            //TODO
+            //var user2 = _userManager.GetUsersInRoleAsync(RoleModels.Doctor).Result;
             var docList = new List<ApplicationUser>();
             foreach(var user in _userManager.Users.ToList())
             {

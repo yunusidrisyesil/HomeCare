@@ -22,7 +22,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         {
             var user = _userManager.GetUsersInRoleAsync(RoleModels.User).Result;
 
-            return Ok(DataSourceLoader.Load(user,loadOptions));
+            return Ok(DataSourceLoader.Load(user, loadOptions));
         }
     }
 }

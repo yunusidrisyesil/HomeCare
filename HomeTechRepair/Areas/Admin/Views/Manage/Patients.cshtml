@@ -12,7 +12,7 @@
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="javascript:(0);">Users</a></li>
-                        <li class="breadcrumb-item active">Doctor</li>
+                        <li class="breadcrumb-item active">Patients</li>
                     </ul>
                 </div>
             </div>
@@ -102,12 +102,12 @@
                     caption: "Surname"
                 },
                 {
-                    dataField: "createdDate",
-                    caption: "Register Date",
-                    dataType: "date",
-                    format: 'dd/MM/yyyy HH:mm',
-                    sortOrder:"desc",
-                    formItem: {visible: false}
+                    dataField:"email",
+                    caption:"Email"
+                },
+                {
+                    dataField: "phonenumber",
+                    caption:"Phone Number"
                 }
             ]
         }).dxDataGrid("instance");

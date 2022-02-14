@@ -66,7 +66,7 @@ namespace HomeTechRepair.Controllers
             }
         }
 
-        public async Task<IActionResult> GetTicketsAsync()
+        public async Task<IActionResult> GetTickets()
         {
             var ticketList = _dbContext.SupportTickets.Where(x => x.UserId == HttpContext.GetUserId());
             List<UserTicketViewModel> model = new List<UserTicketViewModel>();
