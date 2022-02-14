@@ -41,9 +41,9 @@
             remoteOperations: true,
             dataSource: DevExpress.data.AspNet.createStore({
                 key: 'id',
-                loadUrl: `${url}/GetAllDoctors`,
-                updateUrl: `${url}/update`,
-                deleteUrl: `${url}/delete`,
+                loadUrl: `${url}/Get`,
+                updateUrl: `${url}/Update`,
+                deleteUrl: `${url}/Delete`,
                 onBeforeSend(method,ajaxOptions){
                     ajaxOptions.xhrFields = {withCredentials: true};
                     console.log(method);

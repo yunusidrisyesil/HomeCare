@@ -1,9 +1,11 @@
-﻿using HomeTechRepair.Data;
+﻿using DevExtreme.AspNet.Data;
+using HomeTechRepair.Data;
+using HomeTechRepair.Extensions;
 using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +25,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllDoctors()
+        public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
             var docList = new List<ApplicationUser>();
             foreach(var user in _userManager.Users.ToList())
@@ -33,7 +35,44 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                     docList.Add(user);
                 }
             }
-            return Ok(docList);
+            return Ok(DataSourceLoader.Load(docList,loadOptions));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(string key, string values)
+        {
+            var user = _userManager.Users.FirstOrDefault(x => x.Id == key);
+            if(user == null)
+            {
+                return BadRequest();
+            }
+
+            JsonConvert.PopulateObject(values, user);
+            if (!TryValidateModel(user))
+            {
+                return BadRequest();
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            if(!result.Succeeded)
+            {
+                return BadRequest(); 
+            }
+            return Ok();
+        }
+
+        public async Task<IActionResult> DeleteAsync(string id)
+        {
+            //TODO
+            var user = await _userManager.FindByIdAsync(id);
+            if(user != null)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

@@ -86,7 +86,6 @@ namespace HomeTechRepair
                 RequestPath = new PathString("/vendor")
             });
             app.UseRouting();
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTc5OTcwQDMxMzkyZTM0MmUzMGJzT0Q1UFFxOXRMUnBWUC9CWDhIclU3YXMzaXFVQmcxOFg5a1ovckdFWjQ9");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
