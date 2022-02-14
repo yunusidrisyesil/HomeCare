@@ -4,12 +4,8 @@ using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.WebUtilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.Controllers
@@ -128,6 +124,12 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             return View();
         }
+        public IActionResult GetAllUsers() 
+        {
+            ViewBag.Roles = _roleManager.Roles.ToList();
+            return View();
+        }
+
     }
 }
 

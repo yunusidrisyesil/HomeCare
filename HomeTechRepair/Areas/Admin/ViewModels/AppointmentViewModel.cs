@@ -1,9 +1,5 @@
-﻿using HomeTechRepair.Data;
-using HomeTechRepair.Models.Entities;
-using HomeTechRepair.Models.Identiy;
-using Microsoft.AspNetCore.Identity;
+﻿using HomeTechRepair.Models.Entities;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace HomeTechRepair.Areas.Admin.ViewModels
 {
