@@ -124,11 +124,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult GetAllUsers() 
-        {
-            ViewBag.Roles = _roleManager.Roles.ToList();
-            return View();
-        }
 
     }
 }

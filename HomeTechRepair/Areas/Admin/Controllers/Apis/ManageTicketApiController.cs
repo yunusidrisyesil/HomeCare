@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 
-namespace HomeTechRepair.Areas.Admin.Controllers
+namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
     [Route("api/[controller]/[action]")]
     public class ManageTicketApiController : Controller

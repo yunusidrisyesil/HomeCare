@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeTechRepair.Areas.Admin.Controllers
+namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
     [Route("/api/[controller]/[action]")]
     public class ManageDoctorApiController : Controller

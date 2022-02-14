@@ -5,7 +5,7 @@ using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HomeTechRepair.Areas.Admin.Controllers
+namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
     [Route("/api/[controller]/[action]")]
     public class ManagePatientApiController : Controller
