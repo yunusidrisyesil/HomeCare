@@ -2,12 +2,10 @@
 using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
-using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 
-namespace HomeTechRepair.Controllers
+namespace HomeTechRepair.Controllers.Apis
 {
     [Route("api/[controller]/[action]")]
     public class TicketApiController : Controller

@@ -6,16 +6,14 @@ using HomeTechRepair.Models.Entities;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
-   
+
     [Route("api/[controller]/[action]")]
     public class ManageServiceApiController : Controller
     {

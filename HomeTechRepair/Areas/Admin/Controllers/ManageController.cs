@@ -129,6 +129,11 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         }
         public IActionResult AllUser()
         {
+            ViewBag.Roles = _roleManager.Roles.Select(x=>new
+            {
+                id = x.Id,
+                name = x.Name
+            });
             return View();
         }
 

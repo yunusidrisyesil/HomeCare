@@ -41,8 +41,8 @@ namespace HomeTechRepair.Controllers.Apis
                 Id = x.Id,
                 CreatedDate = x.SupportTicket.CreatedDate,
                 AppointmentDate = x.AppointmentDate,
-                StartDate = x.AppointmentDate.ToLongTimeString(),
-                EndDate = x.AppointmentDate.ToLongTimeString(),
+                StartDate = x.AppointmentDate.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                EndDate = x.AppointmentDate.ToString("yyyy-MM-ddTHH:mm:ssZ"),
                 Description = x.SupportTicket.Description
             }).ToList(); ;
             ViewBag.sc = appoinmnetList;

@@ -1,11 +1,8 @@
 ﻿using DevExtreme.AspNet.Data;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
-using HomeTechRepair.Models.Entities;
-using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
