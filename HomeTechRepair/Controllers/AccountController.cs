@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -64,13 +63,24 @@ namespace HomeTechRepair.Controllers
                 var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
                 if (result.Succeeded)
                 {
-                    if (await _userManager.IsInRoleAsync(user,RoleModels.Admin))
+                    if (await _userManager.IsInRoleAsync(user, RoleModels.Admin))
                     {
 
                         return RedirectToAction("Index", "Manage", new { area = "Admin" });
 
                     }
-                    return RedirectToAction("Index", "Home");
+                    else if (await _userManager.IsInRoleAsync(user, RoleModels.Doctor))
+                    {
+                        return RedirectToAction("Index", "Doctor", new { area = "Admin" });
+                    }
+                    else if (await _userManager.IsInRoleAsync(user, RoleModels.Operator))
+                    {
+                        return RedirectToAction("Index", "Operator", new { area = "Admin" });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 else
                 {
