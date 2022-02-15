@@ -6,8 +6,6 @@ using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,11 +13,11 @@ using System.Threading.Tasks;
 namespace HomeTechRepair.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class DoctorController : Controller
+    public class ManageServiceApiController : Controller
     {
         private readonly MyContext _dbContex;
       
-        public DoctorController(MyContext dbContext)
+        public ManageServiceApiController(MyContext dbContext)
         {
             _dbContex = dbContext;
         }

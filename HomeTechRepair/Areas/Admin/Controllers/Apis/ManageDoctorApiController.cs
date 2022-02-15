@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HomeTechRepair.Areas.Admin.Controllers
+namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
     [Route("/api/[controller]/[action]")]
     public class ManageDoctorApiController : Controller
@@ -27,6 +27,8 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
+            //TODO
+            //var user2 = _userManager.GetUsersInRoleAsync(RoleModels.Doctor).Result;
             var docList = new List<ApplicationUser>();
             foreach(var user in _userManager.Users.ToList())
             {

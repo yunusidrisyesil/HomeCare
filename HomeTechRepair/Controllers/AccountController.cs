@@ -1,7 +1,4 @@
-﻿using HomeTechRepair.Data;
-using HomeTechRepair.Extensions;
-using HomeTechRepair.Models;
-using HomeTechRepair.Models.Entities;
+﻿using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;
@@ -9,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;

@@ -1,19 +1,26 @@
-﻿
+﻿@{
+    ViewBag.Title = "Appointments";
+}
 
+<!-- Page Content -->
 <div class="content">
     <div class="container-fluid">
+
         <div class="row">
-            <div class="account-content">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-8">
-                        <div id="dxGrid"></div>
+            <div class="col-md-8 offset-md-2">
+
+                <!-- Login Tab Content -->
+                <div class="account-content">
+                    <div class="row align-items-center justify-content-center">
+                                                <div id="dxGrid"></div>
                     </div>
                 </div>
+                <!-- /Login Tab Content -->
             </div>
         </div>
     </div>
 </div>
-
+<!-- /Page Content -->
 
 @section Scripts
 {
@@ -22,15 +29,13 @@
 <script>
     var dataGrid = null;
     $(() => {
-        var doctors =@Html.Raw(Json.Serialize(@ViewBag.DropDownData));
-        var url = '../../../api/ManageTicketApi';
+        var doctors =@Html.Raw(Json.Serialize(@ViewBag.Doctors));
+        var url = '../../../api/AppointmentApi';
         dataGrid = $("#dxGrid").dxDataGrid({
             remoteOperations: { paging: true, filtering: true, sorting: true, grouping: true, summary: true, groupPaging: true },
             dataSource: DevExpress.data.AspNet.createStore({
                 key: 'id',
                 loadUrl: `${url}/get`,
-                updateUrl: `${url}/update`,
-                insertUrl: `${url}/insert`,
                 onBeforeSend(method, ajaxOptions) {
                     ajaxOptions.xhrFields = { withCredentials: true };
                     console.log(method);
@@ -39,8 +44,8 @@
             }),
             editing: {
                 mode: 'form',
-                allowUpdating: true,
-                allowAdding: true,
+                allowUpdating: false,
+                allowAdding: false,
                 allowDeleting: false,
                 },
             allowColumnResizing: true,
@@ -62,7 +67,7 @@
             },
             export: {
                 enabled: true,
-                fileName: `Tüm Üyelikler_${parseInt(Math.random() * 1000000000)}`,
+                fileName: `Appointments_${parseInt(Math.random() * 1000000000)}`,
                 allowExportSelectedData: true
             },
             paging: {
@@ -83,10 +88,6 @@
                     visible: false,
                     allowFiltering: false,
                     formItem: { visible: false }
-                },
-                {
-                    caption: 'patient',
-                    dataField: "patient"
                 },
                 {
                     dataField : "createdDate",
@@ -119,7 +120,7 @@
                 },
                 {
                     dataField: "isActive",
-                    caption: "active",
+                    caption: "closed",
                     dataType:"boolean",
                     allowEditing: false,
                 },
