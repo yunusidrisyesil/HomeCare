@@ -264,5 +264,10 @@ namespace HomeTechRepair.Controllers
             }
             return View();
         }
+        public IActionResult GetTicket()
+        {
+            return View();
+
+        }
     }
 }

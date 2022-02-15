@@ -33,5 +33,20 @@ namespace HomeTechRepair.Controllers.Apis
 
             return Ok(DataSourceLoader.Load(appoinmnetList, loadOptions));
         }
+        [HttpGet]
+        public IActionResult GetScheduler(DataSourceLoadOptions loadOptions)
+        {
+            var appoinmnetList = _dbContext.Appointments.Include(x => x.SupportTicket).Where(x => x.SupportTicket.UserId == HttpContext.GetUserId()).Select(x => new AppointmentViewModel
+            {
+                Id = x.Id,
+                CreatedDate = x.SupportTicket.CreatedDate,
+                AppointmentDate = x.AppointmentDate,
+                StartDate = x.AppointmentDate.ToLongTimeString(),
+                EndDate = x.AppointmentDate.ToLongTimeString(),
+                Description = x.SupportTicket.Description
+            }).ToList(); ;
+            ViewBag.sc = appoinmnetList;
+            return Ok(DataSourceLoader.Load(appoinmnetList, loadOptions));
+        }
     }
 }

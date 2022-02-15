@@ -1,6 +1,10 @@
-﻿using HomeTechRepair.Data;
+﻿using DevExtreme.AspNet.Data;
+using HomeTechRepair.Areas.Admin.ViewModels;
+using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
+using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 
 namespace HomeTechRepair.Controllers
@@ -16,15 +20,26 @@ namespace HomeTechRepair.Controllers
             _dbContext = dbContext;
         }
 
+        [HttpGet]
+        public IActionResult Get(DataSourceLoadOptions loadOptions)
+        {
+            var data = _dbContext.SupportTickets.Where(i => i.UserId ==HttpContext.GetUserId()).Select(i => new SupportTicketViewModel
+            {
+
+                Id = i.Id,
+                Description = i.Description,
+                CreatedDate = i.CreatedDate
+
+            }).ToList();
+
+            return Ok(DataSourceLoader.Load(data, loadOptions));
+        }
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult GetTickets()
-        {
-            var data = _dbContext.SupportTickets.Where(x => x.UserId == HttpContext.GetUserId());
-            return Ok(data);
-        }
+
+
     }
 }
