@@ -1,7 +1,4 @@
-﻿using HomeTechRepair.Data;
-using HomeTechRepair.Extensions;
-using HomeTechRepair.Models;
-using HomeTechRepair.Models.Entities;
+﻿using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;

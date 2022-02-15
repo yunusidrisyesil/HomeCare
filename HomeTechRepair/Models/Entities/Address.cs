@@ -1,6 +1,4 @@
 ﻿using HomeTechRepair.Models.Identiy;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeTechRepair.Models.Entities

@@ -1,26 +1,19 @@
 ﻿using DevExtreme.AspNet.Data;
-using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace HomeTechRepair.Areas.Admin.Controllers
+namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
     [Route("/api/[controller]/[action]")]
     public class ManagePatientApiController : Controller
     {
-        private readonly MyContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
-        public ManagePatientApiController(MyContext dbContext, UserManager<ApplicationUser> userManager)
+
+        public ManagePatientApiController(UserManager<ApplicationUser> userManager)
         {
-            _dbContext = dbContext;
             _userManager = userManager;
         }
 
@@ -29,7 +22,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             var user = _userManager.GetUsersInRoleAsync(RoleModels.User).Result;
 
-            return Ok(DataSourceLoader.Load(user,loadOptions));
+            return Ok(DataSourceLoader.Load(user, loadOptions));
         }
     }
 }

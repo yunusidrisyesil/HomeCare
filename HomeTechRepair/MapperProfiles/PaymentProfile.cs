@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using HomeTechRepair.Models.Payment;
 using Iyzipay.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HomeTechRepair.MapperProfiles
 {

@@ -1,7 +1,6 @@
 ﻿using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace HomeTechRepair.Controllers
