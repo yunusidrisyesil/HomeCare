@@ -1,4 +1,5 @@
 ﻿using DevExtreme.AspNet.Data;
+using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using HomeTechRepair.Models.Entities;
@@ -6,6 +7,7 @@ using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,11 +15,11 @@ using System.Threading.Tasks;
 namespace HomeTechRepair.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ManageServiceApiController : Controller
+    public class DoctorController : Controller
     {
         private readonly MyContext _dbContex;
-      
-        public ManageServiceApiController(MyContext dbContext)
+
+        public DoctorController(MyContext dbContext)
         {
             _dbContex = dbContext;
         }
@@ -37,7 +39,33 @@ namespace HomeTechRepair.Areas.Admin.Controllers
 
             return Json(await DataSourceLoader.LoadAsync(appointments, loadOptions));
         }
-    
+
+        [HttpGet]
+        public IActionResult ConcludeTicket()
+        {
+            var ticketId = Guid.Parse("ecc5d1e8-d7ba-4426-a47f-08d9eb1b4856");
+            var recipt = _dbContex.ReciptMasters.FirstOrDefault(x => x.SupportTicketId == ticketId);
+            if (recipt == null)
+            {
+                var ticket = _dbContex.SupportTickets.Find(ticketId);
+                recipt = new ReciptMaster
+                {
+                    SupportTicketId = ticketId,
+                    UserId = ticket.UserId,
+                    TotalAmount = 0,
+                };
+                _dbContex.ReciptMasters.Add(recipt);
+                _dbContex.SaveChanges();
+            }
+            var model = new CloseTicketViewModel
+            {
+                ReciptMasterId = recipt.Id,
+                SupportTicketId = recipt.SupportTicketId,
+            };
+
+            ViewBag.Data = _dbContex.Services.ToList();
+            return View(model);
+        }
 
 
     }
