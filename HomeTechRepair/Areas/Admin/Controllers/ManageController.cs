@@ -124,6 +124,9 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             return View();
         }
+        public IActionResult Services() {
+            return View();
+        }
         public IActionResult AllUser()
         {
             return View();

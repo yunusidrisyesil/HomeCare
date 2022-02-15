@@ -3,46 +3,104 @@
 }
 
 
-<!-- Page Content -->
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <h5>My Tickets</h5>
-                <ejs-grid id="Grid" dataSource="@ViewBag.DataSource" allowPaging="true">
-                    <e-grid-pagesettings pageSize="5"></e-grid-pagesettings>
-                    <e-grid-columns>
-                        <e-grid-column field="Id" headerText="Ticket ID" textAlign="Right" width="120"></e-grid-column>
-                        <e-grid-column field="Description" headerText="Description" width="150"></e-grid-column>
-                        <e-grid-column field="CreatedDate" headerText="Created Date" width="130" textAlign="Right" format="yMd"></e-grid-column>
-                        <e-grid-column field="ResolutionDate" headerText="Resolution Date" width="120" format="yMd"></e-grid-column>
-                        <e-grid-column field="DoctorName" headerText="Doctor Name" width="120"></e-grid-column>
-                    </e-grid-columns>
-                </ejs-grid>
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                </div>
             </div>
         </div>
-    </div>
 
+        <div class="control-section">
+            <div class="card-body">
+                <div id="dxGrid"> </div>
+            </div>
+        </div>
+
+    </div>
 </div>
-<!-- /Page Content -->
+
+
 @section Scripts{
-<script>
-    function created(args) {
-        class SerialNoAdaptor extends ej.data.ODataAdaptor {
-            processResponse() {
-                var i = 0;
-                // calling base class processResponse function
-                var original = super.processResponse.apply(this, arguments);
-                // adding serial number
-                original.result.forEach(function (item) { item['Sno'] = ++i });
-                return { result: original.result, count: original.count };
-            }
-        }
-        var grid = document.querySelector('#CustomAdaptor').ej2_instances[0];
-        grid.dataSource = new ej.data.DataManager({
-            url: '../Controllers/GetTickets',
-            adaptor: new SerialNoAdaptor()
+    <script src="~/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
+    <script>
+        var dataGrid = null;
+        $(() => {
+
+            var url = '../../../api/TicketApi';
+            dataGrid = $("#dxGrid").dxDataGrid({
+                remoteOperations: { paging: true, filtering: true, sorting: true, grouping: true, summary: true, groupPaging: true },
+                dataSource: DevExpress.data.AspNet.createStore({
+                    key: 'id',
+                    loadUrl: `${url}/get`,
+                    onBeforeSend(method, ajaxOptions) {
+                        ajaxOptions.xhrFields = { withCredentials: true };
+                        console.log(method);
+                        console.log(ajaxOptions);
+                    }
+                }),
+                editing: {
+                    mode: 'form',
+                    allowUpdating: true,
+                    allowAdding: false,
+                    allowDeleting: false,
+                },
+                allowColumnResizing: true,
+                showColumnLines: true,
+                showRowLines: true,
+                rowAlternationEnabled: true,
+                showBorders: true,
+                searchPanel: {
+                    visible: true,
+                    width: 240,
+                    placeholder: "Search..."
+                },
+                filterRow: {
+                    visible: true,
+                    applyFilter: "auto"
+                },
+                headerFilter: {
+                    visible: true
+                },
+                export: {
+                    enabled: true,
+                    fileName: `Tickets_${parseInt(Math.random() * 1000000000)}`,
+                    allowExportSelectedData: true
+                },
+                paging: {
+                    pageSize: 20
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [5, 15, 30, 45],
+                    showInfo: true
+                },
+                selection: {
+                    mode: "multiple"
+                },
+                columns: [
+                    {
+                        caption: 'Id',
+                        dataField: "Id",
+                        visible: false,
+                        allowFiltering: false,
+                        formItem: { visible: false }
+                    },
+                    {
+                        caption: 'description',
+                        dataField: "description",
+                        dataType: "string"
+                    },
+                    {
+                        caption: 'createdDate',
+                        dataField: "createdDate",
+                        dataType: "datetime"
+                    },
+
+                ]
+            }).dxDataGrid("instance");
         });
-    }
-</script>
+    </script>
+
 }
