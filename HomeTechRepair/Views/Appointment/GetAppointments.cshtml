@@ -12,7 +12,10 @@
                 <!-- Login Tab Content -->
                 <div class="account-content">
                     <div class="row align-items-center justify-content-center">
-                                                <div id="dxGrid"></div>
+                        <div id="dxGrid"></div>
+                    </div>
+                    <div class="row align-items-center justify-content-center">
+                        <div id="scheduler"></div>
                     </div>
                 </div>
                 <!-- /Login Tab Content -->
@@ -24,9 +27,9 @@
 
 @section Scripts
 {
-<script src="~/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
+    <script src="~/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
 
-<script>
+    <script>
     var dataGrid = null;
     $(() => {
         var doctors =@Html.Raw(Json.Serialize(@ViewBag.Doctors));
@@ -64,11 +67,6 @@
             },
             headerFilter: {
                 visible: true
-            },
-            export: {
-                enabled: true,
-                fileName: `Appointments_${parseInt(Math.random() * 1000000000)}`,
-                allowExportSelectedData: true
             },
             paging: {
                 pageSize: 20
@@ -136,6 +134,35 @@
               ]
         }).dxDataGrid("instance");
     });
-</script>
+
+    </script>
+
+    <script>
+        var scheduler = null;
+
+        $(() => {
+            var sc =@Html.Raw(Json.Serialize(@ViewBag.sc));
+            var url = '../../../api/AppointmentApi';
+            scheduler = $('#scheduler').dxScheduler({
+                timeZone: 'Europe/Berlin',
+                dataSource: DevExpress.data.AspNet.createStore({
+                    key: 'id',
+                    loadUrl: `${url}/Getscheduler`,
+                    onBeforeSend(method, ajaxOptions) {
+                        ajaxOptions.xhrFields = { withCredentials: true };
+                        console.log(method);
+                        console.log(ajaxOptions);
+                    },
+                }),
+                fieldExpr: 'id',
+                dateSerializationFormat: 'dd/MM/yyyy HH:mm',
+                views: ['day', 'week','month'],
+                currentView: 'month',
+                editing: false,
+                textExpr: 'description',
+
+            }).dxScheduler("instance");;
+        });
+    </script>
 
 }
