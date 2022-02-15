@@ -4,6 +4,7 @@ using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using HomeTechRepair.Models.Entities;
 using HomeTechRepair.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
-
+   
     [Route("api/[controller]/[action]")]
     public class ManageServiceApiController : Controller
     {
@@ -29,51 +30,44 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
 
+
             var data = _dbContex.Services.Select(i => new ServiceViewModel
-              {
-                  Id = i.Id,
-                  Name = i.Name,
-                  Price = i.Price
-              }).ToArray();
+            {
+                Id = i.Id,
+                Name = i.Name,
+                Price = i.Price
+            }).ToList();
+
 
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }
+
         [HttpPut]
         public IActionResult Update(Guid key, string values)
         {
-            var data = _dbContex.Services.Include(x => x.Id == key).FirstOrDefault();
+
+            var data = _dbContex.Services.Find(key);
             if (data == null)
                 return BadRequest(new JsonResponseViewModel()
                 {
                     IsSuccess = false,
                     ErrorMessage = ModelState.ToFullErrorString()
                 });
-            if (data.Id == null)
-            {
-                var service = new  Service()
-                {
-                   Id = data.Id,
-                   Name = data.Name,
-                   Price = data.Price
-                };
-                _dbContex.Services.Add(service);
-                _dbContex.SaveChanges();
-               
-            }
+
             JsonConvert.PopulateObject(values, data);
-            JsonConvert.PopulateObject(values, data.Id);
             if (!TryValidateModel(data))
                 return BadRequest(ModelState.ToFullErrorString());
+
             var result = _dbContex.SaveChanges();
             if (result == 0)
                 return BadRequest(new JsonResponseViewModel()
                 {
                     IsSuccess = false,
-                    ErrorMessage = "Service could not edited."
+                    ErrorMessage = "service not update"
                 });
             return Ok(new JsonResponseViewModel());
-        }
 
+        }
 
         [HttpPost]
         public IActionResult Insert(string values)
@@ -88,6 +82,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                     ErrorMessage = ModelState.ToFullErrorString()
                 });
             _dbContex.Services.Add(data);
+            _dbContex.SaveChanges();
 
             var result = _dbContex.SaveChanges();
             if (result == 0)
@@ -100,7 +95,22 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 
         }
 
+        [HttpDelete]
+       
+            [HttpDelete]
+            public IActionResult Delete(Guid key)
+            {
+            var data = _dbContex.Services.Find(key); 
+                if (data == null)
+                    return StatusCode(StatusCodes.Status409Conflict, "service not found");
 
+            _dbContex.Services.Remove(data);
+
+            var result = _dbContex.SaveChanges();
+                if (result == 0)
+                    return BadRequest("Deletion failed");
+                return Ok(new JsonResponseViewModel());
+            }
 
     }
 
