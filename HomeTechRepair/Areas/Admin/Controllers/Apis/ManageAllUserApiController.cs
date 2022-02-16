@@ -6,6 +6,7 @@ using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,23 +17,22 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
     public class ManageAllUserApiController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly MyContext _dbContext;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public ManageAllUserApiController(UserManager<ApplicationUser> userManager, MyContext dbContext)
+        public ManageAllUserApiController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
-            _dbContext = dbContext;
+            _roleManager = roleManager;
         }
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var roles = new List<LookUpViewModel>();
             var user = new List<UserViewModel>();
-            
+            var roles = _roleManager.Roles.ToList();
 
-            foreach (var role in RoleModels.Roles)
+            foreach (var role in roles)
             {
-                var userAdd = _userManager.GetUsersInRoleAsync(role).Result.Select(x => new UserViewModel()
+                var userAdd = _userManager.GetUsersInRoleAsync(role.Name).Result.Select(x => new UserViewModel()
                 {
                     CreatedDate = x.CreatedDate,
                     Email = x.Email,
@@ -40,17 +40,46 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                     Name = x.Name,
                     Phone = x.PhoneNumber,
                     Surname = x.Surname,
-                    RoleName = role
+                    Role = role.Id
                 }).ToList();
                 user.AddRange(userAdd);
-                roles.Add(new LookUpViewModel 
-                {
-                    Id = role,
-                    Name = role
-                });
             }
-            ViewBag.Roles = roles;
             return Ok(DataSourceLoader.Load(user, loadOptions));
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync(string key, string values)
+        {
+            var user = _userManager.Users.FirstOrDefault(x => x.Id == key);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            JsonConvert.PopulateObject(values, user);
+            if (!TryValidateModel(user))
+            {
+                return BadRequest();
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+        //[HttpDelete]
+        //public async Task<IActionResult> DeleteAsync(string id)
+        //{
+
+        //    var user = await _userManager.FindByIdAsync(id);
+        //    if (user != null)
+        //    {
+        //        return Ok();
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
     }
 }
