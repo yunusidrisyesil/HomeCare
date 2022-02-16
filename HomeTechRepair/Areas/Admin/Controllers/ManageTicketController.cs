@@ -28,8 +28,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             List<object> ddl = new List<object>();
             foreach (var item in data)
             {
-
-
                 ddl.Add(new
                 {
                     name = item.Name,

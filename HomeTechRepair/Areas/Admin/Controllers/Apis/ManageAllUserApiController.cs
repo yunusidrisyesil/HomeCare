@@ -2,6 +2,7 @@
 using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
+using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,22 +24,32 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             _dbContext = dbContext;
         }
         [HttpGet]
-        public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
+        public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var user = new List<ApplicationUser>();
-
-            //var user = _userManager.Users;
-            //var userroles = _dbContext.UserRoles;
+            var roles = new List<LookUpViewModel>();
+            var user = new List<UserViewModel>();
             
-            //var user = _dbContext.Users.Select(x => new UserViewModel()
-            //{
-            //    CreatedDate = x.CreatedDate,
-            //    Email = x.Email,
-            //    Id = x.Id,
-            //    Name = x.Name,
-            //    Phone = x.PhoneNumber,
-            //    Surname = x.Surname
-            //}).ToList();
+
+            foreach (var role in RoleModels.Roles)
+            {
+                var userAdd = _userManager.GetUsersInRoleAsync(role).Result.Select(x => new UserViewModel()
+                {
+                    CreatedDate = x.CreatedDate,
+                    Email = x.Email,
+                    Id = x.Id,
+                    Name = x.Name,
+                    Phone = x.PhoneNumber,
+                    Surname = x.Surname,
+                    RoleName = role
+                }).ToList();
+                user.AddRange(userAdd);
+                roles.Add(new LookUpViewModel 
+                {
+                    Id = role,
+                    Name = role
+                });
+            }
+            ViewBag.Roles = roles;
             return Ok(DataSourceLoader.Load(user, loadOptions));
         }
     }

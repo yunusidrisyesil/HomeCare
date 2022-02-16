@@ -1,1 +1,126 @@
-﻿
+﻿@{
+    ViewBag.Title = "All Users";
+}
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="page-title">List of Patients</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:(0);">Users</a></li>
+                        <li class="breadcrumb-item active">All Users</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /Page Header -->
+
+        <div class="control-section">
+            <div class="card-body">
+                <div id="dxGrid"> </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
+    <script>
+
+    var dataGrid = null;
+        $(() => {
+        var allUsers =@Html.Raw(Json.Serialize(@ViewBag.Roles));
+        var url = '../../../api/ManageAllUserApi';
+        dataGrid = $("#dxGrid").dxDataGrid({
+            remoteOperations: true,
+            dataSource: DevExpress.data.AspNet.createStore({
+                key: 'id',
+                loadUrl: `${url}/Get`,
+                updateUrl: `${url}/update`,
+                onBeforeSend(method,ajaxOptions){
+                    ajaxOptions.xhrFields = {withCredentials: true};
+                    console.log(method);
+                    console.log(ajaxOptions);
+                }
+            }),
+            editing:{
+                mode: 'form',
+                allowUpdating: true,
+            },
+            allowColumnResizing: true,
+            showColumnLines: true,
+            showRowLines: true,
+            rowAlternationEnabled: true,
+            showBorders: true,
+            searchPanel: {
+                visible: true,
+                width: 240,
+                placeholder: "Search.."
+            },
+            filterRow: {
+                visible:true,
+                applyFilter: "auto"
+            },
+            headerFilter: {
+                visible:true,
+            },
+            export: {
+                enabled: true,
+                fileName: `AllUser _${parseInt(Math.random() * 10000000)}`,
+                allowExportSelectedData:true
+            },
+            paging:{
+                pageSize:20
+            },
+            pager:{
+                showPageSizeSelector: true,
+                allowPageSizes: [5,15,30,45],
+                showInfo:true
+            },
+            selection: {
+                mode: "multiple",
+            },
+            columns: [
+                {
+                    dataField: "id",
+                    caption: "Id",
+                    visible : false,
+                    allowFiltering: false,
+                    formItem: {visible: false}
+                }
+                ,
+                {
+                    dataField: "name",
+                    caption: "Name"
+                },
+                {
+                    dataField: "surname",
+                    caption: "Surname"
+                },
+                {
+                    dataField:"email",
+                    caption:"Email"
+                },
+                {
+                    dataField: "phonenumber",
+                    caption:"Phone Number"
+                },
+                {
+                    caption: 'Role Name',
+                    dataField: "roleName",
+                    lookup: {
+                        dataSource: allUsers,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id'
+                    },
+                }
+            ]
+        }).dxDataGrid("instance");
+    });
+    </script>
+}
