@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Scheduler";
+}
+
+<!-- Page Wrapper -->
+<div class="main-wrapper">
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3 class="page-title">Doctor</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Scheduler</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+
+            <div class="control-section">
+                <div class="card-body">
+                    <div id="scheduler"> </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /Page Wrapper -->
+</div>
+
+
+@section Scripts{
+
+    <script>
+        var scheduler = null;
+
+        $(() => {
+            var viewBag =@Html.Raw(Json.Serialize(@ViewBag.Scheduler));
+            scheduler = $('#scheduler').dxScheduler({
+                timeZone: 'Europe/Berlin',
+                dataSource: viewBag,
+                key: 'id',
+                dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
+                views: ['day', 'week', 'month'],
+                currentView: 'month',
+                editing: false,
+                textExpr: 'description',
+
+            }).dxScheduler("instance");;
+        });
+    </script>
+
+}

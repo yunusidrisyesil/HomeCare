@@ -44,7 +44,7 @@ namespace HomeTechRepair.Controllers.Apis
                 StartDate = x.AppointmentDate.ToString("O"),
                 EndDate = x.AppointmentDate.AddHours(1).ToString("O"),
                 Description = x.SupportTicket.Description
-            }).ToList(); ;
+            }).ToList();
             ViewBag.sc = appoinmnetList;
             return Ok(DataSourceLoader.Load(appoinmnetList, loadOptions));
         }

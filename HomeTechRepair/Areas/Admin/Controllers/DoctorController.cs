@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -67,6 +68,28 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             return View(model);
         }
 
-
+        public IActionResult Scheduler()
+        {
+            ViewBag.Scheduler = DoctorsAppoitments();
+            return View();
+        }
+        public IActionResult Agenda()
+        {
+            ViewBag.Agenda = DoctorsAppoitments();
+            return View();
+        }
+        private List<AppointmentViewModel> DoctorsAppoitments()
+        {
+            var appoinmnetList = _dbContex.Appointments.Include(x => x.SupportTicket).Where(x => x.SupportTicket.DoctorId == HttpContext.GetUserId()).Select(x => new AppointmentViewModel
+            {
+                Id = x.Id,
+                CreatedDate = x.SupportTicket.CreatedDate,
+                AppointmentDate = x.AppointmentDate,
+                StartDate = x.AppointmentDate.ToString("O"),
+                EndDate = x.AppointmentDate.AddHours(1).ToString("O"),
+                Description = x.SupportTicket.Description
+            }).ToList();
+            return appoinmnetList;
+        }
     }
 }
