@@ -1,4 +1,4 @@
-﻿@{
+﻿    @{
     ViewBag.Title = "Appointments";
 }
 
@@ -141,7 +141,6 @@
         var scheduler = null;
 
         $(() => {
-            var sc =@Html.Raw(Json.Serialize(@ViewBag.sc));
             var url = '../../../api/AppointmentApi';
             scheduler = $('#scheduler').dxScheduler({
                 timeZone: 'Europe/Berlin',

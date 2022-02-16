@@ -49,6 +49,16 @@
                     <li>
                         <a asp-action="Index" asp-area="admin" asp-controller="Manage">Admin</a>
                     </li>
+                }else if (Context.User.IsInRole("Doctor"))
+                {
+                    <li>
+                        <a asp-action="Index" asp-area="admin" asp-controller="Doctor">Doctor</a>
+                    </li>
+                }else if (Context.User.IsInRole("Operator"))
+                {
+                    <li>
+                        <a asp-action="Index" asp-area="admin" asp-controller="Operator">Operator</a>
+                    </li>
                 }
                 <li class="login-link">
                     <a asp-action="Login" asp-controller="Account">Login / Signup</a>

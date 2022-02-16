@@ -41,10 +41,10 @@ namespace HomeTechRepair.Controllers.Apis
                 Id = x.Id,
                 CreatedDate = x.SupportTicket.CreatedDate,
                 AppointmentDate = x.AppointmentDate,
-                StartDate = x.AppointmentDate.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                EndDate = x.AppointmentDate.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                StartDate = x.AppointmentDate.ToString("O"),
+                EndDate = x.AppointmentDate.AddHours(1).ToString("O"),
                 Description = x.SupportTicket.Description
-            }).ToList(); ;
+            }).ToList();
             ViewBag.sc = appoinmnetList;
             return Ok(DataSourceLoader.Load(appoinmnetList, loadOptions));
         }

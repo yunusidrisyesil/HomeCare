@@ -1,0 +1,91 @@
+﻿@model CloseTicketViewModel
+@{
+    ViewBag.Title = "Conclude Ticket";
+}
+
+<!-- Page Wrapper -->
+<div class="main-wrapper">
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3 class="page-title">Blank Page</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Blank Page</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+
+            <div class="control-section">
+                <div class="card-body">
+                    <div id="dxGrid"> </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /Page Wrapper -->
+</div>
+
+@section Scripts{
+<script src="/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
+<script>
+    ClearAll();
+    Highlight("doctor");
+
+    var dataGrid = null;
+    $(()=>{
+        var url = '../../../api/CloseTicketApi';
+        dataGrid = $("#dxGrid").dxDataGrid({
+            remoteOperations: true,
+            dataSource: DevExpress.data.AspNet.createStore({
+                key: 'id',
+                loadUrl: `${url}/Get`,
+                loadParams: { id: "@Model.ReciptMasterId" },
+                updateUrl: `${url}/Update`,
+                deleteUrl: `${url}/Delete`,
+                onBeforeSend(method,ajaxOptions){
+                    ajaxOptions.xhrFields = {withCredentials: true};
+                    console.log(method);
+                    console.log(ajaxOptions);
+                },
+            }),
+            editing:{
+                mode: 'form',
+                allowUpdating: true,
+                allowDeleting: true
+            },
+            allowColumnResizing: true,
+            showColumnLines: true,
+            showRowLines: true,
+            rowAlternationEnabled: true,
+            showBorders: true,
+            columns: [
+                {
+                    dataField: "id",
+                    caption: "Id",
+                    visible : false,
+                    allowFiltering: false,
+                    formItem: {visible: false}
+                }
+                ,
+                {
+                    dataField: "name",
+                    caption: "Name"
+                },
+                {
+                    dataField: "price",
+                    caption: "Price"
+                }
+            ]
+        }).dxDataGrid("instance");
+        console.log("Ok");
+    });
+</script>
+}

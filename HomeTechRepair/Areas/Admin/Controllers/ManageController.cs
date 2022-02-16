@@ -63,7 +63,8 @@ namespace HomeTechRepair.Areas.Admin.Controllers
 
         [HttpPost]
         public async Task<IActionResult> EmployeeRegister(EmployeeRegisterViewModel model)
-        {
+        {  
+          
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -89,7 +90,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 Email = model.Email,
                 UserName = count.ToString()
             };
-
+          
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {

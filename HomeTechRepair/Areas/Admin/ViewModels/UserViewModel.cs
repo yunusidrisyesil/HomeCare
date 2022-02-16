@@ -9,8 +9,7 @@ namespace HomeTechRepair.Areas.Admin.ViewModels
         public string Surname { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public string RoleId { get; set; }
         public DateTime CreatedDate { get; set; }
-        public int MyProperty { get; set; }
+        public string RoleName { get; set; }
     }
 }

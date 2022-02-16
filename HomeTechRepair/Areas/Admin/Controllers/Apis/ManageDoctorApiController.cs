@@ -27,24 +27,15 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
-            //TODO
-            //var user2 = _userManager.GetUsersInRoleAsync(RoleModels.Doctor).Result;
-            var docList = new List<ApplicationUser>();
-            foreach(var user in _userManager.Users.ToList())
-            {
-                if(await _userManager.IsInRoleAsync(user,RoleModels.Doctor))
-                {
-                    docList.Add(user);
-                }
-            }
-            return Ok(DataSourceLoader.Load(docList,loadOptions));
+            var docList = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
+            return Ok(DataSourceLoader.Load(docList, loadOptions));
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(string key, string values)
         {
             var user = _userManager.Users.FirstOrDefault(x => x.Id == key);
-            if(user == null)
+            if (user == null)
             {
                 return BadRequest();
             }
@@ -56,9 +47,9 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             }
 
             var result = await _userManager.UpdateAsync(user);
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
-                return BadRequest(); 
+                return BadRequest();
             }
             return Ok();
         }
@@ -67,7 +58,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         {
             //TODO
             var user = await _userManager.FindByIdAsync(id);
-            if(user != null)
+            if (user != null)
             {
                 return Ok();
             }
