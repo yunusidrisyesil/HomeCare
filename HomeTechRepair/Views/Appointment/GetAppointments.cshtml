@@ -1,4 +1,4 @@
-﻿@{
+﻿    @{
     ViewBag.Title = "Appointments";
 }
 
@@ -141,7 +141,6 @@
         var scheduler = null;
 
         $(() => {
-            var sc =@Html.Raw(Json.Serialize(@ViewBag.sc));
             var url = '../../../api/AppointmentApi';
             scheduler = $('#scheduler').dxScheduler({
                 timeZone: 'Europe/Berlin',
@@ -155,7 +154,7 @@
                     },
                 }),
                 fieldExpr: 'id',
-                dateSerializationFormat: 'dd/MM/yyyy HH:mm',
+                dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
                 views: ['day', 'week','month'],
                 currentView: 'month',
                 editing: false,

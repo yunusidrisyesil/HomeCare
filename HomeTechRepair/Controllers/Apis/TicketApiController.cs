@@ -7,19 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
-namespace HomeTechRepair.Controllers
+namespace HomeTechRepair.Controllers.Apis
 {
     [Route("api/[controller]/[action]")]
     public class TicketApiController : Controller
     {
-
         private readonly MyContext _dbContext;
-
         public TicketApiController(MyContext dbContext)
         {
             _dbContext = dbContext;
         }
-
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
@@ -34,12 +31,5 @@ namespace HomeTechRepair.Controllers
 
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-
-
     }
 }

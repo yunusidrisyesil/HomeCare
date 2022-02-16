@@ -5,6 +5,7 @@ using HomeTechRepair.Extensions;
 using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,18 +25,20 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
+            var user = new List<ApplicationUser>();
+
             //var user = _userManager.Users;
-            var userroles = _dbContext.UserRoles;
+            //var userroles = _dbContext.UserRoles;
             
-            var user = _dbContext.Users.Select(x => new UserViewModel()
-            {
-                CreatedDate = x.CreatedDate,
-                Email = x.Email,
-                Id = x.Id,
-                Name = x.Name,
-                Phone = x.PhoneNumber,
-                Surname = x.Surname
-            }).ToList();
+            //var user = _dbContext.Users.Select(x => new UserViewModel()
+            //{
+            //    CreatedDate = x.CreatedDate,
+            //    Email = x.Email,
+            //    Id = x.Id,
+            //    Name = x.Name,
+            //    Phone = x.PhoneNumber,
+            //    Surname = x.Surname
+            //}).ToList();
             return Ok(DataSourceLoader.Load(user, loadOptions));
         }
     }
