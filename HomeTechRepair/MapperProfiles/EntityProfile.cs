@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Models.Entities;
+using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.ViewModels;
 
 namespace HomeTechRepair.MapperProfiles
@@ -10,6 +12,7 @@ namespace HomeTechRepair.MapperProfiles
         {
             CreateMap<AddressViewModel, Address>().ReverseMap();
             CreateMap<UserTicketViewModel, SupportTicket>().ReverseMap();
+            CreateMap<UserViewModel, ApplicationUser>().ReverseMap();
         }
     }
 }

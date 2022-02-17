@@ -57,7 +57,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             {
                 return BadRequest();
             }
-            //var userRole = _dbContext.UserRoles.FirstOrDefault(x => x.UserId == key).ToString();
+            var userRole = _dbContext.UserRoles.FirstOrDefault(x => x.UserId == key);
             var userRoles = await _userManager.GetRolesAsync(user);
             var userView = new UserViewModel();
             userView.Email = user.Email;
@@ -66,15 +66,30 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             userView.Name = user.Name;
             userView.Phone = user.PhoneNumber;
             userView.Surname = user.Surname;
-            userView.RoleId = userRoles[0];
+            userView.RoleId = userRole.RoleId;
+            userView.UserRole = userRoles;
 
 
             //await _userManager.RemoveFromRoleAsync(user, oldrole.Name);
 
             JsonConvert.PopulateObject(values, userView );
+            if (userRole.RoleId != userView.RoleId)
+            {
+                var newRole = _dbContext.Roles.FirstOrDefault(x=>x.Id == userView.RoleId);
+                var oldRole = _dbContext.Roles.FirstOrDefault(x => x.Id == userRole.RoleId); ;
+                await _userManager.RemoveFromRoleAsync(user, oldRole.Name);
 
+                await _userManager.AddToRoleAsync(user, newRole.Name);
+            }
             //gelen roleidlere göre yeni rol bilgisi eski rol bilgisi ile kontrol edilecek
 
+            user.Email =userView.Email;
+            user.CreatedDate= userView.CreatedDate;
+            user.Id= userView.Id;
+            user.Name= userView.Name;
+            user.PhoneNumber= userView.Phone;
+            user.Surname = userView.Surname ;
+            
             //user update işlemleri
 
             if (!TryValidateModel(user))

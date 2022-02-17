@@ -1,5 +1,6 @@
 ﻿using HomeTechRepair.Models.Identiy;
 using System;
+using System.Collections.Generic;
 
 namespace HomeTechRepair.Areas.Admin.ViewModels
 {
@@ -12,5 +13,6 @@ namespace HomeTechRepair.Areas.Admin.ViewModels
         public string Phone { get; set; }
         public DateTime CreatedDate { get; set; }
         public string RoleId { get; set; }
+        public IList<string> UserRole { get; set; }
     }
 }
