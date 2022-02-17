@@ -38,7 +38,7 @@
 <script>
     ClearAll();
     Highlight("doctor");
-    var services =@Html.Raw(Json.Serialize(@ViewBag.Data));
+    var services = @Html.Raw(Json.Serialize(@ViewBag.Data));
     var dataGrid = null;
     $(()=>{
         var url = '../../../api/CloseTicketApi';
@@ -50,8 +50,12 @@
                 loadParams: { id: "@Model.ReciptMasterId" },
                 updateUrl: `${url}/Update`,
                 deleteUrl: `${url}/Delete`,
+                insertUrl: `${url}/Insert`,
                 onBeforeSend(method,ajaxOptions){
                     ajaxOptions.xhrFields = {withCredentials: true};
+                    if (method !== "load") {
+                        ajaxOptions.data.extraParam = "@Model.ReciptMasterId";
+                    }
                     console.log(method);
                     console.log(ajaxOptions);
                 },
@@ -59,7 +63,8 @@
             editing:{
                 mode: 'form',
                 allowUpdating: true,
-                allowDeleting: true
+                allowDeleting: true,
+                allowAdding: true,
             },
             allowColumnResizing: true,
             showColumnLines: true,
@@ -73,24 +78,38 @@
                     visible : false,
                     allowFiltering: false,
                     formItem: {visible: false}
-                }
-                ,
+                },
                 {
-                    dataField: "name",
+                    dataField: "id",
                     caption: "Name",
                     lookup: {
                         dataSource: services,
-                        displayExpr: 'Name',
-                        valueExpr: 'Id'
+                        displayExpr: 'name',
+                        valueExpr: 'id'
+                    },
+                    setCellValue : function(newData,value,currentRowData){
+                        return getPrice(value).done(function(data){
+                            newData.id = value;
+                            newData.price = data;
+                        });
                     }
                 },
                 {
                     dataField: "price",
-                    caption: "Price"
+                    caption: "Price",
                 }
             ]
         }).dxDataGrid("instance");
         console.log("Ok");
     });
+
+    function getPrice(value){
+        var price = $.ajax({
+            url : "../../../api/CloseTicketApi/GetPrice",
+            dataType : "json",
+            data:{id : value}
+        });
+        return price;
+    }
 </script>
 }

@@ -63,12 +63,11 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 ReciptMasterId = recipt.Id,
                 SupportTicketId = recipt.SupportTicketId,
             };
-            var serviceList = _dbContex.Services.Select(x => new LookUpViewModel
+            ViewBag.Data = _dbContex.Services.Select(x => new
             {
-                Id = x.Id.ToString(),
+                Id = x.Id,
                 Name = x.Name,
             }).ToList();
-            ViewBag.Data = serviceList;
             return View(model);
         }
 

@@ -4,6 +4,7 @@ using HomeTechRepair.Extensions;
 using HomeTechRepair.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 
@@ -27,13 +28,30 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 Id = x.Service.Id,
                 Name = x.Service.Name,
                 Price = x.Service.Price
-            });
+            }).ToList();
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }
 
-        public IActionResult Insert()
+        [HttpPut]
+        public IActionResult Update(string key, string values, string extraParam)
+        {
+            var reciptId = Guid.Parse(extraParam);
+            //var ReciptDetials = _dbContext.ReciptDetails.Select(x => x.Description);
+            Service service = new Service();
+            JsonConvert.PopulateObject(values, service);
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult Insert(string values)
         {
             return Ok();
+        }
+
+        public IActionResult GetPrice(Guid id)
+        {
+            var price = _dbContext.Services.FirstOrDefault(x => x.Id == id);
+            return Ok(price.Price);
         }
     }
 }
