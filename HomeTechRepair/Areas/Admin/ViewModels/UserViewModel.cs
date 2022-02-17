@@ -11,6 +11,6 @@ namespace HomeTechRepair.Areas.Admin.ViewModels
         public string Email { get; set; }
         public string Phone { get; set; }
         public DateTime CreatedDate { get; set; }
-        public string Role { get; set; }
+        public string RoleId { get; set; }
     }
 }

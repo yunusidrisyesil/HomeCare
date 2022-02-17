@@ -18,11 +18,13 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly MyContext _dbContext;
 
-        public ManageAllUserApiController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+        public ManageAllUserApiController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, MyContext dbContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _dbContext = dbContext;
         }
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
@@ -40,27 +42,47 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                     Name = x.Name,
                     Phone = x.PhoneNumber,
                     Surname = x.Surname,
-                    Role = role.Id
+                    RoleId = role.Id
                 }).ToList();
                 user.AddRange(userAdd);
             }
             return Ok(DataSourceLoader.Load(user, loadOptions));
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(string key, string values)
+        public async Task<IActionResult> Update(string key, string values)
         {
+            //TODO Role kontrol
             var user = _userManager.Users.FirstOrDefault(x => x.Id == key);
             if (user == null)
             {
                 return BadRequest();
             }
-            JsonConvert.PopulateObject(values, user);
+            //var userRole = _dbContext.UserRoles.FirstOrDefault(x => x.UserId == key).ToString();
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var userView = new UserViewModel();
+            userView.Email = user.Email;
+            userView.CreatedDate = user.CreatedDate;
+            userView.Id = user.Id;
+            userView.Name = user.Name;
+            userView.Phone = user.PhoneNumber;
+            userView.Surname = user.Surname;
+            userView.RoleId = userRoles[0];
+
+
+            //await _userManager.RemoveFromRoleAsync(user, oldrole.Name);
+
+            JsonConvert.PopulateObject(values, userView );
+
+            //gelen roleidlere göre yeni rol bilgisi eski rol bilgisi ile kontrol edilecek
+
+            //user update işlemleri
+
             if (!TryValidateModel(user))
             {
                 return BadRequest();
             }
-
             var result = await _userManager.UpdateAsync(user);
+
             if (!result.Succeeded)
             {
                 return BadRequest();
