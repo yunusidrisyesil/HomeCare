@@ -24,11 +24,8 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             _dbContex = dbContext;
         }
-        public async Task<IActionResult> GetAppoinment(DataSourceLoadOptions loadOptions)
+        public async Task<IActionResult> GetAppointment(DataSourceLoadOptions loadOptions)
         {
-            //var data = _dbContex.Appointments.Include(x => x.SupportTicket).Where(x => x.SupportTicket.DoctorId == HttpContext.GetUserId()).ToList();
-            //ViewBag.DataSource = data;
-            //return View();
 
             var appointments = _dbContex.Appointments.Include(x => x.SupportTicket).
                Where(x => x.SupportTicket.DoctorId == HttpContext.GetUserId()).Select(i => new
@@ -36,6 +33,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                    Id = i.Id,
                    SupportTicketId = i.SupportTicketId,
                    AppointmentDate = i.AppointmentDate
+                    
                });
 
             return Json(await DataSourceLoader.LoadAsync(appointments, loadOptions));
@@ -81,6 +79,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             ViewBag.Agenda = DoctorsAppoitments();
             return View();
         }
+
         private List<AppointmentViewModel> DoctorsAppoitments()
         {
             var appoinmnetList = _dbContex.Appointments.Include(x => x.SupportTicket).Where(x => x.SupportTicket.DoctorId == HttpContext.GetUserId()).Select(x => new AppointmentViewModel
