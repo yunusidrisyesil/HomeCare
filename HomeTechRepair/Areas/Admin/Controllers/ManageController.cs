@@ -1,11 +1,18 @@
 ﻿using HomeTechRepair.Areas.Admin.ViewModels;
+using HomeTechRepair.Data;
+using HomeTechRepair.Extensions;
 using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
+using HomeTechRepair.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.Controllers
@@ -16,27 +23,17 @@ namespace HomeTechRepair.Areas.Admin.Controllers
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
+  
 
-        public ManageController(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
+        public ManageController(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _roleManager = roleManager;
             _userManager = userManager;
-            //CheckAndAddRoles();
+            _emailSender = emailSender;
         }
 
-        //private void CheckAndAddRoles()
-        //{
-        //    foreach (var role in RoleModels.Roles)
-        //    {
-        //        if (!_roleManager.RoleExistsAsync(role).Result)
-        //        {
-        //            var result = _roleManager.CreateAsync(new ApplicationRole(role)).Result;
-        //        }
-        //    }
-        //}
-        //model.EmployeesList= data.Select(x => new Itemlist { Value = x.EmployeeId, Text = x.EmployeeName }).ToList();
-
-
+       
         public IActionResult Index()
         {
 
@@ -82,33 +79,30 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 ModelState.AddModelError(nameof(model.Email), "This email has already been registered");
                 return View(model);
             }
-            var count = _userManager.Users.Count() + 1;
+            string username = RandomGenerator.CreateUsername(5);
             user = new ApplicationUser
             {
                 Name = model.Name,
                 Surname = model.Surname,
                 Email = model.Email,
-                UserName = count.ToString()
+                UserName = username
+               
             };
-          
-            var result = await _userManager.CreateAsync(user, model.Password);
+             string password =RandomGenerator.CreatePassword(6);
+            var result = await _userManager.CreateAsync(user,password);
+         
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, model.RoleName);
-                //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
-                //    protocol: Request.Scheme);
-                //var emailMessage = new EmailMessage()
-                //{
-                //    Contacts = new string[] { user.Email },
-                //    Body =
-                //        $"User registered successfully",
-                //    Subject = "...."
-                //};
 
-
-                return RedirectToAction("Login", "Account");
+                var emailMessage = new EmailMessage()
+                {
+                    Contacts = new string[] { user.Email },
+                    Body ="Your Password and username:"+ password+"/"+username,
+                    Subject = "User Information"
+                };
+               await _emailSender.SendAsync(emailMessage);
+                return RedirectToAction("Login", "Account",new { area = ""});
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using HomeTechRepair.Models;
+﻿using HomeTechRepair.Extensions;
+using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;
@@ -108,13 +109,13 @@ namespace HomeTechRepair.Controllers
             var isExist = await _userManager.FindByEmailAsync(model.Email);
             if (isExist == null)
             {
-                var count = _userManager.Users.Count() + 1; // For username 
+                var count = _userManager.Users.Count() + 1;
                 var user = new ApplicationUser
                 {
                     Name = model.Name,
                     Surname = model.Surname,
                     Email = model.Email,
-                    UserName = count.ToString(),
+                    UserName = RandomGenerator.CreateUsername(10)
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);

@@ -26,9 +26,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         }
         public async Task<IActionResult> GetAppoinment(DataSourceLoadOptions loadOptions)
         {
-            //var data = _dbContex.Appointments.Include(x => x.SupportTicket).Where(x => x.SupportTicket.DoctorId == HttpContext.GetUserId()).ToList();
-            //ViewBag.DataSource = data;
-            //return View();
 
             var appointments = _dbContex.Appointments.Include(x => x.SupportTicket).
                Where(x => x.SupportTicket.DoctorId == HttpContext.GetUserId()).Select(i => new
