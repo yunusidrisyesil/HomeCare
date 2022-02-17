@@ -38,7 +38,7 @@
 <script>
     ClearAll();
     Highlight("doctor");
-
+    var services =@Html.Raw(Json.Serialize(@ViewBag.Data));
     var dataGrid = null;
     $(()=>{
         var url = '../../../api/CloseTicketApi';
@@ -77,7 +77,12 @@
                 ,
                 {
                     dataField: "name",
-                    caption: "Name"
+                    caption: "Name",
+                    lookup: {
+                        dataSource: services,
+                        displayExpr: 'Name',
+                        valueExpr: 'Id'
+                    }
                 },
                 {
                     dataField: "price",

@@ -2,6 +2,8 @@
 using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
+using HomeTechRepair.Models.Entities;
+using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -61,8 +63,12 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 ReciptMasterId = recipt.Id,
                 SupportTicketId = recipt.SupportTicketId,
             };
-
-            ViewBag.Data = _dbContex.Services.ToList();
+            var serviceList = _dbContex.Services.Select(x => new LookUpViewModel
+            {
+                Id = x.Id.ToString(),
+                Name = x.Name,
+            }).ToList();
+            ViewBag.Data = serviceList;
             return View(model);
         }
 
