@@ -1,4 +1,5 @@
 ﻿using DevExtreme.AspNet.Data;
+using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using HomeTechRepair.Models.Entities;
@@ -35,16 +36,69 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         [HttpPut]
         public IActionResult Update(string key, string values, string extraParam)
         {
-            var reciptId = Guid.Parse(extraParam);
-            //var ReciptDetials = _dbContext.ReciptDetails.Select(x => x.Description);
-            Service service = new Service();
+            var service = new ReciptServiceViewModel();
             JsonConvert.PopulateObject(values, service);
+            var reciptDetials = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == Guid.Parse(extraParam)).Where(x => x.ServiceId == Guid.Parse(key)).ToList().First();
+            var doesExists = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == Guid.Parse(extraParam)).Where(x => x.ServiceId == service.Id).ToList();
+            if (doesExists.Count != 0)
+            {
+                doesExists.First().Quantity += service.Quantity;
+                doesExists.First().ServicePrice = service.Price;
+                doesExists.First().Description = doesExists.First().Description + " / " + service.Description;
+                _dbContext.ReciptDetails.Remove(reciptDetials);
+            }
+            else
+            {
+                _dbContext.Remove(reciptDetials);
+                _dbContext.SaveChanges();
+                if (service.Id != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                {
+                    reciptDetials.ServiceId = service.Id;
+                }
+                reciptDetials.ServicePrice = service.Price;
+                reciptDetials.Quantity = service.Quantity;
+                reciptDetials.Description = service.Description;
+                _dbContext.Add(reciptDetials);
+            }
+            _dbContext.SaveChanges();
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult Insert(string values)
+        public IActionResult Insert(string values, string extraParam)
         {
+            var recipt = new ReciptDetail();
+            var service = new ReciptServiceViewModel();
+            JsonConvert.PopulateObject(values, service);
+            var doesExists = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == Guid.Parse(extraParam))
+                                                     .Where(x => x.ServiceId == service.Id).ToList();
+            if (doesExists.Count != 0)
+            {
+                doesExists.First().Quantity += service.Quantity;
+                doesExists.First().Description = doesExists.First().Description + " / " + service.Description;
+                doesExists.First().ServicePrice = service.Price;
+            }
+            else
+            {
+                recipt.ServiceId = service.Id;
+                recipt.ReciptMasterId = Guid.Parse(extraParam);
+                recipt.Quantity = service.Quantity;
+                recipt.ServicePrice = service.Price;
+                _dbContext.ReciptDetails.Add(recipt);
+            }
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+
+
+        [HttpDelete]
+        public IActionResult Delete(string key, string extraParam)
+        {
+            var reciptService = _dbContext.ReciptDetails
+                                        .Where(x => x.ReciptMasterId == Guid.Parse(extraParam))
+                                        .Where(x => x.ServiceId == Guid.Parse(key)).ToList().First();
+            _dbContext.Remove(reciptService);
+            _dbContext.SaveChanges();
             return Ok();
         }
 
