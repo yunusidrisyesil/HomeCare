@@ -54,7 +54,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             return Ok();
         }
 
-        public async Task<IActionResult> DeleteAsync(string id)
+        public async Task<IActionResult> Delete(string id)
         {
             //TODO
             var user = await _userManager.FindByIdAsync(id);

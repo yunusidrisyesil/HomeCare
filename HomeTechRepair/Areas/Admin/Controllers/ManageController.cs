@@ -98,8 +98,8 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 var emailMessage = new EmailMessage()
                 {
                     Contacts = new string[] { user.Email },
-                    Body ="Your Password and username:"+ password+"/"+username,
-                    Subject = "User Information"
+                    Body ="Your Password:"+ password,
+                    Subject = "User Password"
                 };
                await _emailSender.SendAsync(emailMessage);
                 return RedirectToAction("Login", "Account",new { area = ""});

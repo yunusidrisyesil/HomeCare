@@ -27,37 +27,35 @@ namespace HomeTechRepair.Controllers.Apis
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
             var data = _dbContext.ReciptMasters
-                .Where(x => x.UserId == "c2b8f513-32ed-470b-aa9e-57788439b6aa")
+                .Where(x => x.UserId == HttpContext.GetUserId())
                 .Select(x => new ReciptViewModel
                 {
-
                     ReciptMasterId = x.Id,
                     TotalAmount = x.TotalAmount,
                     Date = x.Date,
-                    UserId = x.UserId,
-                    hasitems = _dbContext.ReciptDetails.Count(b => b.ReciptMasterId == x.Id) > 0
+                    UserId = x.UserId
                 }).ToList();
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }
 
-        [HttpGet]
-        public IActionResult GetReciptDetail(DataSourceLoadOptions loadOptions)
-        {
-            var datard = _dbContext.ReciptDetails.Include(x => x.ReciptMaster)
-              .Include(x => x.Service).Select(x => new ReciptViewModel
-              {
-                  ReciptMasterId = x.ReciptMasterId,
-                  Id = x.ServiceId,
-                  Name = x.Service.Name,
-                  ServicePrice = x.ServicePrice,
-                  Quantity = x.Quantity,
-                  Description = x.Description
-              }).ToList();
+        //[HttpGet]
+        //public IActionResult GetReciptDetail(DataSourceLoadOptions loadOptions)
+        //{
+        //    var datard = _dbContext.ReciptDetails.Include(x => x.ReciptMaster)
+        //      .Include(x => x.Service).Select(x => new ReciptViewModel
+        //      {
+        //          ReciptMasterId = x.ReciptMasterId,
+        //          Id = x.ServiceId,
+        //          Name = x.Service.Name,
+        //          ServicePrice = x.ServicePrice,
+        //          Quantity = x.Quantity,
+        //          Description = x.Description
+        //      }).ToList();
 
 
-            return Ok(DataSourceLoader.Load(datard, loadOptions));
+        //    return Ok(DataSourceLoader.Load(datard, loadOptions));
 
-        }
+        //}
 
     }
 }
