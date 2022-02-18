@@ -38,7 +38,7 @@
         dataGrid = $("#dxGrid").dxDataGrid({
             remoteOperations: true,
             dataSource: DevExpress.data.AspNet.createStore({
-                key: 'id',
+                key: 'parentId',
                 loadUrl: `${url}/Get`,
                 updateUrl: `${url}/update`,
                 onBeforeSend(method,ajaxOptions){
