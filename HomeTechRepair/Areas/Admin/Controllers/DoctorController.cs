@@ -36,7 +36,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                    AppointmentDate = i.AppointmentDate
                     
                });
-
             return Json(await DataSourceLoader.LoadAsync(appointments, loadOptions));
         }
 

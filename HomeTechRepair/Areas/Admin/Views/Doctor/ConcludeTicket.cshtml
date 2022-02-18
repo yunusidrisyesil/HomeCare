@@ -94,21 +94,28 @@
                     }
                 },
                 {
+                    dataField: "reciptPrice",
+                    caption: "Recipt Price",
+                    visible:true,
+                    formItem: {visible:false}
+                },
+                {
                     dataField: "price",
                     caption: "Price",
+                    visible: false,
+                    formItem: {visible: true}
                 },
                 {
                     dataFiled: "quantity",
                     caption: "Quantity",
-                    dataType: "number",
-                    visible: false,
+                    visible: true,
                     formItem: {visible: true}
                 },
                 {
                     dataField: "description",
                     caption: "Description",
-                    visible: false,
-                    formItem: {visible:true}
+                    visible: true,
+                    formItem: {visible: true}
                 }
             ]
         }).dxDataGrid("instance");

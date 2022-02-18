@@ -26,78 +26,38 @@
                     <li id="li-transaction">
                         <a href="transactions-list.html"><i class="fe fe-activity"></i> <span>Transactions</span></a>
                     </li>
-                    <li class="submenu">
-                        <a href="#"><i class="fe fe-document"></i> <span> Reports</span> <span class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="invoice-report.html">Invoice Reports</a></li>
-                        </ul>
-                    </li>
+
                     <li class="menu-title">
-                        <span>Employees</span>
+                        <span>Management</span>
                     </li>
                     <li id="li-newEmployee">
                         <a asp-action="EmployeeRegister" asp-controller="Manage" asp-area="Admin"><i class="fe fe-user-plus"></i> <span>New Employee</span></a>
                     </li>
 
                     <li id="li-services">
-                        <a asp-action="Services" asp-controller="Manage" asp-area="Admin"><i class="fe fe-user-plus"></i> <span>New Employee</span></a>
+                        <a asp-action="Services" asp-controller="Manage" asp-area="Admin"><i class="fe fe-user-plus"></i> <span>Services</span></a>
                     </li>
-                    
-                    <li>
-                        <a href="blank-page.html"><i class="fe fe-file"></i> <span>Blank Page</span></a>
-                    </li>
-                    <li class="menu-title">
-                        <span>UI Interface</span>
-                    </li>
-                    <li>
-                        <a href="components.html"><i class="fe fe-vector"></i> <span>Components</span></a>
-                    </li>
-                    <li class="submenu">
-                        <a href="#"><i class="fe fe-layout"></i> <span> Forms </span> <span class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="form-basic-inputs.html">Basic Inputs </a></li>
-                            <li><a href="form-input-groups.html">Input Groups </a></li>
-                            <li><a href="form-horizontal.html">Horizontal Form </a></li>
-                            <li><a href="form-vertical.html"> Vertical Form </a></li>
-                            <li><a href="form-mask.html"> Form Mask </a></li>
-                            <li><a href="form-validation.html"> Form Validation </a></li>
-                        </ul>
-                    </li>
-                    <li class="submenu">
-                        <a href="#"><i class="fe fe-table"></i> <span> Tables </span> <span class="menu-arrow"></span></a>
-                        <ul style="display: none;">
-                            <li><a href="tables-basic.html">Basic Tables </a></li>
-                            <li><a href="data-tables.html">Data Table </a></li>
-                        </ul>
-                    </li>
+
                 }
                 else if (Context.User.IsInRole("Doctor"))
                 {
                     <li id="li-appointments">
-                        <a><i class="fe fe-user"></i> <span>Patients</span></a>
+                        <a asp-action="Scheduler" asp-controller="Doctor" asp-area="Admin"><i class="fe fe-user"></i> <span>Appoinmets</span></a>
                     </li>
                 }
-                <li class="submenu">
-                    <a href="javascript:void(0);"><i class="fe fe-code"></i> <span>Multi Level</span> <span class="menu-arrow"></span></a>
-                    <ul style="display: none;">
-                        <li class="submenu">
-                            <a href="javascript:void(0);"> <span>Level 1</span> <span class="menu-arrow"></span></a>
-                            <ul style="display: none;">
-                                <li><a href="javascript:void(0);"><span>Level 2</span></a></li>
-                                <li class="submenu">
-                                    <a href="javascript:void(0);"> <span> Level 2</span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a href="javascript:void(0);">Level 3</a></li>
-                                        <li><a href="javascript:void(0);">Level 3</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="javascript:void(0);"> <span>Level 2</span></a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);"> <span>Level 1</span></a>
-                        </li>
-                    </ul>
+                else if (Context.User.IsInRole("Operator"))
+                {
+                    <li id="li-manageTickets">
+                        <a asp-action="Index" asp-controller="ManageTicket" asp-area="Admin"><i class="fe fe-user"></i> <span>Manage Tickets</span></a>
+                    </li>
+                }
+
+                <li class="menu-title">
+                    <span>Site</span>
+                </li>
+
+                <li id="li-services">
+                    <a asp-action="Index" asp-controller="Home" asp-area=""><i class="fe fe-user-plus"></i> <span>Go To Site</span></a>
                 </li>
             </ul>
         </div>

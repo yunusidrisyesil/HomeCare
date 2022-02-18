@@ -1,54 +1,75 @@
 ﻿@model EmployeeRegisterViewModel
-@*@model List<RoleDropdownViewModel>*@
-
 @{
     ViewBag.Title = "EmployeeRegister";
 }
 
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="account-content">
-                    <div class="row align-items-center justify-content-center">
-                        <div class="col-md-12 col-lg-6 login-right">
-                            <form asp-action="EmployeeRegister" asp-controller="Manage" asp-area="Admin" method="post">
-                                <div class="form-group form-focus">
-                                    <label class="focus-label" asp-for="Name"></label>
-                                    <input asp-for="Name" class="form-control floating">
-                                    <span asp-validation-for="Name"></span>
+<!-- Page Wrapper -->
+<div class="main-wrapper">
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3 class="page-title">Blank Page</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Blank Page</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+
+            <div class="control-section">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <div class="account-content">
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-md-12 col-lg-6 login-right">
+                                    <form asp-action="EmployeeRegister" asp-controller="Manage" asp-area="Admin" method="post">
+                                        <div class="form-group form-focus">
+                                            <label class="focus-label" asp-for="Name"></label>
+                                            <input asp-for="Name" class="form-control floating">
+                                            <span asp-validation-for="Name"></span>
+                                        </div>
+                                        <div class="form-group form-focus">
+                                            <label class="focus-label" asp-for="Surname"></label>
+                                            <input asp-for="Surname" class="form-control floating">
+                                            <span asp-validation-for="Surname"></span>
+                                        </div>
+                                        <div class="form-group form-focus">
+                                            <label class="focus-label" asp-for="Email"></label>
+                                            <input asp-for="Email" class="form-control floating">
+                                            <span asp-validation-for="Email"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <select id="DropdownViewModel" class="form-control" asp-for="RoleName" asp-items="@(new SelectList(Model.Roles, "Value", "Text"))">
+                                                    <option value="">--Select--</option>
+                                                </select>
+                                                <input type="hidden" asp-for="RoleName" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="payment-box mt-30">
+                                                <input type="submit" class="main-btn" value="Add" />
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="form-group form-focus">
-                                    <label class="focus-label" asp-for="Surname"></label>
-                                    <input asp-for="Surname" class="form-control floating">
-                                    <span asp-validation-for="Surname"></span>
-                                </div>
-                                <div class="form-group form-focus">
-                                    <label class="focus-label" asp-for="Email"></label>
-                                    <input asp-for="Email" class="form-control floating">
-                                    <span asp-validation-for="Email"></span>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <select id="DropdownViewModel" class="form-control" asp-for="RoleName" asp-items="@(new SelectList(Model.Roles, "Value", "Text"))">
-                                            <option value="">--Select--</option>
-                                        </select>
-                                        <input type="hidden" asp-for="RoleName" />
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="payment-box mt-30">
-                                        <input type="submit" class="main-btn" value="Add" />
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
+    <!-- /Page Wrapper -->
 </div>
+
 
 @section Scripts{
 <script>

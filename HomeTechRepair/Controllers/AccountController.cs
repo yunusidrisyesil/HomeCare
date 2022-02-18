@@ -69,7 +69,7 @@ namespace HomeTechRepair.Controllers
                     }
                     else if (await _userManager.IsInRoleAsync(user, RoleModels.Doctor))
                     {
-                        return RedirectToAction("Index", "Doctor", new { area = "Admin" });
+                        return RedirectToAction("Agenda", "Doctor", new { area = "Admin" });
                     }
                     else if (await _userManager.IsInRoleAsync(user, RoleModels.Operator))
                     {

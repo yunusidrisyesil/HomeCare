@@ -24,11 +24,13 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         [HttpGet]
         public IActionResult Get(Guid id, DataSourceLoadOptions loadOptions)
         {
-            var data = _dbContext.ReciptDetails.Include(x => x.Service).Where(x => x.ReciptMasterId == id).Select(x => new Service
+            var data = _dbContext.ReciptDetails.Include(x => x.Service).Where(x => x.ReciptMasterId == id).Select(x => new ReciptServiceViewModel
             {
                 Id = x.Service.Id,
                 Name = x.Service.Name,
-                Price = x.Service.Price
+                ReciptPrice = x.Service.Price,
+                Description = x.Description,
+                Quantity = x.Quantity
             }).ToList();
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }
@@ -43,7 +45,10 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             if (doesExists.Count != 0)
             {
                 doesExists.First().Quantity += service.Quantity;
-                doesExists.First().ServicePrice = service.Price;
+                if (service.Price != 0)
+                {
+                    doesExists.First().ServicePrice = service.Price;
+                }
                 doesExists.First().Description = doesExists.First().Description + " / " + service.Description;
                 _dbContext.ReciptDetails.Remove(reciptDetials);
             }
@@ -51,11 +56,14 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             {
                 _dbContext.Remove(reciptDetials);
                 _dbContext.SaveChanges();
-                if (service.Id != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+                if (service.Id != Guid.Empty)
                 {
                     reciptDetials.ServiceId = service.Id;
                 }
-                reciptDetials.ServicePrice = service.Price;
+                if (service.Price != 0)
+                {
+                    reciptDetials.ServicePrice = service.Price;
+                }
                 reciptDetials.Quantity = service.Quantity;
                 reciptDetials.Description = service.Description;
                 _dbContext.Add(reciptDetials);
