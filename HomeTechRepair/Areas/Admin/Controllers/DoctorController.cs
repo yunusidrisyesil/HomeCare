@@ -24,6 +24,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             _dbContex = dbContext;
         }
+
         public async Task<IActionResult> GetAppointment(DataSourceLoadOptions loadOptions)
         {
 
@@ -40,16 +41,16 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult ConcludeTicket()
+        public IActionResult ConcludeTicket(Guid Id)
         {
-            var ticketId = Guid.Parse("ecc5d1e8-d7ba-4426-a47f-08d9eb1b4856");
-            var recipt = _dbContex.ReciptMasters.FirstOrDefault(x => x.SupportTicketId == ticketId);
+            //var ticketId = Guid.Parse("ecc5d1e8-d7ba-4426-a47f-08d9eb1b4856");
+            var recipt = _dbContex.ReciptMasters.FirstOrDefault(x => x.SupportTicketId == Id);
             if (recipt == null)
             {
-                var ticket = _dbContex.SupportTickets.Find(ticketId);
+                var ticket = _dbContex.SupportTickets.Find(Id);
                 recipt = new ReciptMaster
                 {
-                    SupportTicketId = ticketId,
+                    SupportTicketId = Id,
                     UserId = ticket.UserId,
                     TotalAmount = 0,
                 };
@@ -74,9 +75,15 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             ViewBag.Scheduler = DoctorsAppoitments();
             return View();
         }
+
         public IActionResult Agenda()
         {
             ViewBag.Agenda = DoctorsAppoitments();
+            return View();
+        }
+
+        public IActionResult Tickets()
+        {
             return View();
         }
 

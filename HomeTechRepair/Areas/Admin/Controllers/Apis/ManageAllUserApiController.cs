@@ -78,7 +78,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 var newRole = _dbContext.Roles.FirstOrDefault(x=>x.Id == userView.RoleId);
                 var oldRole = _dbContext.Roles.FirstOrDefault(x => x.Id == userRole.RoleId); ;
                 await _userManager.RemoveFromRoleAsync(user, oldRole.Name);
-
                 await _userManager.AddToRoleAsync(user, newRole.Name);
             }
             //gelen roleidlere göre yeni rol bilgisi eski rol bilgisi ile kontrol edilecek
