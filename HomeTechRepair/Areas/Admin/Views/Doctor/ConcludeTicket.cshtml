@@ -76,7 +76,6 @@
                     dataField: "id",
                     caption: "Id",
                     visible : false,
-                    allowFiltering: false,
                     formItem: {visible: false}
                 },
                 {
@@ -97,6 +96,19 @@
                 {
                     dataField: "price",
                     caption: "Price",
+                },
+                {
+                    dataFiled: "quantity",
+                    caption: "Quantity",
+                    dataType: "number",
+                    visible: false,
+                    formItem: {visible: true}
+                },
+                {
+                    dataField: "description",
+                    caption: "Description",
+                    visible: false,
+                    formItem: {visible:true}
                 }
             ]
         }).dxDataGrid("instance");
