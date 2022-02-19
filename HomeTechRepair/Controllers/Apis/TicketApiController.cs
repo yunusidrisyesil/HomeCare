@@ -1,4 +1,5 @@
-﻿using DevExtreme.AspNet.Data;
+﻿using AutoMapper;
+using DevExtreme.AspNet.Data;
 using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
@@ -11,14 +12,18 @@ namespace HomeTechRepair.Controllers.Apis
     public class TicketApiController : Controller
     {
         private readonly MyContext _dbContext;
-        public TicketApiController(MyContext dbContext)
+        private readonly IMapper _mapper;
+        public TicketApiController(MyContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var data = _dbContext.SupportTickets.Where(i => i.UserId ==HttpContext.GetUserId()).Select(i => new SupportTicketViewModel
+            //Mapped not checked
+            //var data = _dbContext.SupportTickets.Where(x=> x.UserId == HttpContext.GetUserId()).Select(x=> _mapper.Map<SupportTicketViewModel>(x)).ToList();
+            var data = _dbContext.SupportTickets.Where(i => i.UserId == HttpContext.GetUserId()).Select(i => new SupportTicketViewModel
             {
 
                 Id = i.Id,

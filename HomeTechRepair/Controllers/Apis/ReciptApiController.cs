@@ -1,4 +1,5 @@
-﻿using DevExtreme.AspNet.Data;
+﻿using AutoMapper;
+using DevExtreme.AspNet.Data;
 using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
@@ -17,15 +18,21 @@ namespace HomeTechRepair.Controllers.Apis
     {
 
         private readonly MyContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public ReciptApiController(MyContext dbContext)
+        public ReciptApiController(MyContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
+            //MAPPED not checked
+            //var data = _dbContext.ReciptMasters.Where(x => x.UserId == HttpContext.GetUserId())
+            //    .Select(x => _mapper.Map<ReciptViewModel>(x)).ToList();
+
             var data = _dbContext.ReciptMasters
                 .Where(x => x.UserId == HttpContext.GetUserId())
                 .Select(x => new ReciptViewModel

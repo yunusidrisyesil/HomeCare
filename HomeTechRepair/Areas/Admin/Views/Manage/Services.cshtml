@@ -5,15 +5,22 @@
 
 <div class="page-wrapper">
     <div class="content container-fluid">
- Page Header 
-<div class="page-header">
-    <div class="row">
-        <div class="col-sm-12">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="page-title">Services</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:(0);">Manage</a></li>
+                        <li class="breadcrumb-item active">Services</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
- /Page Header 
-<div class="control-section">
+        <!-- /Page Header -->
+
+        <div class="control-section">
             <div class="card-body">
                 <div id="dxGrid"> </div>
             </div>
@@ -26,88 +33,88 @@
 
 @section Scripts
 {
-    <script src="~/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
+<script src="~/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
 
-    <script>
-        var dataGrid = null;
-        $(() => {
+<script>
+      var dataGrid = null;
+      $(() => {
 
-            var url = '../../../api/ManageServiceApi';
-            dataGrid = $("#dxGrid").dxDataGrid({
-                remoteOperations: { paging: true, filtering: true, sorting: true, grouping: true, summary: true, groupPaging: true },
-                dataSource: DevExpress.data.AspNet.createStore({
-                    key: 'id',
-                    loadUrl: `${url}/get`,
-                    updateUrl: `${url}/update`,
-                    insertUrl: `${url}/insert`,
-                    deleteUrl: `${url}/delete`,
-                    onBeforeSend(method, ajaxOptions) {
-                        ajaxOptions.xhrFields = { withCredentials: true };
-                        console.log(method);
-                        console.log(ajaxOptions);
-                    }
-                }),
-                editing: {
-                    mode: 'form',
-                    allowUpdating: true,
-                    allowAdding: true,
-                    allowDeleting: true,
-                },
-                allowColumnResizing: true,
-                showColumnLines: true,
-                showRowLines: true,
-                rowAlternationEnabled: true,
-                showBorders: true,
-                searchPanel: {
-                    visible: true,
-                    width: 240,
-                    placeholder: "Search..."
-                },
-                filterRow: {
-                    visible: true,
-                    applyFilter: "auto"
-                },
-                headerFilter: {
-                    visible: true
-                },
-                export: {
-                    enabled: true,
-                    fileName: `Serviceler_${parseInt(Math.random() * 1000000000)}`,
-                    allowExportSelectedData: true
-                },
-                paging: {
-                    pageSize: 20
-                },
-                pager: {
-                    showPageSizeSelector: true,
-                    allowedPageSizes: [5, 15, 30, 45],
-                    showInfo: true
-                },
-                selection: {
-                    mode: "multiple"
-                },
-                columns: [
-                    {
-                        caption: 'Id',
-                        dataField: "Id",
-                        visible: false,
-                        allowFiltering: false,
-                        formItem: { visible: false }
-                    },
-                    {
-                        caption: 'Name',
-                        dataField: "name",
-                        dataType :"string"
-                    },
-                    {
-                        caption: 'Price',
-                        dataField: "price",
-                        dataType: "number",
-                        format: "#.## TL"
-                    },
-                ]
-            }).dxDataGrid("instance");
-      });
-    </script>
+          var url = '../../../api/ManageServiceApi';
+          dataGrid = $("#dxGrid").dxDataGrid({
+              remoteOperations: { paging: true, filtering: true, sorting: true, grouping: true, summary: true, groupPaging: true },
+              dataSource: DevExpress.data.AspNet.createStore({
+                  key: 'id',
+                  loadUrl: `${url}/get`,
+                  updateUrl: `${url}/update`,
+                  insertUrl: `${url}/insert`,
+                  deleteUrl: `${url}/delete`,
+                  onBeforeSend(method, ajaxOptions) {
+                      ajaxOptions.xhrFields = { withCredentials: true };
+                      console.log(method);
+                      console.log(ajaxOptions);
+                  }
+              }),
+              editing: {
+                  mode: 'form',
+                  allowUpdating: true,
+                  allowAdding: true,
+                  allowDeleting: true,
+              },
+              allowColumnResizing: true,
+              showColumnLines: true,
+              showRowLines: true,
+              rowAlternationEnabled: true,
+              showBorders: true,
+              searchPanel: {
+                  visible: true,
+                  width: 240,
+                  placeholder: "Search..."
+              },
+              filterRow: {
+                  visible: true,
+                  applyFilter: "auto"
+              },
+              headerFilter: {
+                  visible: true
+              },
+              export: {
+                  enabled: true,
+                  fileName: `Serviceler_${parseInt(Math.random() * 1000000000)}`,
+                  allowExportSelectedData: true
+              },
+              paging: {
+                  pageSize: 20
+              },
+              pager: {
+                  showPageSizeSelector: true,
+                  allowedPageSizes: [5, 15, 30, 45],
+                  showInfo: true
+              },
+              selection: {
+                  mode: "multiple"
+              },
+              columns: [
+                  {
+                      caption: 'Id',
+                      dataField: "Id",
+                      visible: false,
+                      allowFiltering: false,
+                      formItem: { visible: false }
+                  },
+                  {
+                      caption: 'Name',
+                      dataField: "name",
+                      dataType :"string"
+                  },
+                  {
+                      caption: 'Price',
+                      dataField: "price",
+                      dataType: "number",
+                      format: "#.## TL"
+                  },
+              ]
+          }).dxDataGrid("instance");
+    });
+</script>
 
 }

@@ -42,31 +42,18 @@
                 }),
                 editing: {
                     mode: 'form',
-                    allowUpdating: true,
-                    allowAdding: false,
-                    allowDeleting: false,
                 },
                 allowColumnResizing: true,
                 showColumnLines: true,
                 showRowLines: true,
                 rowAlternationEnabled: true,
                 showBorders: true,
-                searchPanel: {
-                    visible: true,
-                    width: 240,
-                    placeholder: "Search..."
-                },
                 filterRow: {
                     visible: true,
                     applyFilter: "auto"
                 },
                 headerFilter: {
                     visible: true
-                },
-                export: {
-                    enabled: true,
-                    fileName: `Tickets_${parseInt(Math.random() * 1000000000)}`,
-                    allowExportSelectedData: true
                 },
                 paging: {
                     pageSize: 20
@@ -75,9 +62,6 @@
                     showPageSizeSelector: true,
                     allowedPageSizes: [5, 15, 30, 45],
                     showInfo: true
-                },
-                selection: {
-                    mode: "multiple"
                 },
                 columns: [
                     {
@@ -88,12 +72,12 @@
                         formItem: { visible: false }
                     },
                     {
-                        caption: 'description',
+                        caption: 'Description',
                         dataField: "description",
                         dataType: "string"
                     },
                     {
-                        caption: 'createdDate',
+                        caption: 'Created Date',
                         dataField: "createdDate",
                         dataType: "datetime"
                     },

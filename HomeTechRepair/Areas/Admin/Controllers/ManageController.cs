@@ -111,7 +111,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult GetAllDoctors()
+        public IActionResult Employees()
         {
             return View();
         }

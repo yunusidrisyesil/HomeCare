@@ -1,4 +1,4 @@
-﻿@{
+﻿  @{
     ViewBag.Title = "All Doctros";
 }
 
@@ -36,7 +36,7 @@
 
     var dataGrid = null;
     $(()=>{
-        var url = '../../../api/managedoctorapi';
+        var url = '../../../api/ManageEmployeesApi';
         dataGrid = $("#dxGrid").dxDataGrid({
             remoteOperations: true,
             dataSource: DevExpress.data.AspNet.createStore({

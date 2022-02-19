@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
     [Route("/api/[controller]/[action]")]
-    public class ManageDoctorApiController : Controller
+    public class ManageEmployeesApiController : Controller
     {
         private readonly MyContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ManageDoctorApiController(MyContext dbContext, UserManager<ApplicationUser> userManager)
+        public ManageEmployeesApiController(MyContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
@@ -27,8 +27,12 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
+            var employeesList = new List< ApplicationUser >() ;
             var docList = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
-            return Ok(DataSourceLoader.Load(docList, loadOptions));
+            var operatorList = await _userManager.GetUsersInRoleAsync(RoleModels.Operator);
+            employeesList.AddRange(docList);
+            employeesList.AddRange(operatorList);
+            return Ok(DataSourceLoader.Load(employeesList, loadOptions));
         }
 
         [HttpPut]

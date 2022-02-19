@@ -13,6 +13,7 @@ namespace HomeTechRepair.MapperProfiles
             CreateMap<AddressViewModel, Address>().ReverseMap();
             CreateMap<UserTicketViewModel, SupportTicket>().ReverseMap();
             CreateMap<UserViewModel, ApplicationUser>().ReverseMap();
+            CreateMap<ReciptViewModel, ReciptMaster>().ReverseMap();
         }
     }
 }
