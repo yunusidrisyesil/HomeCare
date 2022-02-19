@@ -4,10 +4,7 @@ using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
@@ -20,7 +17,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         {
             _dbContext = dbContext;
         }
-
+        [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
             var data = _dbContext.SupportTickets.Include(x => x.Appointment).Where(x => x.DoctorId == HttpContext.GetUserId()).Select(x => new SupportTicketViewModel

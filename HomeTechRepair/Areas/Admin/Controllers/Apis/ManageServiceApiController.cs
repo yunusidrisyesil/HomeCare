@@ -94,21 +94,19 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         }
 
         [HttpDelete]
-       
-            [HttpDelete]
-            public IActionResult Delete(Guid key)
-            {
-            var data = _dbContex.Services.Find(key); 
-                if (data == null)
-                    return StatusCode(StatusCodes.Status409Conflict, "service not found");
+        public IActionResult Delete(Guid key)
+        {
+            var data = _dbContex.Services.Find(key);
+            if (data == null)
+                return StatusCode(StatusCodes.Status409Conflict, "service not found");
 
             _dbContex.Services.Remove(data);
 
             var result = _dbContex.SaveChanges();
-                if (result == 0)
-                    return BadRequest("Deletion failed");
-                return Ok(new JsonResponseViewModel());
-            }
+            if (result == 0)
+                return BadRequest("Deletion failed");
+            return Ok(new JsonResponseViewModel());
+        }
 
     }
 

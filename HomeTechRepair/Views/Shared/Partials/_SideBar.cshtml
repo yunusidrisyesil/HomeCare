@@ -6,7 +6,7 @@
             <nav class="dashboard-menu">
                 <ul>
                     <li class="active">
-                        <a asp-controller="Profile" asp-action="Profile">
+                        <a asp-controller="Profile" asp-action="Details">
                             <i class="fas fa-user-cog"></i>
                             <span>Profile Settings</span>
                         </a>
@@ -18,20 +18,19 @@
                         </a>
                     </li>
                     <li>
-                        <a href="favourites.html">
+                        <a asp-controller="Recipt" asp-action="Index">
                             <i class="fas fa-bookmark"></i>
                             <span>Invoices</span>
                         </a>
                     </li>
                     <li>
-                        <a href="chat.html">
+                        <a asp-controller="Ticket" asp-action="GetTickets">
                             <i class="fas fa-comments"></i>
                             <span>Tickets</span>
-                            <small class="unread-msg">23</small>
                         </a>
                     </li>
                     <li>
-                        <a asp-controller="Profie" asp-action="UpdatePassword">
+                        <a asp-controller="Profile" asp-action="UpdatePassword">
                             <i class="fas fa-lock"></i>
                             <span>Change Password</span>
                         </a>

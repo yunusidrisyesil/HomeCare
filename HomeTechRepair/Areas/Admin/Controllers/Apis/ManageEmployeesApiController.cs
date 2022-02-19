@@ -57,7 +57,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             }
             return Ok();
         }
-
+        [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
             //TODO

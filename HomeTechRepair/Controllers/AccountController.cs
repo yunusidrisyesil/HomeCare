@@ -265,6 +265,9 @@ namespace HomeTechRepair.Controllers
             }
             return View();
         }
+
+        [HttpGet]
+        [Authorize]
         public IActionResult GetTicket()
         {
             return View();

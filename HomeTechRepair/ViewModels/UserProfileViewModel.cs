@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace HomeTechRepair.ViewModels
 {
@@ -11,6 +12,9 @@ namespace HomeTechRepair.ViewModels
         [Required(ErrorMessage = "Email space cannot be blank.")]
         [EmailAddress]
         public string Email { get; set; }
+        [Phone]
+        public string PhoneNumber { get; set; }
+        public DateTime BirthDay { get; set; }
 
     }
 }

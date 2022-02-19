@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace HomeTechRepair.Controllers
 {
+    //TODO Birthday
     public class ProfileController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,10 +29,6 @@ namespace HomeTechRepair.Controllers
             _roleManager = roleManager;
             _emailSender = emailSender;
         }
-
-    
-
-
 
         [HttpGet]
         [Authorize]
@@ -49,7 +46,7 @@ namespace HomeTechRepair.Controllers
                 Email = user.Email,
                 Name = user.Name,
                 Surname = user.Surname,
-
+                PhoneNumber = user.PhoneNumber,
             };
             return View(model);
         }
@@ -94,7 +91,6 @@ namespace HomeTechRepair.Controllers
 
         }
 
-
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdatePassword(UpdatePasswordViewModel model)
@@ -121,8 +117,5 @@ namespace HomeTechRepair.Controllers
             return RedirectToAction(nameof(Profile));
 
         }
-
-
-
     }
 }

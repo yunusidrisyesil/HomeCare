@@ -1,5 +1,4 @@
 ﻿using HomeTechRepair.Areas.Admin.ViewModels;
-using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
@@ -7,12 +6,8 @@ using HomeTechRepair.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.Controllers
@@ -33,7 +28,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             _emailSender = emailSender;
         }
 
-       
         public IActionResult Index()
         {
 
@@ -102,7 +96,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                     Subject = "User Password"
                 };
                await _emailSender.SendAsync(emailMessage);
-                return RedirectToAction("Login", "Account",new { area = ""});
+                return RedirectToAction("Employees", "Manage",new { area = "Admin"});
             }
             else
             {

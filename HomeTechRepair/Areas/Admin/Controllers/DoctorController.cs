@@ -4,9 +4,9 @@ using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using HomeTechRepair.Models.Entities;
 using HomeTechRepair.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 namespace HomeTechRepair.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin,Doctor")]
     public class DoctorController : Controller
     {
         private readonly MyContext _dbContex;
@@ -25,6 +26,8 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             _dbContex = dbContext;
         }
 
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAppointment(DataSourceLoadOptions loadOptions)
         {
 
@@ -40,6 +43,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult ConcludeTicket(Guid Id)
         {
             //var ticketId = Guid.Parse("ecc5d1e8-d7ba-4426-a47f-08d9eb1b4856");
@@ -69,23 +73,31 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Authorize]
         public IActionResult Scheduler()
         {
             ViewBag.Scheduler = DoctorsAppoitments();
             return View();
         }
 
+        [HttpGet]
+        [Authorize]
         public IActionResult Agenda()
         {
             ViewBag.Agenda = DoctorsAppoitments();
             return View();
         }
 
+        [HttpGet]
+        [Authorize]
         public IActionResult Tickets()
         {
             return View();
         }
 
+        [HttpGet]
+        [Authorize]
         private List<AppointmentViewModel> DoctorsAppoitments()
         {
             var appoinmnetList = _dbContex.Appointments.Include(x => x.SupportTicket).Where(x => x.SupportTicket.DoctorId == HttpContext.GetUserId()).Select(x => new AppointmentViewModel
