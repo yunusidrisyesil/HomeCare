@@ -83,31 +83,33 @@
                         formItem: { visible: false }
                     },
                     {
-                        caption: 'patient',
-                        dataField: "patient"
+                        caption: 'Patient',
+                        dataField: "patient",
+                        allowEditing: false,
                     },
                     {
                         dataField: "createdDate",
-                        caption: "createdDate",
-                        dataType: "datetime",
-                        format: 'dd/MM/yyyy HH:mm',
-                    },
-                    {
-                        dataField: "appointmentDate",
-                        caption: "appointmentDate",
-                        dataType: "datetime",
-                        format: 'dd/MM/yyyy HH:mm',
-
-                    },
-                    {
-                        dataField: "resolutionDate",
-                        caption: "resolutionDate",
+                        caption: "Created Date",
                         dataType: "datetime",
                         format: 'dd/MM/yyyy HH:mm',
                         allowEditing: false,
                     },
                     {
-                        caption: 'description',
+                        dataField: "appointmentDate",
+                        caption: "Appointment Date",
+                        dataType: "datetime",
+                        format: 'dd/MM/yyyy HH:mm',
+                        allowEditing: false,
+                    },
+                    {
+                        dataField: "resolutionDate",
+                        caption: "Resolution Date",
+                        dataType: "datetime",
+                        format: 'dd/MM/yyyy HH:mm',
+                        
+                    },
+                    {
+                        caption: 'Description',
                         dataField: "description",
                         editorType: 'dxTextArea',
                         colSpan: 2,
