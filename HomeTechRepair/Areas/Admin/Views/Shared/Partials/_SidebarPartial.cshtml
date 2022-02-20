@@ -44,6 +44,12 @@
                     <li id="li-appointments">
                         <a asp-action="Scheduler" asp-controller="Doctor" asp-area="Admin"><i class="fe fe-user"></i> <span>Appoinmets</span></a>
                     </li>
+                    <li id="li-appointments">
+                        <a asp-action="Agenda" asp-controller="Doctor" asp-area="Admin"><i class="fe fe-user"></i> <span>Agenda</span></a>
+                    </li>
+                    <li id="li-appointments">
+                        <a asp-action="Tickets" asp-controller="Doctor" asp-area="Admin"><i class="fe fe-user"></i> <span>Tickets</span></a>
+                    </li>
                 }
                 else if (Context.User.IsInRole("Operator"))
                 {

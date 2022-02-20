@@ -27,7 +27,8 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 Description = x.Description,
                 CreatedDate = x.CreatedDate,
                 AppointmentDate = x.Appointment.AppointmentDate,
-                ResolutionDate = x.ResolutionDate
+                ResolutionDate = x.ResolutionDate,
+                isActive = (x.ResolutionDate != null) ? true : false
             }).ToList();
 
             return Ok(DataSourceLoader.Load(data, loadOptions));

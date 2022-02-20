@@ -107,31 +107,32 @@
                     formItem: { visible: false }
                 },
                 {
-                    caption: 'patient',
-                    dataField: "patient"
+                    caption: 'Patient',
+                    dataField: "patient",
+                    allowEditing: false
                 },
                 {
                     dataField : "createdDate",
-                    caption: "createdDate",
+                    caption: "Created Date",
                     dataType: "datetime",
                     format: 'dd/MM/yyyy HH:mm',
                 },
                 {
                     dataField : "appointmentDate",
-                    caption: "appointmentDate",
+                    caption: "Appointment Date",
                     dataType: "datetime",
                     format: 'dd/MM/yyyy HH:mm',
 
                 },
                 {
                     dataField : "resolutionDate",
-                    caption: "resolutionDate",
+                    caption: "Resolution Date",
                     dataType: "datetime",
                     format: 'dd/MM/yyyy HH:mm',
                     allowEditing: false,
                 },
                 {
-                    caption: 'doctorId',
+                    caption: 'Doctor',
                     dataField: "doctorId",
                     lookup: {
                         dataSource: doctors,
@@ -146,9 +147,10 @@
                     allowEditing: false,
                 },
                 {
-                    caption: 'description',
+                    caption: 'Description',
                     dataField: "description",
                     editorType: 'dxTextArea',
+                    allowEditing: false,
                     colSpan: 2,
                     editorOptions: {
                         height: 100,

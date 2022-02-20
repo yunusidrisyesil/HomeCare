@@ -1,28 +1,21 @@
 ﻿@{
-    ViewBag.Title = "Recipts";
+    ViewBag.Title = " Details";
 }
-<div class="content">
-    <div class="container-fluid">
+
+<div class="page-wrapper">
+    <div class="content container-fluid">
         <div class="row">
-            <div class="account-content">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-8">
-                        <div id="dxGrid"></div>
-                        <div class="fancybox-button" id="Detail" hidden></div>
-                    </div>
-                </div>
-            </div>
+            <div class="col-lg-8" id="dxGrid"> </div>
         </div>
     </div>
 </div>
-
 @section Scripts
 {
     <script src="~/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
     <script>
         var dataGrid = null;
         $(() => {
-            var url = '../../../api/ReciptApi';
+            var url = '../../../api/ReciptDetailApi';
             dataGrid = $("#dxGrid").dxDataGrid({
                 remoteOperations: { paging: true, filtering: true, sorting: true, grouping: true, summary: true, groupPaging: true },
                 dataSource: DevExpress.data.AspNet.createStore({
@@ -71,42 +64,35 @@
                 },
                 columns: [
                     {
-                        caption: 'Id',
-                        dataField: "Id",
-                        visible: false,
-                        allowFiltering: false,
-                        formItem: { visible: false }
+                        caption: 'Recipt MasterId',
+                        dataField: "reciptMasterId",
+                        visible: true,
+                        allowFiltering: true,
+                        formItem: { visible: true }
                     },
                     {
-                        caption: 'Recipt Date',
-                        dataField: "date",
-                        dataType: "DateTime",
+                        caption: 'Service Name',
+                        dataField: "name",
                     },
                     {
-                        caption: 'Total Amount',
-                        dataField: "totalAmount",
+                        caption: 'Quantity',
+                        dataField: "quantity",
                         dataType: "double"
 
+                    },
+                    {
+                        caption: 'Service Price',
+                        dataField: "servicePrice",
+                        dataType: "double"
+
+                    },
+                    {
+                        caption: 'Description',
+                        dataField: "description",
                     }
-                ],
-                onSelectionChanged(selectedItems) {
-                    const data = selectedItems.selectedRowsData[0];
-                    if (data) {
-                        $('#Detail').dxButton({
-                            stylingMode: 'contained',
-                            text: 'Detail',
-                            type: 'success',
-                            width: 120,
-                            onClick() {
-                                console.log(data.id)
-                                window.location.href = '/reciptdetail/index/' + data.id;
-                            },
-                        });
-                    }
-                },
+                ]
             }).dxDataGrid("instance");
         });
-
     </script>
 
 }
