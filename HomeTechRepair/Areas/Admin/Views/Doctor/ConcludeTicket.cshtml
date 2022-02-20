@@ -28,6 +28,15 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-3">
+                    <button id="btn_conclude">Save</button>
+                </div>
+                <div class="col-md-3">
+                    <button id="btn_cancel">Cancel</button>
+                </div>
+            </div>
+
         </div>
     </div>
     <!-- /Page Wrapper -->
@@ -36,8 +45,7 @@
 @section Scripts{
 <script src="/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
 <script>
-    ClearAll();
-    Highlight("doctor");
+
     var services = @Html.Raw(Json.Serialize(@ViewBag.Data));
     var dataGrid = null;
     $(()=>{
@@ -119,7 +127,6 @@
                 }
             ]
         }).dxDataGrid("instance");
-        console.log("Ok");
     });
 
     function getPrice(value){
@@ -130,5 +137,28 @@
         });
         return price;
     }
+
+    $("#btn_conclude").on("click",function(){
+        $.ajax({
+            url: "../../../api/CloseTicketApi/Conclude",
+            type: "POST",
+            data: {'id': "@Model.ReciptMasterId"},
+            success: function (data) {
+                window.location.href = '/admin/doctor/index';
+            }
+        });
+    });
+
+    $("#btn_cancel").on("click",function(){
+        $.ajax({
+            url: "../../../api/CloseTicketApi/Cancel",
+            type: "POST",
+            data: {'id': "@Model.ReciptMasterId"},
+            success: function (data) {
+                window.location.href = '/admin/doctor/index';
+            }
+        });
+    });
+
 </script>
 }

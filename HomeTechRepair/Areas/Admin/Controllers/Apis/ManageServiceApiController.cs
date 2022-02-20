@@ -27,70 +27,68 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-
-
             var data = _dbContex.Services.Select(i => new ServiceViewModel
             {
                 Id = i.Id,
                 Name = i.Name,
                 Price = i.Price
             }).ToList();
-
-
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }
 
         [HttpPut]
         public IActionResult Update(Guid key, string values)
         {
-
             var data = _dbContex.Services.Find(key);
             if (data == null)
+            {
                 return BadRequest(new JsonResponseViewModel()
                 {
                     IsSuccess = false,
                     ErrorMessage = ModelState.ToFullErrorString()
                 });
-
+            }
             JsonConvert.PopulateObject(values, data);
             if (!TryValidateModel(data))
+            {
                 return BadRequest(ModelState.ToFullErrorString());
-
+            }
             var result = _dbContex.SaveChanges();
             if (result == 0)
+            {
                 return BadRequest(new JsonResponseViewModel()
                 {
                     IsSuccess = false,
-                    ErrorMessage = "service not update"
+                    ErrorMessage = "Service could not update."
                 });
+            }
             return Ok(new JsonResponseViewModel());
-
         }
 
         [HttpPost]
         public IActionResult Insert(string values)
         {
-
             var data = new Service();
             JsonConvert.PopulateObject(values, data);
             if (!TryValidateModel(data))
+            {
                 return BadRequest(new JsonResponseViewModel()
                 {
                     IsSuccess = false,
                     ErrorMessage = ModelState.ToFullErrorString()
                 });
+            }
             _dbContex.Services.Add(data);
-            _dbContex.SaveChanges();
-
             var result = _dbContex.SaveChanges();
             if (result == 0)
+            {
                 return BadRequest(new JsonResponseViewModel()
                 {
                     IsSuccess = false,
                     ErrorMessage = "New service could not added."
                 });
+            }
             return Ok(new JsonResponseViewModel());
-
         }
 
         [HttpDelete]
@@ -98,17 +96,17 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         {
             var data = _dbContex.Services.Find(key);
             if (data == null)
-                return StatusCode(StatusCodes.Status409Conflict, "service not found");
-
+            {
+                return StatusCode(StatusCodes.Status409Conflict, "Service not found.");
+            }
             _dbContex.Services.Remove(data);
-
             var result = _dbContex.SaveChanges();
             if (result == 0)
-                return BadRequest("Deletion failed");
+            {
+                return BadRequest("An error occured.Try again later.");
+            }
             return Ok(new JsonResponseViewModel());
         }
-
     }
-
 }
 

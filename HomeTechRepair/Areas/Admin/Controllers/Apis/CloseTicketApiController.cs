@@ -91,6 +91,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 recipt.ServiceId = service.Id;
                 recipt.ReciptMasterId = Guid.Parse(extraParam);
                 recipt.Quantity = service.Quantity;
+                recipt.Description = service.Description;
                 recipt.ServicePrice = service.Price;
                 _dbContext.ReciptDetails.Add(recipt);
             }
@@ -114,6 +115,35 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         {
             var price = _dbContext.Services.FirstOrDefault(x => x.Id == id);
             return Ok(price.Price);
+        }
+
+        [HttpPost]
+        public IActionResult Conclude(Guid id)
+        {
+            var recipt = _dbContext.ReciptMasters.FirstOrDefault(x => x.Id == id);
+            if (recipt != null)
+            {
+                recipt.isInvoiced = true;
+            }
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult Cancel(Guid id)
+        {
+            var reciptList = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == id).ToList();
+            if (reciptList != null)
+            {
+                foreach (var item in reciptList)
+                {
+                    _dbContext.ReciptDetails.Remove(item);
+                }
+            }
+            var reciptMaster = _dbContext.ReciptMasters.Find(id);
+            _dbContext.ReciptMasters.Remove(reciptMaster);
+            _dbContext.SaveChanges();
+            return Ok();
         }
     }
 }

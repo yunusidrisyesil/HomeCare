@@ -19,13 +19,11 @@
             </div>
         </div>
         <!-- /Page Header -->
-
         <div class="control-section">
             <div class="card-body">
                 <div id="dxGrid"> </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -38,7 +36,6 @@
 <script>
       var dataGrid = null;
       $(() => {
-
           var url = '../../../api/ManageServiceApi';
           dataGrid = $("#dxGrid").dxDataGrid({
               remoteOperations: { paging: true, filtering: true, sorting: true, grouping: true, summary: true, groupPaging: true },
@@ -50,8 +47,6 @@
                   deleteUrl: `${url}/delete`,
                   onBeforeSend(method, ajaxOptions) {
                       ajaxOptions.xhrFields = { withCredentials: true };
-                      console.log(method);
-                      console.log(ajaxOptions);
                   }
               }),
               editing: {
@@ -70,13 +65,6 @@
                   width: 240,
                   placeholder: "Search..."
               },
-              filterRow: {
-                  visible: true,
-                  applyFilter: "auto"
-              },
-              headerFilter: {
-                  visible: true
-              },
               export: {
                   enabled: true,
                   fileName: `Serviceler_${parseInt(Math.random() * 1000000000)}`,
@@ -89,9 +77,6 @@
                   showPageSizeSelector: true,
                   allowedPageSizes: [5, 15, 30, 45],
                   showInfo: true
-              },
-              selection: {
-                  mode: "multiple"
               },
               columns: [
                   {

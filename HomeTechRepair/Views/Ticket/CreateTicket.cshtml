@@ -4,6 +4,10 @@
     ViewBag.Title = "Create Support Ticket";
 }
 
+@section Styles{
+<link rel="stylesheet" href="~/assets/css/maps.css">
+}
+
 <!-- Page Content -->
 <div class="content">
     <div class="container-fluid">
@@ -16,13 +20,16 @@
                             <div class="login-header">
                                 <h3>Support Ticket</h3>
                             </div>
-                            <form asp-action="CreateTicket" asp-controller="Ticket"> 
+                            <form asp-action="CreateTicket" asp-controller="Ticket">
                                 <div class="form-group form-focus">
-                                    <input asp-for="Description" class="form-control floating">
+                                    <input id="Description" asp-for="Description" class="form-control floating">
                                     <label asp-for="Description" class="focus-label"></label>
                                     <span asp-validation-for="Description"></span>
                                 </div>
-                                <button class="btn btn-primary btn-block btn-lg login-btn" type="submit">Send a Ticket</button>
+
+                                <div id="map"></div>
+
+                                <button id="btn_send" class="btn btn-primary btn-block btn-lg login-btn" type="submit">Send a Ticket</button>
                             </form>
                         </div>
                     </div>
@@ -32,3 +39,31 @@
     </div>
 </div>
 <!-- /Page Content -->
+@section Scripts{
+
+<script src=~/assets/js/maps.js></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1zFGX6A3lCgEI_JvZfbl4F8Zsx0XPOaU&callback=initMap" async defer>
+</script>
+
+<script>
+    $("#btn_send").click(function(e){
+    e.preventDefault();
+    var desc = $("#Description").val();
+     $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "../../../api/TicketApi/Insert",
+        data: {
+            'Description' : desc,
+            'Latitude' : lat,
+            'Longitude' : lng
+        },
+        success:function(data){
+            window.location.href = '/Home/Index';
+        }
+    });
+    });
+</script>
+
+}

@@ -7,6 +7,10 @@ namespace HomeTechRepair.ViewModels
         [Required]
         [StringLength(120)]
         public string Description { get; set; }
-        //public Address Address { get; set; }
+        [Required]
+        public string Latitude { get; set; }
+        [Required]
+        public string Longitude { get; set; }
+
     }
 }

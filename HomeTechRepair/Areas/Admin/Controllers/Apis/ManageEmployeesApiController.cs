@@ -6,6 +6,7 @@ using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,13 +58,15 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             }
             return Ok();
         }
+
         [HttpDelete]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string key)
         {
             //TODO
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(key);
             if (user != null)
             {
+                await _userManager.SetEmailAsync(user,user.Name+user.Surname+DateTime.UtcNow.ToString()+"@deleted.com");
                 return Ok();
             }
             else
