@@ -45,24 +45,7 @@ namespace HomeTechRepair.Controllers.Apis
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }
 
-        //[HttpGet]
-        //public IActionResult GetReciptDetail(DataSourceLoadOptions loadOptions)
-        //{
-        //    var datard = _dbContext.ReciptDetails.Include(x => x.ReciptMaster)
-        //      .Include(x => x.Service).Select(x => new ReciptViewModel
-        //      {
-        //          ReciptMasterId = x.ReciptMasterId,
-        //          Id = x.ServiceId,
-        //          Name = x.Service.Name,
-        //          ServicePrice = x.ServicePrice,
-        //          Quantity = x.Quantity,
-        //          Description = x.Description
-        //      }).ToList();
 
-
-        //    return Ok(DataSourceLoader.Load(datard, loadOptions));
-
-        //}
 
     }
 }
