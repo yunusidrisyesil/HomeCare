@@ -20,7 +20,7 @@ namespace HomeTechRepair.Controllers
         }
 
        [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(Guid id)
         {
             return View();
         }

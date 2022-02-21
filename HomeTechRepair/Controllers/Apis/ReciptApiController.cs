@@ -37,7 +37,7 @@ namespace HomeTechRepair.Controllers.Apis
                 .Where(x => x.UserId == HttpContext.GetUserId())
                 .Select(x => new ReciptViewModel
                 {
-                    ReciptMasterId = x.Id,
+                    Id = x.Id,
                     TotalAmount = x.TotalAmount,
                     Date = x.Date,
                     UserId = x.UserId
