@@ -1,5 +1,4 @@
-﻿using HomeTechRepair.Models.Entities;
-using System;
+﻿using System;
 
 namespace HomeTechRepair.ViewModels
 {

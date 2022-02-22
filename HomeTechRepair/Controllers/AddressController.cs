@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 namespace HomeTechRepair.Controllers
 {
     [Route("Profile/[controller]/[action]")]
+    [Authorize]
     public class AddressController : Controller
     {
         private readonly MyContext _dbContext;
