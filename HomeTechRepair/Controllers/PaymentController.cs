@@ -75,8 +75,7 @@ namespace HomeTechRepair.Controllers
             }
             catch (Exception)
             {
-
-                throw;
+                ModelState.AddModelError(string.Empty, "Payment failed. Please try again");
             }
             
             return View(model);

@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 namespace HomeTechRepair.Controllers
 {
     //TODO Birthday
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
