@@ -42,39 +42,26 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             JsonConvert.PopulateObject(values, service);
             var reciptMaster = _dbContext.ReciptMasters.Find(Guid.Parse(extraParam));
             var reciptDetials = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == Guid.Parse(extraParam)).Where(x => x.ServiceId == Guid.Parse(key)).ToList().First();
-            var doesExists = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == Guid.Parse(extraParam)).Where(x => x.ServiceId == service.Id).ToList();
-            if (doesExists.Count != 0)
+            var difference = service.Quantity - reciptDetials.Quantity;
+            reciptMaster.TotalAmount += reciptDetials.ServicePrice * difference;
+            
+            _dbContext.Remove(reciptDetials);
+            _dbContext.SaveChanges();
+            
+            if (service.Id != Guid.Empty)
             {
-                var existsService = doesExists.First();
-                var difference = ((existsService.Quantity > service.Quantity) ? (service.Quantity - existsService.Quantity) : (existsService.Quantity - service.Quantity));
-                existsService.Quantity += service.Quantity;
-                if (service.Price != 0)
-                {
-                    existsService.ServicePrice = service.Price;
-                    reciptMaster.TotalAmount += service.Price * service.Quantity;
-                }
-                existsService.Description = existsService.Description + " / " + service.Description;
+                reciptDetials.ServiceId = service.Id;
+            }
 
-                _dbContext.ReciptDetails.Remove(reciptDetials);
-            }
-            else
+            reciptDetials.Quantity = service.Quantity;
+            
+            if (service.Price != 0)
             {
-                reciptMaster.TotalAmount -= reciptDetials.ServicePrice;
-                _dbContext.Remove(reciptDetials);
-                _dbContext.SaveChanges();
-                if (service.Id != Guid.Empty)
-                {
-                    reciptDetials.ServiceId = service.Id;
-                }
-                if (service.Price != 0)
-                {
-                    reciptDetials.ServicePrice = service.Price;
-                    reciptMaster.TotalAmount += service.Price;
-                }
-                reciptDetials.Quantity = service.Quantity;
-                reciptDetials.Description = service.Description;
-                _dbContext.Add(reciptDetials);
+                reciptDetials.ServicePrice = service.Price;
+                reciptMaster.TotalAmount += service.Price * service.Quantity;
             }
+            reciptDetials.Description = service.Description;
+            _dbContext.Add(reciptDetials);
             _dbContext.SaveChanges();
             return Ok();
         }
