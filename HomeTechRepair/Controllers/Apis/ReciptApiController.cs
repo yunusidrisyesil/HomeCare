@@ -4,12 +4,7 @@ using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace HomeTechRepair.Controllers.Apis
 {
@@ -40,7 +35,8 @@ namespace HomeTechRepair.Controllers.Apis
                     Id = x.Id,
                     TotalAmount = x.TotalAmount,
                     Date = x.Date,
-                    UserId = x.UserId
+                    UserId = x.UserId,
+                    isPaid= x.isPaid
                 }).ToList();
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }

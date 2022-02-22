@@ -14,6 +14,8 @@ namespace HomeTechRepair.Models.Entities
         public DateTime? ResolutionDate { get; set; }
         public string? OperatorId { get; set; }
         public string? DoctorId { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
         public string UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public virtual ApplicationUser User { get; set; }

@@ -40,7 +40,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                    Id = i.Id,
                    SupportTicketId = i.SupportTicketId,
                    AppointmentDate = i.AppointmentDate
-                    
+
                });
             return Json(await DataSourceLoader.LoadAsync(appointments, loadOptions));
         }
@@ -113,6 +113,18 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 Description = x.SupportTicket.Description
             }).ToList();
             return appoinmnetList;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetTicketLocationDetails(Guid id)
+        {
+            var ticket = _dbContex.SupportTickets.FirstOrDefault(x => x.Id == id);
+            if (ticket == null)
+            {
+                return RedirectToAction("Tickets", "Doctor", new { area = "Admin" });
+            }
+            return View(ticket);
         }
     }
 }

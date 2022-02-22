@@ -14,6 +14,7 @@ namespace HomeTechRepair.MapperProfiles
             CreateMap<UserTicketViewModel, SupportTicket>().ReverseMap();
             CreateMap<UserViewModel, ApplicationUser>().ReverseMap();
             CreateMap<ReciptViewModel, ReciptMaster>().ReverseMap();
+            CreateMap<PaymentViewModel, ReciptMaster>().ReverseMap();
         }
     }
 }

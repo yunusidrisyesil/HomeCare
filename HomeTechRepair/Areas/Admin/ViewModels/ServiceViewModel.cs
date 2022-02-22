@@ -1,6 +1,4 @@
-﻿using HomeTechRepair.Models.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace HomeTechRepair.Areas.Admin.ViewModels
 {
