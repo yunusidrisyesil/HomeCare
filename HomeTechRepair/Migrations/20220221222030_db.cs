@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HomeTechRepair.Migrations
 {
-    public partial class DBInit : Migration
+    public partial class db : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -95,6 +95,8 @@ namespace HomeTechRepair.Migrations
                     BuildingNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Line = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Latitude = table.Column<double>(type: "float", nullable: true),
+                    Longitude = table.Column<double>(type: "float", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
@@ -194,26 +196,6 @@ namespace HomeTechRepair.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReciptMasters",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TotalAmount = table.Column<double>(type: "float", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReciptMasters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReciptMasters_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SupportTickets",
                 columns: table => new
                 {
@@ -234,6 +216,54 @@ namespace HomeTechRepair.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Appointments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SupportTicketId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointments_SupportTickets_SupportTicketId",
+                        column: x => x.SupportTicketId,
+                        principalTable: "SupportTickets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReciptMasters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TotalAmount = table.Column<double>(type: "float", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    SupportTicketId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    isInvoiced = table.Column<bool>(type: "bit", nullable: false),
+                    isPaid = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReciptMasters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReciptMasters_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ReciptMasters_SupportTickets_SupportTicketId",
+                        column: x => x.SupportTicketId,
+                        principalTable: "SupportTickets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -263,25 +293,6 @@ namespace HomeTechRepair.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Appointments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SupportTicketId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Appointments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Appointments_SupportTickets_SupportTicketId",
-                        column: x => x.SupportTicketId,
-                        principalTable: "SupportTickets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_UserId",
                 table: "Addresses",
@@ -290,7 +301,8 @@ namespace HomeTechRepair.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_SupportTicketId",
                 table: "Appointments",
-                column: "SupportTicketId");
+                column: "SupportTicketId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -337,6 +349,11 @@ namespace HomeTechRepair.Migrations
                 column: "ReciptMasterId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ReciptMasters_SupportTicketId",
+                table: "ReciptMasters",
+                column: "SupportTicketId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ReciptMasters_UserId",
                 table: "ReciptMasters",
                 column: "UserId");
@@ -374,9 +391,6 @@ namespace HomeTechRepair.Migrations
                 name: "ReciptDetails");
 
             migrationBuilder.DropTable(
-                name: "SupportTickets");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -384,6 +398,9 @@ namespace HomeTechRepair.Migrations
 
             migrationBuilder.DropTable(
                 name: "Services");
+
+            migrationBuilder.DropTable(
+                name: "SupportTickets");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

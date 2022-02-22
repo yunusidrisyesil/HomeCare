@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeTechRepair.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20220220231121_missingColumns")]
-    partial class missingColumns
+    [Migration("20220221222030_db")]
+    partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,14 +36,14 @@ namespace HomeTechRepair.Migrations
                     b.Property<string>("DoorNo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("Latitude")
-                        .HasColumnType("bigint");
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("Line")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("Longitude")
-                        .HasColumnType("bigint");
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasMaxLength(50)
