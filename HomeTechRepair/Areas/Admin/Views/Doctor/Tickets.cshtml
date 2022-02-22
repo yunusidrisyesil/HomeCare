@@ -1,20 +1,26 @@
 ﻿
+<div class="main-wrapper">
+    <div class="page-wrapper">
+        <div class="content container-fluid">
 
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="account-content">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-lg-8">
-                        <div id="dxGrid"></div>
-                        <a class="fancybox-button" id="Invoice" hidden></a>
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="account-content">
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-lg-8">
+                                    <div id="dxGrid"></div>
+                                    <a class="fancybox-button" id="Invoice" hidden></a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- /Page Wrapper -->
 </div>
-
 
 @section Scripts
 {
@@ -106,7 +112,7 @@
                         caption: "Resolution Date",
                         dataType: "datetime",
                         format: 'dd/MM/yyyy HH:mm',
-                        
+
                     },
                     {
                         caption: 'Description',
@@ -118,7 +124,7 @@
                         },
                     }
                 ],
-                    onSelectionChanged(selectedItems) {
+                onSelectionChanged(selectedItems) {
                     const data = selectedItems.selectedRowsData[0];
                     if (data) {
                         $('#Invoice').dxButton({
@@ -128,7 +134,7 @@
                             width: 120,
                             onClick() {
                                 console.log(data.id)
-                                window.location.href = '/admin/doctor/concludeticket/' + data.id ;
+                                window.location.href = '/admin/doctor/concludeticket/' + data.id;
                             },
                         });
                     }

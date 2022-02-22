@@ -109,10 +109,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult Patients()
-        {
-            return View();
-        }
         public IActionResult Services() {
             return View();
         }
