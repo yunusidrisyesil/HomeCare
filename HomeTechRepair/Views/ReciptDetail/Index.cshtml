@@ -6,6 +6,7 @@
     <div class="content container-fluid">
         <div class="row">
             <div class="col-lg-8" id="dxGrid"> </div>
+            <div class="fancybox-button" id="Pay" ></div>
         </div>
     </div>
 </div>
@@ -59,9 +60,6 @@
                     allowedPageSizes: [5, 15, 30, 45],
                     showInfo: true
                 },
-                selection: {
-                    mode: "multiple"
-                },
                 columns: [
                     {
                         caption: 'Recipt MasterId',
@@ -90,7 +88,22 @@
                         caption: 'Description',
                         dataField: "description",
                     }
-                ]
+                ],
+                onSelectionChanged(selectedItems) {
+                    const data = selectedItems.selectedRowsData[0];
+                    if (data) {
+                        $('#Pay').dxButton({
+                            stylingMode: 'contained',
+                            text: 'Pay',
+                            type: 'success',
+                            width: 120,
+                            onClick() {
+                                console.log(data.id)
+                                window.location.href = '/Payment/Index' + data.reciptMasterId;
+                            },
+                        });
+                    }
+                },
             }).dxDataGrid("instance");
         });
     </script>

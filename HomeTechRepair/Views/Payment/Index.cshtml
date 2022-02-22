@@ -46,7 +46,7 @@
                             <!-- /Personal Information -->
 
                             <div class="payment-widget">
-                                <h4 class="card-title">Ödeme Şekli</h4>
+                                <h4 class="card-title">Payment Method</h4>
 
                                 <!-- Credit Card Payment -->
                                 <div class="payment-list">
@@ -58,28 +58,28 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group card-label">
-                                                <label asp-for="CardModel.CardHolderName">Kart Üzerindeki İsim</label>
+                                                <label asp-for="CardModel.CardHolderName">Name on the Card</label>
                                                 <input asp-for="CardModel.CardHolderName" class="form-control" id="card_name" type="text">
                                                 <span asp-validation-for="CardModel.CardHolderName"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group card-label">
-                                                <label asp-for="CardModel.CardNumber">Kart Numarası</label>
+                                                <label asp-for="CardModel.CardNumber">Card Number</label>
                                                 <input asp-for="CardModel.CardNumber" class="form-control" id="card_number" placeholder="1234  5678  9876  5432" type="text">
                                                 <span asp-validation-for="CardModel.CardNumber"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group card-label">
-                                                <label asp-for="CardModel.ExpireMonth">S.K. Ay</label>
+                                                <label asp-for="CardModel.ExpireMonth">Expiry Month</label>
                                                 <input asp-for="CardModel.ExpireMonth" class="form-control" id="expiry_month" placeholder="MM" type="text">
                                                 <span asp-validation-for="CardModel.ExpireMonth"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group card-label">
-                                                <label asp-for="CardModel.ExpireYear">S.K. Yıl</label>
+                                                <label asp-for="CardModel.ExpireYear">Expiry Year</label>
                                                 <input asp-for="CardModel.ExpireYear" class="form-control" id="expiry_year" placeholder="YY" type="text">
                                                 <span asp-validation-for="CardModel.ExpireYear"></span>
                                             </div>
@@ -91,27 +91,36 @@
                                                 <span asp-validation-for="CardModel.Cvc"></span>
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <input type="hidden" asp-for="PaidAmount" class="form-control" id="Price" />
+                                            <span type="hidden" asp-validation-for="PaidAmount"></span>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="hidden" asp-for="BasketModel.Id" class="form-control" id="Price" />
+                                            <span type="hidden" asp-validation-for="BasketModel.Id"></span>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- /Credit Card Payment -->
                                 <div class="col-lg-6">
-                                <div class="payment-widget">
-                                    <h3 class="title">Taksit Seçenekleri </h3>
-                                    <div class="payment-widget table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Taksit Sayısı</th>
-                                                    <th>Ödenecek Tutar</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="table-installment">
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <div class="payment-widget">
+                                        <h3 class="title">Taksit Seçenekleri </h3>
+                                        <div class="payment-widget table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Taksit Sayısı</th>
+                                                        <th>Ödenecek Tutar</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="table-installment">
 
-                                </div>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
                                 </div>
                                 <!-- Terms Accept -->
                                 <div class="terms-accept">
@@ -123,7 +132,7 @@
                                 <!-- /Terms Accept -->
                                 <!-- Submit Section -->
                                 <div class="submit-section mt-4">
-                                    <button type="submit" class="btn btn-primary submit-btn">Kabul et ve Öde</button>
+                                    <button type="submit" class="btn btn-primary submit-btn">Accept and Pay</button>
                                 </div>
                                 <!-- /Submit Section -->
 
@@ -182,7 +191,7 @@
                                     <ul class="booking-total-list">
                                         <li>
                                             <span>Total</span>
-                                            <span class="total-cost">$160</span>
+                                            <span class="total-cost">$@ViewBag.PaidAmount</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -219,7 +228,7 @@
                     method: 'POST',
                     data: {
                         binNumber: binNumber,
-                        price: 1000
+                        price: @Html.Raw(Json.Serialize(@ViewBag.PaidAmount))
                     },
                     success: function(response) {
                         fillInstallments(response.installmentPrices);

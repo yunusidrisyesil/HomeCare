@@ -47,6 +47,10 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                     IsSuccess = false,
                     ErrorMessage = ModelState.ToFullErrorString()
                 });
+            if(data.OperatorId==null)
+            {
+                data.OperatorId = HttpContext.GetUserId();
+            }
             JsonConvert.PopulateObject(values, data);
             if (data.Appointment == null)
             {

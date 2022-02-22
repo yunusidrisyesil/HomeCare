@@ -27,11 +27,11 @@ namespace HomeTechRepair.Controllers.Apis
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var datard = _dbContext.ReciptDetails.Include(x => x.ReciptMaster)
+            var model = _dbContext.ReciptDetails.Include(x => x.ReciptMaster)
               .Include(x => x.Service).Select(x => new ReciptViewModel
               {
-                  ReciptMasterId = x.ReciptMasterId,
-                  Id = x.ServiceId,
+                  Id = x.ReciptMasterId,
+                  ServiceId = x.ServiceId,
                   Name = x.Service.Name,
                   ServicePrice = x.ServicePrice,
                   Quantity = x.Quantity,
@@ -39,7 +39,7 @@ namespace HomeTechRepair.Controllers.Apis
               }).ToList();
 
 
-            return Ok(DataSourceLoader.Load(datard, loadOptions));
+            return Ok(DataSourceLoader.Load(model, loadOptions));
 
         }
 

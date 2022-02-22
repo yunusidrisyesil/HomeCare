@@ -25,7 +25,10 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             _dbContex = dbContext;
         }
-
+        public IActionResult Index()
+        {
+            return View();
+        }
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetAppointment(DataSourceLoadOptions loadOptions)

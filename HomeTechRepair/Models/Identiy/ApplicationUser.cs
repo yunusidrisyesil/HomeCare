@@ -18,7 +18,7 @@ namespace HomeTechRepair.Models.Identiy
         //[PersonalData]
         //public DateTime BirthDay { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        //public bool isDeleted { get; set; }
+        //public bool isDeleted { get; set; } = false;
         public List<SupportTicket> SupportTickets { get; set; }
         public List<ReciptMaster> ReciptMasters { get; set; }
 

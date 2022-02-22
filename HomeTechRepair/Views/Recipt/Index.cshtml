@@ -8,7 +8,8 @@
                 <div class="row align-items-center justify-content-center">
                     <div class="col-lg-8">
                         <div id="dxGrid"></div>
-                        <div class="fancybox-button" id="Detail" hidden></div>
+                            <div class="fancybox-button" id="Detail" hidden></div>
+                            <button class="fancybox-button" id="Pay" hidden></button>
                     </div>
                 </div>
             </div>
@@ -66,13 +67,10 @@
                     allowedPageSizes: [5, 15, 30, 45],
                     showInfo: true
                 },
-                selection: {
-                    mode: "multiple"
-                },
                 columns: [
                     {
                         caption: 'Id',
-                        dataField: "Id",
+                        dataField: "id",
                         visible: false,
                         allowFiltering: false,
                         formItem: { visible: false }
@@ -86,8 +84,13 @@
                         caption: 'Total Amount',
                         dataField: "totalAmount",
                         dataType: "double"
-
-                    }
+                    },
+                    {
+                        dataField: "isPaid",
+                        caption: "active",
+                        dataType: "boolean",
+                        allowEditing: false,
+                    },
                 ],
                 onSelectionChanged(selectedItems) {
                     const data = selectedItems.selectedRowsData[0];
@@ -102,33 +105,21 @@
                                 window.location.href = '/reciptdetail/index/' + data.id;
                             },
                         });
+                        $('#Pay').dxButton({
+                            stylingMode: 'contained',
+                            text: 'Pay',
+                            type: 'success',
+                            width: 120,
+                            onClick() {
+                                console.log(data.id)
+                                window.location.href = '/Payment/Index/' + data.id;
+                            },
+                        });
                     }
                 },
+
             }).dxDataGrid("instance");
         });
 
     </script>
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

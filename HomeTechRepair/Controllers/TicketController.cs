@@ -30,42 +30,6 @@ namespace HomeTechRepair.Controllers
         {
             return View();
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateTicket(TicketViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-
-        //    var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
-        //    if (user != null)
-        //    {
-        //        try
-        //        {
-        //            _dbContext.SupportTickets.Add(new SupportTicket
-        //            {
-        //                Description = model.Description,
-        //                UserId = user.Id,
-        //            });
-        //            _dbContext.SaveChanges();
-        //            ViewBag.Message = "Support ticket created succesfully";
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            ModelState.AddModelError(String.Empty, ex.Message);
-        //            return View(model);
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //}
-
         public async Task<IActionResult> GetTickets()
         {
             var ticketList = _dbContext.SupportTickets.Where(x => x.UserId == HttpContext.GetUserId());
