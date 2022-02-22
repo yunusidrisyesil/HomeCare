@@ -8,7 +8,7 @@ namespace HomeTechRepair.Models.Entities
         public Guid ReciptMasterId { get; set; }
         public Guid ServiceId { get; set; }
         public double ServicePrice { get; set; }
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; } = 1;
         public string? Description { get; set; }
 
         [ForeignKey(nameof(ReciptMasterId))]

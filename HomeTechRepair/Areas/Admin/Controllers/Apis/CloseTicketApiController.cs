@@ -40,20 +40,26 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         {
             var service = new ReciptServiceViewModel();
             JsonConvert.PopulateObject(values, service);
+            var reciptMaster = _dbContext.ReciptMasters.Find(Guid.Parse(extraParam));
             var reciptDetials = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == Guid.Parse(extraParam)).Where(x => x.ServiceId == Guid.Parse(key)).ToList().First();
             var doesExists = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == Guid.Parse(extraParam)).Where(x => x.ServiceId == service.Id).ToList();
             if (doesExists.Count != 0)
             {
-                doesExists.First().Quantity += service.Quantity;
+                var existsService = doesExists.First();
+                var difference = ((existsService.Quantity > service.Quantity) ? (service.Quantity - existsService.Quantity) : (existsService.Quantity - service.Quantity));
+                existsService.Quantity += service.Quantity;
                 if (service.Price != 0)
                 {
-                    doesExists.First().ServicePrice = service.Price;
+                    existsService.ServicePrice = service.Price;
+                    reciptMaster.TotalAmount += service.Price * service.Quantity;
                 }
-                doesExists.First().Description = doesExists.First().Description + " / " + service.Description;
+                existsService.Description = existsService.Description + " / " + service.Description;
+
                 _dbContext.ReciptDetails.Remove(reciptDetials);
             }
             else
             {
+                reciptMaster.TotalAmount -= reciptDetials.ServicePrice;
                 _dbContext.Remove(reciptDetials);
                 _dbContext.SaveChanges();
                 if (service.Id != Guid.Empty)
@@ -63,6 +69,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 if (service.Price != 0)
                 {
                     reciptDetials.ServicePrice = service.Price;
+                    reciptMaster.TotalAmount += service.Price;
                 }
                 reciptDetials.Quantity = service.Quantity;
                 reciptDetials.Description = service.Description;
@@ -77,6 +84,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         {
             var recipt = new ReciptDetail();
             var service = new ReciptServiceViewModel();
+            var reciptMaster = _dbContext.ReciptMasters.Find(Guid.Parse(extraParam));
             JsonConvert.PopulateObject(values, service);
             var doesExists = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == Guid.Parse(extraParam))
                                                      .Where(x => x.ServiceId == service.Id).ToList();
@@ -85,6 +93,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 doesExists.First().Quantity += service.Quantity;
                 doesExists.First().Description = doesExists.First().Description + " / " + service.Description;
                 doesExists.First().ServicePrice = service.Price;
+                reciptMaster.TotalAmount += service.Price * service.Quantity;
             }
             else
             {
@@ -93,6 +102,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 recipt.Quantity = service.Quantity;
                 recipt.Description = service.Description;
                 recipt.ServicePrice = service.Price;
+                reciptMaster.TotalAmount += service.Price * service.Quantity;
                 _dbContext.ReciptDetails.Add(recipt);
             }
             _dbContext.SaveChanges();
@@ -103,9 +113,11 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         [HttpDelete]
         public IActionResult Delete(string key, string extraParam)
         {
+            var reciptMaster = _dbContext.ReciptMasters.Find(Guid.Parse(extraParam));
             var reciptService = _dbContext.ReciptDetails
                                         .Where(x => x.ReciptMasterId == Guid.Parse(extraParam))
                                         .Where(x => x.ServiceId == Guid.Parse(key)).ToList().First();
+            reciptMaster.TotalAmount -= reciptService.ServicePrice * reciptService.Quantity;
             _dbContext.Remove(reciptService);
             _dbContext.SaveChanges();
             return Ok();

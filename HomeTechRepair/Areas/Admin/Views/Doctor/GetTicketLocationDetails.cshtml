@@ -1,0 +1,26 @@
+﻿@model SupportTicket
+@{
+    ViewBag.Title = "Location";
+}
+@section Styles{
+    <link rel="stylesheet" href="~/assets/css/maps.css">
+}
+
+<div id="map">
+
+</div>
+
+@section Scripts{
+    <script src=~/assets/js/maps.js></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1zFGX6A3lCgEI_JvZfbl4F8Zsx0XPOaU" async defer>
+    </script>
+
+    <script>
+        var a = { lat: @Model.Latitude, lng: @Model.Longitude };
+        initMap();
+        setMarker(a);
+    </script>
+}
+
+

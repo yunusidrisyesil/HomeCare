@@ -52,25 +52,13 @@ namespace HomeTechRepair.Controllers.Apis
                 var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
                 if (user != null)
                 {
-                    var address = _dbContext.Addresses.FirstOrDefault(x => x.UserId == user.Id);
-                    if (address == null)
-                    {
-                        address = new Address
-                        {
-                            UserId = HttpContext.GetUserId(),
-                            StateId = 0,
-                        };
-                        _dbContext.Addresses.Add(address);
-                    }
-
                     _dbContext.SupportTickets.Add(new SupportTicket
                     {
                         Description = data.Description,
                         UserId = user.Id,
+                        Longitude = Convert.ToDouble(data.Longitude),
+                        Latitude = Convert.ToDouble(data.Latitude)
                     });
-
-                    address.Latitude = Convert.ToDouble(data.Latitude);
-                    address.Longitude = Convert.ToDouble(data.Longitude);
                     _dbContext.SaveChanges();
                 }
                 else
