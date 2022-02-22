@@ -17,7 +17,7 @@ namespace HomeTechRepair.Areas.Admin.ViewModels
         public double ServicePrice { get; set; }
         public int? Quantity { get; set; }
         public string Description { get; set; }
-        public int ParentId { get; set; }
         public Guid ServiceId{ get; set; }
+        public bool isPaid { get; set; }
     }
 }

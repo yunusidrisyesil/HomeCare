@@ -26,5 +26,6 @@ namespace HomeTechRepair.Models.Payment
         public string BinNumber { get; set; }
         public string LastFourDigits { get; set; }
         public string BasketID { get; set; }
+        public string Status { get; set; }
     }
 }

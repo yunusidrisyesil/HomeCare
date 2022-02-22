@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HomeTechRepair.Data;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Models.Payment;
 using Iyzipay.Model;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace HomeTechRepair.Services
 {
@@ -18,11 +20,13 @@ namespace HomeTechRepair.Services
         private readonly IyzicoPaymentOptions _options;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
-        public IyzicoPaymentService(IConfiguration configuration, IMapper mapper, UserManager<ApplicationUser> userManager)
+        private readonly MyContext _dbContext;
+        public IyzicoPaymentService(IConfiguration configuration, IMapper mapper, UserManager<ApplicationUser> userManager, MyContext dbContext)
         {
             _configuration = configuration;
             _mapper = mapper;
             _userManager = userManager;
+            _dbContext = dbContext;
 
             var section = _configuration.GetSection(IyzicoPaymentOptions.Key);
             _options = new IyzicoPaymentOptions()
@@ -41,6 +45,9 @@ namespace HomeTechRepair.Services
         }
         private CreatePaymentRequest InitialPaymentRequest(PaymentModel model)
         {
+            var ReciptMaster = new BasketModel();
+            ReciptMaster.Id = model.BasketList.First().Id;
+            var recipt = _dbContext.ReciptMasters.Find(Guid.Parse(ReciptMaster.Id));
             var paymentrequest = new CreatePaymentRequest
             {
                 Installment = model.Installment,
@@ -55,6 +62,8 @@ namespace HomeTechRepair.Services
                 PaymentCard = _mapper.Map<PaymentCard>(model.CardModel)
             };
             var user = _userManager.FindByIdAsync(model.UserId).Result;
+            var address = new Models.Entities.Address();
+            address = _dbContext.Addresses.FirstOrDefault(x => x.UserId == user.Id);
             var buyer = new Buyer
             {
                 Id = user.Id,
@@ -65,7 +74,7 @@ namespace HomeTechRepair.Services
                 IdentityNumber = "11111111110",
                 LastLoginDate = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss}",
                 RegistrationDate = $"{user.CreatedDate:yyyy-MM-dd HH:mm:ss}",
-                RegistrationAddress = "Cihannuma Mah. Barbaros Bulvarı No:9 Beşiktaş",
+                RegistrationAddress = $"{address.Description} {address.StreetName} street No:{address.BuildingNo} {address.DoorNo}",
                 Ip = model.Ip,
                 City = "Istanbul",
                 Country = "Turkey",
@@ -78,7 +87,7 @@ namespace HomeTechRepair.Services
                 ContactName = $"{user.Name} {user.Surname}",
                 City = "Istanbul",
                 Country = "Turkey",
-                Description = "Cihannuma Mah. Barbaros Bulvarı No:9 Beşiktaş",
+                Description = $"{address.Description} {address.StreetName} street No:{address.BuildingNo} {address.DoorNo}",
                 ZipCode = "34752"
             };
             paymentrequest.BillingAddress = billingAddress;
@@ -86,7 +95,7 @@ namespace HomeTechRepair.Services
             var basketItems = new List<BasketItem>();
             var firstBasketItem = new BasketItem
             {
-                Id = "BI101",
+                Id = recipt.Id.ToString(),
                 Name = "Binocular",
                 Category1 = "Collectibles",
                 Category2 = "Accessories",

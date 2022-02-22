@@ -84,8 +84,13 @@
                         caption: 'Total Amount',
                         dataField: "totalAmount",
                         dataType: "double"
-
-                    }
+                    },
+                    {
+                        dataField: "isPaid",
+                        caption: "active",
+                        dataType: "boolean",
+                        allowEditing: false,
+                    },
                 ],
                 onSelectionChanged(selectedItems) {
                     const data = selectedItems.selectedRowsData[0];

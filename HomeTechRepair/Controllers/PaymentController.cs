@@ -25,8 +25,11 @@ namespace HomeTechRepair.Controllers
         {
             var data = _dbContext.ReciptMasters.FirstOrDefault(x => x.Id == id);
             var model = new PaymentViewModel();
+            model.BasketModel = new BasketModel();
             model.PaidAmount = (decimal)data.TotalAmount;
+            model.BasketModel.Id = data.Id.ToString();
             ViewBag.PaidAmount = model.PaidAmount;
+            ViewBag.ID = model.BasketModel.Id;
             return View(model);
         }
         [HttpPost]
@@ -49,14 +52,35 @@ namespace HomeTechRepair.Controllers
                 UserId = HttpContext.GetUserId(),
                 Ip = Request.HttpContext.Connection.RemoteIpAddress?.ToString()
             };
+            var basketModel = new BasketModel();
+            basketModel.Id = model.BasketModel.Id;
+            paymentModel.BasketList.Add(basketModel);
+
             var installmentInfo = _paymentService.CheckInstalment(paymentModel.CardModel.CardNumber, paymentModel.Price);
 
             var installmentNumber =
                 installmentInfo.InstallmentPrices.FirstOrDefault(x => x.InstallmentNumber == model.Installment);
 
             paymentModel.PaidPrice = decimal.Parse(installmentNumber != null ? installmentNumber.TotalPrice.Replace('.', ',') : installmentInfo.InstallmentPrices[0].TotalPrice.Replace('.', ','));
-            var result = _paymentService.Pay(paymentModel);
-            return View();
+            try
+            {
+                var result = _paymentService.Pay(paymentModel);
+                if (result.Status == "success")
+                {
+                    var reciptMaster = _dbContext.ReciptMasters.Find(Guid.Parse(model.BasketModel.Id));
+                    reciptMaster.isPaid = true;
+                    _dbContext.SaveChanges();
+                    return RedirectToAction("Index", "home");
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+            return View(model);
+
         }
     }
 }
