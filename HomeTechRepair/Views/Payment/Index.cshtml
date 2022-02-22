@@ -95,23 +95,25 @@
                                 </div>
                                 <!-- /Credit Card Payment -->
                                 <div class="col-lg-6">
-                                <div class="payment-widget">
-                                    <h3 class="title">Taksit Seçenekleri </h3>
-                                    <div class="payment-widget table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Taksit Sayısı</th>
-                                                    <th>Ödenecek Tutar</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="table-installment">
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <div class="payment-widget">
+                                        <h3 class="title">Taksit Seçenekleri </h3>
+                                        <div class="payment-widget table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Taksit Sayısı</th>
+                                                        <th>Ödenecek Tutar</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="table-installment">
+                                                </tbody>
+                                                <input type="hidden" asp-for="PaidAmount" class="form-control" id="Price" >
+                                                <span type="hidden" asp-validation-for="PaidAmount"></span>
+                                            </table>
+                                        </div>
 
-                                </div>
+                                    </div>
                                 </div>
                                 <!-- Terms Accept -->
                                 <div class="terms-accept">
@@ -219,7 +221,7 @@
                     method: 'POST',
                     data: {
                         binNumber: binNumber,
-                        price: 1000
+                        price: @Html.Raw(Json.Serialize(@ViewBag.PaidAmount))
                     },
                     success: function(response) {
                         fillInstallments(response.installmentPrices);

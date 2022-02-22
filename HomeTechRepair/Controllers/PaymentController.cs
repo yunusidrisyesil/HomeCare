@@ -1,9 +1,11 @@
-﻿using HomeTechRepair.Extensions;
+﻿using HomeTechRepair.Data;
+using HomeTechRepair.Extensions;
 using HomeTechRepair.Models.Payment;
 using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,13 +15,19 @@ namespace HomeTechRepair.Controllers
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
-        public PaymentController(IPaymentService paymentService)
+        private readonly MyContext _dbContext;
+        public PaymentController(IPaymentService paymentService, MyContext dbContext)
         {
             _paymentService = paymentService;
+            _dbContext = dbContext;
         }
-        public IActionResult Index()
+        public IActionResult Index(Guid id)
         {
-            return View();
+            var data = _dbContext.ReciptMasters.FirstOrDefault(x => x.Id == id);
+            var model = new PaymentViewModel();
+            model.PaidAmount = (decimal)data.TotalAmount;
+            ViewBag.PaidAmount = model.PaidAmount;
+            return View(model);
         }
         [HttpPost]
         public IActionResult CheckInstallment(string binNumber, decimal price)
@@ -37,7 +45,7 @@ namespace HomeTechRepair.Controllers
                 BasketList = new List<BasketModel>(),
                 Customer = new CustomerModel(),
                 CardModel = model.CardModel,
-                Price = 1000,
+                Price = model.PaidAmount,
                 UserId = HttpContext.GetUserId(),
                 Ip = Request.HttpContext.Connection.RemoteIpAddress?.ToString()
             };
