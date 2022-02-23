@@ -6,6 +6,7 @@ using HomeTechRepair.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,7 +20,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
-  
+
 
         public ManageController(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
@@ -37,25 +38,33 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> EmployeeRegister()
         {
-
-            var model = new EmployeeRegisterViewModel();
-            model.Roles = new List<DropdownViewModel>();
-            foreach (var role in RoleModels.Roles)
+            try
             {
-                var data = await _roleManager.FindByNameAsync(role);
-                model.Roles.Add(new DropdownViewModel
+                var model = new EmployeeRegisterViewModel();
+                model.Roles = new List<DropdownViewModel>();
+                foreach (var role in RoleModels.Roles)
                 {
-                    Text = data.Name,
-                    Value = data.Name
-                });
+                    var data = await _roleManager.FindByNameAsync(role);
+                    model.Roles.Add(new DropdownViewModel
+                    {
+                        Text = data.Name,
+                        Value = data.Name
+                    });
+                }
+                return View(model);
             }
-            return View(model);
+            catch (Exception)
+            {
+                ModelState.AddModelError(String.Empty, "Roles cannot found.");
+                return View();
+            }
+
         }
 
         [HttpPost]
         public async Task<IActionResult> EmployeeRegister(EmployeeRegisterViewModel model)
-        {  
-          
+        {
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -80,11 +89,11 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 Surname = model.Surname,
                 Email = model.Email,
                 UserName = username
-               
+
             };
-             string password =RandomGenerator.CreatePassword(6);
-            var result = await _userManager.CreateAsync(user,password);
-         
+            string password = RandomGenerator.CreatePassword(6);
+            var result = await _userManager.CreateAsync(user, password);
+
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, model.RoleName);
@@ -92,11 +101,11 @@ namespace HomeTechRepair.Areas.Admin.Controllers
                 var emailMessage = new EmailMessage()
                 {
                     Contacts = new string[] { user.Email },
-                    Body ="Your Password:"+ password,
+                    Body = "Your Password:" + password,
                     Subject = "User Password"
                 };
-               await _emailSender.SendAsync(emailMessage);
-                return RedirectToAction("Employees", "Manage",new { area = "Admin"});
+                await _emailSender.SendAsync(emailMessage);
+                return RedirectToAction("Employees", "Manage", new { area = "Admin" });
             }
             else
             {
@@ -109,17 +118,27 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult Services() {
+        public IActionResult Services()
+        {
             return View();
         }
         public IActionResult AllUser()
         {
-            ViewBag.Roles = _roleManager.Roles.Select(x => new
+            try
             {
-                id = x.Id,
-                name = x.Name
-            }).ToList();
-            return View();
+                ViewBag.Roles = _roleManager.Roles.Select(x => new
+                {
+                    id = x.Id,
+                    name = x.Name
+                }).ToList();
+                return View();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "An error has occurred while updating roles. Please try again.");
+                return View();
+            }
+
         }
         public IActionResult Report()
         {

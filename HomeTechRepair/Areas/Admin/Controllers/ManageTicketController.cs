@@ -4,6 +4,7 @@ using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -23,19 +24,28 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {            
-            var data = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
-            List<object> ddl = new List<object>();
-            foreach (var item in data)
+        {
+            try
             {
-                ddl.Add(new
+                var data = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
+                List<object> ddl = new List<object>();
+                foreach (var item in data)
                 {
-                    name = item.Name,
-                    id = item.Id
-                });
+                    ddl.Add(new
+                    {
+                        name = item.Name,
+                        id = item.Id
+                    });
+                }
+                ViewBag.DropDownData = ddl;
+                return View();
             }
-            ViewBag.DropDownData = ddl;
-            return View();
+            catch (Exception )
+            {
+                ModelState.AddModelError(String.Empty, "There are not any doctor in system");
+                return View();
+            }
+
         }
        
 

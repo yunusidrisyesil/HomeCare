@@ -80,16 +80,33 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         [Authorize]
         public IActionResult Scheduler()
         {
-            ViewBag.Scheduler = DoctorsAppoitments();
-            return View();
+            try
+            {
+                ViewBag.Scheduler = DoctorsAppoitments();
+                return View();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "There is no appointments beloong to this doctor.");
+                return RedirectToAction("Tickets", "Doctor", new { area = "Admin" });
+            }
+
         }
 
         [HttpGet]
         [Authorize]
         public IActionResult Agenda()
         {
-            ViewBag.Agenda = DoctorsAppoitments();
-            return View();
+            try
+            {
+                ViewBag.Agenda = DoctorsAppoitments();
+                return View();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "There is no appointments beloong to this doctor.");
+                return RedirectToAction("Tickets", "Doctor", new { area = "Admin" });
+            }
         }
 
         [HttpGet]

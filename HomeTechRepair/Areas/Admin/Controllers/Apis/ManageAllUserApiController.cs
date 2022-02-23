@@ -3,9 +3,11 @@ using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using HomeTechRepair.Models.Identiy;
+using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,6 +47,12 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 }).ToList();
                 user.AddRange(userAdd);
             }
+            if (user == null)
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
             return Ok(DataSourceLoader.Load(user, loadOptions));
         }
         [HttpPut]
@@ -56,38 +64,75 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             {
                 return BadRequest();
             }
-            var userRole = _dbContext.UserRoles.FirstOrDefault(x => x.UserId == key);
-            var userRoles = await _userManager.GetRolesAsync(user);
-            var userView = new UserViewModel();
-            userView.Email = user.Email;
-            userView.CreatedDate = user.CreatedDate;
-            userView.Id = user.Id;
-            userView.Name = user.Name;
-            userView.Phone = user.PhoneNumber;
-            userView.Surname = user.Surname;
-            userView.RoleId = userRole.RoleId;
-            userView.UserRole = userRoles;
 
+            var userRole = _dbContext.UserRoles.FirstOrDefault(x => x.UserId == key);
+            if (userRole == null)
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles == null)
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
+
+            var userView = new UserViewModel();
+
+            try
+            {
+
+                userView.Email = user.Email;
+                userView.CreatedDate = user.CreatedDate;
+                userView.Id = user.Id;
+                userView.Name = user.Name;
+                userView.Phone = user.PhoneNumber;
+                userView.Surname = user.Surname;
+                userView.RoleId = userRole.RoleId;
+                userView.UserRole = userRoles;
+            }
+            catch (Exception)
+            {
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
+            }
 
             //await _userManager.RemoveFromRoleAsync(user, oldrole.Name);
-
-            JsonConvert.PopulateObject(values, userView );
-            if (userRole.RoleId != userView.RoleId)
+            try
             {
-                var newRole = _dbContext.Roles.FirstOrDefault(x=>x.Id == userView.RoleId);
-                var oldRole = _dbContext.Roles.FirstOrDefault(x => x.Id == userRole.RoleId); ;
-                await _userManager.RemoveFromRoleAsync(user, oldRole.Name);
-                await _userManager.AddToRoleAsync(user, newRole.Name);
-            }
-            //gelen roleidlere göre yeni rol bilgisi eski rol bilgisi ile kontrol edilecek
+                JsonConvert.PopulateObject(values, userView);
+                if (userRole.RoleId != userView.RoleId)
+                {
+                    var newRole = _dbContext.Roles.FirstOrDefault(x => x.Id == userView.RoleId);
+                    var oldRole = _dbContext.Roles.FirstOrDefault(x => x.Id == userRole.RoleId); ;
+                    await _userManager.RemoveFromRoleAsync(user, oldRole.Name);
+                    await _userManager.AddToRoleAsync(user, newRole.Name);
+                }
+                //gelen roleidlere göre yeni rol bilgisi eski rol bilgisi ile kontrol edilecek
 
-            user.Email =userView.Email;
-            user.CreatedDate= userView.CreatedDate;
-            user.Id= userView.Id;
-            user.Name= userView.Name;
-            user.PhoneNumber= userView.Phone;
-            user.Surname = userView.Surname ;
-            
+                user.Email = userView.Email;
+                user.CreatedDate = userView.CreatedDate;
+                user.Id = userView.Id;
+                user.Name = userView.Name;
+                user.PhoneNumber = userView.Phone;
+                user.Surname = userView.Surname;
+            }
+            catch (Exception)
+            {
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
+            }
+
             //user update işlemleri
 
             if (!TryValidateModel(user))

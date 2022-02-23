@@ -45,6 +45,12 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 DoctorId = x.DoctorId,
                 isActive = (x.ResolutionDate != null) ? true : false
             }).ToArray();
+            if (data == null)
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }
         [HttpPut]
