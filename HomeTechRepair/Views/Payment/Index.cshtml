@@ -12,38 +12,6 @@
                         <!-- Checkout Form -->
                         <form asp-action="Index" method="post">
                             <input asp-for="Installment" type="hidden" id="hdInstallment" value="1" />
-                            <!-- Personal Information -->
-                            <div class="info-widget">
-                                <h4 class="card-title">Kişisel Bilgiler</h4>
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="form-group card-label">
-                                            <label>Ad</label>
-                                            <input class="form-control" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="form-group card-label">
-                                            <label>Soyad</label>
-                                            <input class="form-control" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="form-group card-label">
-                                            <label>Email</label>
-                                            <input class="form-control" type="email">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="form-group card-label">
-                                            <label>Telefon Numarası </label>
-                                            <input class="form-control" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="exist-customer">Existing Customer? <a href="#">Click here to login</a></div>
-                            </div>
-                            <!-- /Personal Information -->
 
                             <div class="payment-widget">
                                 <h4 class="card-title">Payment Method</h4>
@@ -53,7 +21,7 @@
                                     <label class="payment-radio credit-card-option">
                                         <input type="radio" name="radio" checked>
                                         <span class="checkmark"></span>
-                                        Kredi Kartı
+                                       Credit Card
                                     </label>
                                     <div class="row">
                                         <div class="col-md-6">
@@ -104,14 +72,14 @@
                                 <!-- /Credit Card Payment -->
                                 <div class="col-lg-6">
                                     <div class="payment-widget">
-                                        <h3 class="title">Taksit Seçenekleri </h3>
+                                        <h3 class="title">Payment Options </h3>
                                         <div class="payment-widget table-responsive">
                                             <table class="table">
                                                 <thead>
                                                     <tr>
                                                         <th></th>
-                                                        <th>Taksit Sayısı</th>
-                                                        <th>Ödenecek Tutar</th>
+                                                        <th>Number of Installments</th>
+                                                        <th>Amount to be paid</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="table-installment">
@@ -126,7 +94,7 @@
                                 <div class="terms-accept">
                                     <div class="custom-checkbox">
                                         <input type="checkbox" id="terms_accept">
-                                        <label for="terms_accept">Kullanım Şartlarını Okudum ve Kabul ediyorum <a href="#">Kullanıcı Şartları Sözleşmesi</a></label>
+                                        <label for="terms_accept">I've Read and I Accept the Terms of Use <a href="#">User Terms Agreement</a></label>
                                     </div>
                                 </div>
                                 <!-- /Terms Accept -->
