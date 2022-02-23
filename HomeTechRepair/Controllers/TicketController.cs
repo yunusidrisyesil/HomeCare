@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
+using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -31,19 +32,9 @@ namespace HomeTechRepair.Controllers
         }
         public async Task<IActionResult> GetTickets()
         {
-            var ticketList = _dbContext.SupportTickets.Where(x => x.UserId == HttpContext.GetUserId());
-            List<UserTicketViewModel> model = new List<UserTicketViewModel>();
-            foreach (var item in ticketList)
-            {
-                var data = _mapper.Map<UserTicketViewModel>(item);
-                if (item.DoctorId != null)
-                {
-                    var doctor = await _userManager.FindByIdAsync(item.DoctorId);
-                    data.DoctorName = doctor.Name;
-                }
-                model.Add(data);
-            }
-            ViewBag.DataSource = model;
+            var doctors = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
+
+            ViewBag.DataSource = doctors;
             return View();
         }
     }

@@ -2,13 +2,21 @@
 using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
+using HomeTechRepair.Models;
 using HomeTechRepair.Models.Entities;
+using HomeTechRepair.Models.Identiy;
+using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
@@ -16,9 +24,14 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
     public class ManageTicketApiController : Controller
     {
         private readonly MyContext _dbContext;
-        public ManageTicketApiController(MyContext dbContext)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
+
+        public ManageTicketApiController(MyContext dbContext, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
+            _emailSender = emailSender;
         }
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
@@ -37,7 +50,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             return Ok(DataSourceLoader.Load(data, loadOptions));
         }
         [HttpPut]
-        public IActionResult Update(Guid key, string values)
+        public async Task<IActionResult> Update(Guid key, string values)
         {
             bool delete = false;
             var data = _dbContext.SupportTickets.Include(x => x.Appointment).Where(x => x.Id == key).FirstOrDefault();
@@ -63,6 +76,17 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 delete = true;
                 _dbContext.Appointments.Add(appointment);
                 _dbContext.SaveChanges();
+                var doctor = await _userManager.FindByIdAsync(data.DoctorId);
+
+                var callbackUrl = Url.Action("Scheduler", "Doctor", new { Area = "Admin" } , protocol: Request.Scheme);
+
+                var email = new EmailMessage()
+                {
+                    Contacts = new string[] { doctor.Email },
+                    Subject = "New Appointment",
+                    Body = $"New appoinment has been created.Please check your Scheduler by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click Here</a>",
+                };
+                await _emailSender.SendAsync(email);
             }
             JsonConvert.PopulateObject(values, data.Appointment);
             var date = _dbContext.SupportTickets.Include(x => x.Appointment).Where(x => x.DoctorId == data.DoctorId)
