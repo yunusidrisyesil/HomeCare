@@ -67,7 +67,7 @@
                 columns: [
                     {
                         caption: 'Id',
-                        dataField: "Id",
+                        dataField: "id",
                         visible: true,
                         allowFiltering: true,
                         formItem: { visible: true }
@@ -75,7 +75,8 @@
                     {
                         caption: 'Date',
                         dataField: "date",
-                        dataType: "string"
+                        dataType: "string",
+                        format: 'dd/MM/yyyy HH:mm'
                     },
                     {
                         caption: 'Amount',
