@@ -4,6 +4,7 @@ using HomeTechRepair.Extensions;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace HomeTechRepair.Controllers.Apis
@@ -35,7 +36,7 @@ namespace HomeTechRepair.Controllers.Apis
 
                 return Ok(DataSourceLoader.Load(appoinmnetList, loadOptions));
             }
-            catch ()
+            catch (Exception)
             {
                 return BadRequest();
             }

@@ -37,7 +37,7 @@ namespace HomeTechRepair.Controllers.Apis
             }
             catch (System.Exception)
             {
-                return BadRequest()
+                return BadRequest();
               
             }
         }
