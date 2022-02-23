@@ -22,20 +22,24 @@ namespace HomeTechRepair.Controllers.Apis
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var model = _dbContext.ReciptDetails.Include(x => x.ReciptMaster)
-              .Include(x => x.Service).Select(x => new ReciptViewModel
-              {
+            try
+            {
+            var model = _dbContext.ReciptDetails.Include(x => x.ReciptMaster).Include(x => x.Service).Select(x => new ReciptViewModel
+                {
                   Id = x.ReciptMasterId,
                   ServiceId = x.ServiceId,
                   Name = x.Service.Name,
                   ServicePrice = x.ServicePrice,
                   Quantity = x.Quantity,
                   Description = x.Description
-              }).ToList();
-
-
-            return Ok(DataSourceLoader.Load(model, loadOptions));
-
+                }).ToList();
+                return Ok(DataSourceLoader.Load(model, loadOptions));
+            }
+            catch (System.Exception)
+            {
+                return BadRequest()
+              
+            }
         }
 
     }

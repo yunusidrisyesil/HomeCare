@@ -31,21 +31,25 @@ namespace HomeTechRepair.Controllers.Apis
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            //Mapped not checked
-            //var data = _dbContext.SupportTickets.Where(x=> x.UserId == HttpContext.GetUserId()).Select(x=> _mapper.Map<SupportTicketViewModel>(x)).ToList();
-            var data = _dbContext.SupportTickets.Include(x=>x.Appointment).Where(i => i.UserId == HttpContext.GetUserId()).Select(i => new SupportTicketViewModel
+            try
             {
+                var data = _dbContext.SupportTickets.Include(x => x.Appointment).Where(i => i.UserId == HttpContext.GetUserId()).Select(i => new SupportTicketViewModel
+                {
 
-                Id = i.Id,
-                Description = i.Description,
-                CreatedDate = i.CreatedDate,
-                AppointmentDate = i.Appointment.AppointmentDate,
-                DoctorId=i.DoctorId,
-                ResolutionDate = i.ResolutionDate,
-                Patient = i.UserId               
-            }).ToList();
-
-            return Ok(DataSourceLoader.Load(data, loadOptions));
+                    Id = i.Id,
+                    Description = i.Description,
+                    CreatedDate = i.CreatedDate,
+                    AppointmentDate = i.Appointment.AppointmentDate,
+                    DoctorId = i.DoctorId,
+                    ResolutionDate = i.ResolutionDate,
+                    Patient = i.UserId
+                }).ToList();
+                return Ok(DataSourceLoader.Load(data, loadOptions));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]

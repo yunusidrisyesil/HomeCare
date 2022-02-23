@@ -54,6 +54,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         {
             bool delete = false;
             var data = _dbContext.SupportTickets.Include(x => x.Appointment).Where(x => x.Id == key).FirstOrDefault();
+            var doctor = await _userManager.FindByIdAsync(data.DoctorId);
             if (data == null)
                 return BadRequest(new JsonResponseViewModel()
                 {
@@ -76,7 +77,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 delete = true;
                 _dbContext.Appointments.Add(appointment);
                 _dbContext.SaveChanges();
-                var doctor = await _userManager.FindByIdAsync(data.DoctorId);
 
                 var callbackUrl = Url.Action("Scheduler", "Doctor", new { Area = "Admin" } , protocol: Request.Scheme);
 
@@ -106,6 +106,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                         {
                             _dbContext.Appointments.Remove(data.Appointment);
                             _dbContext.SaveChanges();
+
                         }
                         return BadRequest();
                     }
@@ -115,6 +116,17 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             if (!TryValidateModel(data))
                 return BadRequest(ModelState.ToFullErrorString());
             var result = _dbContext.SaveChanges();
+            if (result != 0)
+            {
+                var callbackUrl = Url.Action("Tickets", "Doctor", new { Area = "Admin" }, protocol: Request.Scheme);
+                var email = new EmailMessage()
+                {
+                    Contacts = new string[] { doctor.Email },
+                    Subject = "New Appointment",
+                    Body = $"Appointment, is {data.Id} appoinment number, has been updated.Please check your Tickets by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click Here</a>",
+                };
+                await _emailSender.SendAsync(email);
+            }
             if (result == 0)
                 return BadRequest(new JsonResponseViewModel()
                 {
