@@ -4,14 +4,9 @@ using System;
 
 namespace HomeTechRepair.Controllers
 {
+    [Authorize]
     public class ReciptDetailController : Controller
     {
-        private readonly MyContext _dbContext;
-
-        public ReciptDetailController(MyContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
 
        [HttpGet]
         public IActionResult Index(Guid id)

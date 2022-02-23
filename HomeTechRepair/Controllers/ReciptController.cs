@@ -1,17 +1,11 @@
-﻿using HomeTechRepair.Data;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeTechRepair.Controllers
 {
+    [Authorize]
     public class ReciptController : Controller
     {
-        private readonly MyContext _dbContext;
-
-        public ReciptController(MyContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
        [HttpGet]
         public IActionResult Index()
         {

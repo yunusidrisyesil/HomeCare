@@ -121,6 +121,10 @@ namespace HomeTechRepair.Areas.Admin.Controllers
             }).ToList();
             return View();
         }
+        public IActionResult Report()
+        {
+            return View();
+        }
 
     }
 }

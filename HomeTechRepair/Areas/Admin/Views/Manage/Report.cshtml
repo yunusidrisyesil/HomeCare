@@ -1,0 +1,91 @@
+﻿@{ 
+    ViewBag.Title = "Reports";
+}
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="page-title">INVOICE REPORTS</h3>
+                </div>
+            </div>
+        </div>
+        <div class="control-section">
+            <div class="card-body">
+                <div id="dxGrid"> </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section Scripts
+{
+    <script src="~/vendor/devextreme-aspnet-data/js/dx.aspnet.data.js"></script>
+
+    <script>
+        var dataGrid = null;
+        $(() => {
+            var url = '../../../api/ManageReportApi';
+            dataGrid = $("#dxGrid").dxDataGrid({
+                remoteOperations: { paging: true, filtering: true, sorting: true, grouping: true, summary: true, groupPaging: true },
+                dataSource: DevExpress.data.AspNet.createStore({
+                    key: 'id',
+                    loadUrl: `${url}/get`,
+                    onBeforeSend(method, ajaxOptions) {
+                        ajaxOptions.xhrFields = { withCredentials: true };
+                    }
+                }),
+                editing: {
+                    mode: 'form',
+                    allowUpdating: false,
+                    allowAdding: false,
+                    allowDeleting: false,
+                },
+                allowColumnResizing: true,
+                showColumnLines: true,
+                showRowLines: true,
+                rowAlternationEnabled: true,
+                showBorders: true,
+                searchPanel: {
+                    visible: true,
+                    width: 240,
+                    placeholder: "Search..."
+                },
+                export: {
+                    enabled: true,
+                    fileName: `Serviceler_${parseInt(Math.random() * 1000000000)}`,
+                    allowExportSelectedData: true
+                },
+                paging: {
+                    pageSize: 20
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [5, 15, 30, 45],
+                    showInfo: true
+                },
+                columns: [
+                    {
+                        caption: 'Id',
+                        dataField: "Id",
+                        visible: true,
+                        allowFiltering: true,
+                        formItem: { visible: true }
+                    },
+                    {
+                        caption: 'Date',
+                        dataField: "date",
+                        dataType: "string"
+                    },
+                    {
+                        caption: 'Amount',
+                        dataField: "totalAmount",
+                        dataType: "number",
+                        format: "#.## TL"
+                    },
+                ]
+            }).dxDataGrid("instance");
+        });
+    </script>
+
+}
