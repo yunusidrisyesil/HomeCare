@@ -8,6 +8,7 @@ using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,13 +33,16 @@ namespace HomeTechRepair.Controllers.Apis
         {
             //Mapped not checked
             //var data = _dbContext.SupportTickets.Where(x=> x.UserId == HttpContext.GetUserId()).Select(x=> _mapper.Map<SupportTicketViewModel>(x)).ToList();
-            var data = _dbContext.SupportTickets.Where(i => i.UserId == HttpContext.GetUserId()).Select(i => new SupportTicketViewModel
+            var data = _dbContext.SupportTickets.Include(x=>x.Appointment).Where(i => i.UserId == HttpContext.GetUserId()).Select(i => new SupportTicketViewModel
             {
 
                 Id = i.Id,
                 Description = i.Description,
-                CreatedDate = i.CreatedDate
-
+                CreatedDate = i.CreatedDate,
+                AppointmentDate = i.Appointment.AppointmentDate,
+                DoctorId=i.DoctorId,
+                ResolutionDate = i.ResolutionDate,
+                Patient = i.UserId               
             }).ToList();
 
             return Ok(DataSourceLoader.Load(data, loadOptions));

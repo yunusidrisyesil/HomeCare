@@ -1,13 +1,17 @@
 ﻿using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
+using HomeTechRepair.Models;
+using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Models.Payment;
 using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace HomeTechRepair.Controllers
 {
@@ -16,10 +20,14 @@ namespace HomeTechRepair.Controllers
     {
         private readonly IPaymentService _paymentService;
         private readonly MyContext _dbContext;
-        public PaymentController(IPaymentService paymentService, MyContext dbContext)
+        private readonly IEmailSender _emailSender;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public PaymentController(IPaymentService paymentService, MyContext dbContext, IEmailSender emailSender, UserManager<ApplicationUser> userManager)
         {
             _paymentService = paymentService;
             _dbContext = dbContext;
+            _emailSender = emailSender;
+            _userManager = userManager;
         }
         public IActionResult Index(Guid id)
         {
@@ -39,7 +47,7 @@ namespace HomeTechRepair.Controllers
             return Ok(result);
         }
         [HttpPost]
-        public IActionResult Index(PaymentViewModel model)
+        public async Task<IActionResult> IndexAsync(PaymentViewModel model)
         {
             var paymentModel = new PaymentModel()
             {
@@ -64,20 +72,30 @@ namespace HomeTechRepair.Controllers
             paymentModel.PaidPrice = decimal.Parse(installmentNumber != null ? installmentNumber.TotalPrice.Replace('.', ',') : installmentInfo.InstallmentPrices[0].TotalPrice.Replace('.', ','));
             try
             {
+               
                 var result = _paymentService.Pay(paymentModel);
                 if (result.Status == "success")
                 {
+                    var user = _userManager.Users.FirstOrDefault(x => x.Id == HttpContext.GetUserId());
                     var reciptMaster = _dbContext.ReciptMasters.Find(Guid.Parse(model.BasketModel.Id));
                     reciptMaster.isPaid = true;
                     _dbContext.SaveChanges();
+                   
+                    var emailMessage = new EmailMessage()
+                    {
+                        Contacts = new string[] { user.Email },
+                        Body = "Your payment has been done.",
+                        Subject = "Pay"
+                    };
+                    await _emailSender.SendAsync(emailMessage);
                     return RedirectToAction("Index", "home");
+
                 }
             }
             catch (Exception)
             {
                 ModelState.AddModelError(string.Empty, "Payment failed. Please try again");
             }
-            
             return View(model);
 
         }
