@@ -67,15 +67,16 @@
                 columns: [
                     {
                         caption: 'Id',
-                        dataField: "Id",
+                        dataField: "id",
                         visible: true,
-                        allowFiltering: true,
-                        formItem: { visible: true }
+                        allowFiltering: false,
+                        formItem: { visible: false }
                     },
                     {
                         caption: 'Date',
                         dataField: "date",
-                        dataType: "string"
+                        dataType: "string",
+                        
                     },
                     {
                         caption: 'Amount',

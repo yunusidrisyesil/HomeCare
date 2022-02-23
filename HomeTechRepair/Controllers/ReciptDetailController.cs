@@ -4,7 +4,7 @@ using System;
 
 namespace HomeTechRepair.Controllers
 {
-    [Authorize]
+ 
     public class ReciptDetailController : Controller
     {
 

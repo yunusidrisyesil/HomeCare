@@ -26,7 +26,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 
                 Id = x.Id,
                 TotalAmount = x.TotalAmount,
-                Date = x.Date,
+                Date = x.Date
             }).ToList();
 
 
