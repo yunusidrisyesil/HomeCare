@@ -27,13 +27,25 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var data = _dbContex.Services.Select(i => new ServiceViewModel
+            try
             {
-                Id = i.Id,
-                Name = i.Name,
-                Price = i.Price
-            }).ToList();
-            return Ok(DataSourceLoader.Load(data, loadOptions));
+                var data = _dbContex.Services.Select(i => new ServiceViewModel
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    Price = i.Price
+                }).ToList();
+                return Ok(DataSourceLoader.Load(data, loadOptions));
+            }
+            catch (Exception)
+            {
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
+            }
+
         }
 
         [HttpPut]

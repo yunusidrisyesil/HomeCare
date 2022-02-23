@@ -2,6 +2,7 @@
 using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
+using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,15 +23,25 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var data = _dbContext.ReciptMasters.Select(x => new ReciptViewModel {
+            try
+            {
+                var data = _dbContext.ReciptMasters.Select(x => new ReciptViewModel
+                {
+                    Id = x.Id,
+                    TotalAmount = x.TotalAmount,
+                    Date = x.Date
+                }).ToList();
+                return Ok(DataSourceLoader.Load(data, loadOptions));
+            }
+            catch (Exception)
+            {
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
+            }
 
-                Id = x.Id,
-                TotalAmount = x.TotalAmount,
-                Date = x.Date
-            }).ToList();
-
-
-            return Ok(DataSourceLoader.Load(data, loadOptions));
         }
 
     }

@@ -22,9 +22,8 @@
   },
   "homepage": "https://github.com/yunusidrisyesil/HomeTechRepair#readme",
   "dependencies": {
+    "apexcharts": "^3.33.1",
     "devextreme": "^21.2.5",
     "devextreme-aspnet-data": "^2.8.6"
   }
-
-
 }

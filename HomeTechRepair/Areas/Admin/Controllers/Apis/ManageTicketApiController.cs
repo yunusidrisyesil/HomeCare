@@ -9,12 +9,10 @@ using HomeTechRepair.Services;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
@@ -106,7 +104,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                         {
                             _dbContext.Appointments.Remove(data.Appointment);
                             _dbContext.SaveChanges();
-
                         }
                         return BadRequest();
                     }

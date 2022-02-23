@@ -3,6 +3,8 @@ using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
 using HomeTechRepair.Models;
 using HomeTechRepair.Models.Identiy;
+using HomeTechRepair.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -16,24 +18,33 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
     [Route("/api/[controller]/[action]")]
     public class ManageEmployeesApiController : Controller
     {
-        private readonly MyContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ManageEmployeesApiController(MyContext dbContext, UserManager<ApplicationUser> userManager)
+        public ManageEmployeesApiController(UserManager<ApplicationUser> userManager)
         {
-            _dbContext = dbContext;
             _userManager = userManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(DataSourceLoadOptions loadOptions)
         {
-            var employeesList = new List< ApplicationUser >() ;
-            var docList = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
-            var operatorList = await _userManager.GetUsersInRoleAsync(RoleModels.Operator);
-            employeesList.AddRange(docList);
-            employeesList.AddRange(operatorList);
-            return Ok(DataSourceLoader.Load(employeesList, loadOptions));
+            try
+            {
+                var employeesList = new List<ApplicationUser>();
+                var docList = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
+                var operatorList = await _userManager.GetUsersInRoleAsync(RoleModels.Operator);
+                employeesList.AddRange(docList);
+                employeesList.AddRange(operatorList);
+                return Ok(DataSourceLoader.Load(employeesList, loadOptions));
+            }
+            catch (Exception)
+            {
+                return BadRequest(new JsonResponseViewModel
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Data cannot found."
+                });
+            }
         }
 
         [HttpPut]
@@ -41,20 +52,30 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         {
             var user = _userManager.Users.FirstOrDefault(x => x.Id == key);
             if (user == null)
-            {
-                return BadRequest();
-            }
+                return StatusCode(StatusCodes.Status409Conflict, new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "User cannot found."
+                });
 
             JsonConvert.PopulateObject(values, user);
             if (!TryValidateModel(user))
             {
-                return BadRequest();
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "User cannot updated."
+                });
             }
 
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
-                return BadRequest();
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "User cannot updated."
+                });
             }
             return Ok();
         }
@@ -71,7 +92,11 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             }
             else
             {
-                return BadRequest();
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Delete operation cannot helded."
+                });
             }
         }
     }
