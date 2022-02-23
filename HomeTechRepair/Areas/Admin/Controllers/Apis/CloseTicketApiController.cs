@@ -2,12 +2,18 @@
 using HomeTechRepair.Areas.Admin.ViewModels;
 using HomeTechRepair.Data;
 using HomeTechRepair.Extensions;
+using HomeTechRepair.Models;
 using HomeTechRepair.Models.Entities;
+using HomeTechRepair.Models.Identiy;
+using HomeTechRepair.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace HomeTechRepair.Areas.Admin.Controllers.Apis
 {
@@ -15,10 +21,14 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
     public class CloseTicketApiController : Controller
     {
         private readonly MyContext _dbContext;
+        private readonly IEmailSender _emailSender;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CloseTicketApiController(MyContext dbContext)
+        public CloseTicketApiController(MyContext dbContext, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -44,17 +54,17 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             var reciptDetials = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == Guid.Parse(extraParam)).Where(x => x.ServiceId == Guid.Parse(key)).ToList().First();
             var difference = service.Quantity - reciptDetials.Quantity;
             reciptMaster.TotalAmount += reciptDetials.ServicePrice * difference;
-            
+
             _dbContext.Remove(reciptDetials);
             _dbContext.SaveChanges();
-            
+
             if (service.Id != Guid.Empty)
             {
                 reciptDetials.ServiceId = service.Id;
             }
 
             reciptDetials.Quantity = service.Quantity;
-            
+
             if (service.Price != 0)
             {
                 reciptDetials.ServicePrice = service.Price;
@@ -117,14 +127,35 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         }
 
         [HttpPost]
-        public IActionResult Conclude(Guid id)
+        public async Task<IActionResult> Conclude(Guid id)
         {
-            var recipt = _dbContext.ReciptMasters.FirstOrDefault(x => x.Id == id);
-            if (recipt != null)
+            try
             {
-                recipt.isInvoiced = true;
+                var recipt = _dbContext.ReciptMasters.FirstOrDefault(x => x.Id == id);
+                if (recipt != null)
+                {
+                    recipt.isInvoiced = true;
+                    var supportTicket = _dbContext.SupportTickets.FirstOrDefault(x => x.Id == recipt.SupportTicketId);
+                    supportTicket.ResolutionDate = DateTime.UtcNow;
+                }
+                _dbContext.SaveChanges();
+                
+                var user = _userManager.Users.FirstOrDefault(x => x.Id == recipt.UserId);
+                var callbackUrl = Url.Action("Index", "Paymnet", new { id = recipt.Id}, protocol: Request.Scheme);
+
+                var email = new EmailMessage()
+                {
+                    Contacts = new string[] { user.Email },
+                    Subject = "Your Invoice",
+                    Body = $"You can pay your invoice by clicking <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Click Here</a>",
+                };
+                await _emailSender.SendAsync(email);
             }
-            _dbContext.SaveChanges();
+            catch (Exception)
+            {
+                return BadRequest();
+                throw;
+            }
             return Ok();
         }
 
