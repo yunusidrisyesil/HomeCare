@@ -41,7 +41,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             {
                 Id = x.Service.Id,
                 Name = x.Service.Name,
-                ReciptPrice = x.Service.Price,
+                ReciptPrice = x.ServicePrice,
                 Description = x.Description,
                 Quantity = x.Quantity
             }).ToList();
@@ -154,7 +154,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 _dbContext.SaveChanges();
                 
                 var user = _userManager.Users.FirstOrDefault(x => x.Id == recipt.UserId);
-                var callbackUrl = Url.Action("Index", "Paymnet", new { id = recipt.Id}, protocol: Request.Scheme);
+                var callbackUrl = Url.Action("Index", "Payment", new { id = recipt.Id}, protocol: Request.Scheme);
 
                 var email = new EmailMessage()
                 {
