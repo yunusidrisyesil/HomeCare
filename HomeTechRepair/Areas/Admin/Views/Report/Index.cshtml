@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Manage Tickets";
+}
+
+<!-- Page Wrapper -->
+<div class="main-wrapper">
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h3 class="page-title">Blank Page</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Blank Page</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-12">
+                            <div id="chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /Page Wrapper -->
+</div>
+
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script>
+
+        var options = {
+            chart: {
+                height: 350,
+                type: 'line',
+            },
+            dataLabels: {
+                enabled: false
+            },
+            series: [
+
+            ],
+            title: {
+                text: 'Ajax Example',
+            },
+            noData: {
+                text: 'Loading...'
+            }
+        }
+
+        var chart = new ApexCharts(
+            document.querySelector("#chart"),
+            options
+        );
+
+        chart.render();
+
+        var url = '../../../api/reportapi/MonthlyIncome';
+        $.getJSON(url, function (response) {
+            chart.updateSeries([{
+                name: '',
+                data: response
+            }])
+        });
+
+    </script>
+
+
+}
