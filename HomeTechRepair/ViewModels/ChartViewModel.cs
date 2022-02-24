@@ -8,7 +8,7 @@ namespace HomeTechRepair.ViewModels
     public class ChartViewModel
     {
 
-        public string? x { get; set; }
+        public string? x { get; set; } = "0";
         public string? y { get; set; }
 
     }
