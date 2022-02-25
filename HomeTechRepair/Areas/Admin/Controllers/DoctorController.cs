@@ -29,21 +29,6 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetAppointment(DataSourceLoadOptions loadOptions)
-        {
-
-            var appointments = _dbContex.Appointments.Include(x => x.SupportTicket).
-               Where(x => x.SupportTicket.DoctorId == HttpContext.GetUserId()).Select(i => new
-               {
-                   Id = i.Id,
-                   SupportTicketId = i.SupportTicketId,
-                   AppointmentDate = i.AppointmentDate
-
-               });
-            return Json(await DataSourceLoader.LoadAsync(appointments, loadOptions));
-        }
 
         [HttpGet]
         [Authorize]
@@ -80,16 +65,32 @@ namespace HomeTechRepair.Areas.Admin.Controllers
         [Authorize]
         public IActionResult Scheduler()
         {
-            ViewBag.Scheduler = DoctorsAppoitments();
-            return View();
+            try
+            {
+                ViewBag.Scheduler = DoctorsAppoitments();
+                return View();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "There is no appointments beloong to this doctor.");
+                return RedirectToAction("Tickets", "Doctor", new { area = "Admin" });
+            }
         }
 
         [HttpGet]
         [Authorize]
         public IActionResult Agenda()
         {
-            ViewBag.Agenda = DoctorsAppoitments();
-            return View();
+            try
+            {
+                ViewBag.Agenda = DoctorsAppoitments();
+                return View();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "There is no appointments beloong to this doctor.");
+                return RedirectToAction("Tickets", "Doctor", new { area = "Admin" });
+            }
         }
 
         [HttpGet]

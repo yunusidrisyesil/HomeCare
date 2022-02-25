@@ -3,6 +3,7 @@ using HomeTechRepair.Models.Identiy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace HomeTechRepair.Controllers
@@ -19,8 +20,18 @@ namespace HomeTechRepair.Controllers
 
         public async Task<IActionResult> GetAppointments()
         {
-            ViewBag.Doctors = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
-            return View();
+            try
+            {
+                ViewBag.Doctors = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
+                return View();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Doctors could not be uploaded. Please try again");
+                return RedirectToAction("Index", "Home");
+            }
+
+
         }
     }
 }

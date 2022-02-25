@@ -6,6 +6,7 @@ using HomeTechRepair.Models;
 using HomeTechRepair.Models.Entities;
 using HomeTechRepair.Models.Identiy;
 using HomeTechRepair.Services;
+using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,21 +35,33 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         [HttpGet]
         public IActionResult Get(Guid id, DataSourceLoadOptions loadOptions)
         {
+            try
+            {
             var data = _dbContext.ReciptDetails.Include(x => x.Service).Where(x => x.ReciptMasterId == id).Select(x => new ReciptServiceViewModel
             {
                 Id = x.Service.Id,
                 Name = x.Service.Name,
-                ReciptPrice = x.Service.Price,
+                ReciptPrice = x.ServicePrice,
                 Description = x.Description,
                 Quantity = x.Quantity
             }).ToList();
             return Ok(DataSourceLoader.Load(data, loadOptions));
+            }
+            catch (Exception)
+            {
+                return BadRequest(new JsonResponseViewModel()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ModelState.ToFullErrorString()
+                });
+            }
         }
 
         [HttpPut]
         public IActionResult Update(string key, string values, string extraParam)
         {
             var service = new ReciptServiceViewModel();
+
             JsonConvert.PopulateObject(values, service);
             var reciptMaster = _dbContext.ReciptMasters.Find(Guid.Parse(extraParam));
             var reciptDetials = _dbContext.ReciptDetails.Where(x => x.ReciptMasterId == Guid.Parse(extraParam)).Where(x => x.ServiceId == Guid.Parse(key)).ToList().First();
@@ -141,7 +154,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 _dbContext.SaveChanges();
                 
                 var user = _userManager.Users.FirstOrDefault(x => x.Id == recipt.UserId);
-                var callbackUrl = Url.Action("Index", "Paymnet", new { id = recipt.Id}, protocol: Request.Scheme);
+                var callbackUrl = Url.Action("Index", "Payment", new { id = recipt.Id}, protocol: Request.Scheme);
 
                 var email = new EmailMessage()
                 {

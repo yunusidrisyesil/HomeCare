@@ -7,6 +7,7 @@ using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,10 +33,19 @@ namespace HomeTechRepair.Controllers
         }
         public async Task<IActionResult> GetTickets()
         {
+            try
+            {
             var doctors = await _userManager.GetUsersInRoleAsync(RoleModels.Doctor);
 
             ViewBag.DataSource = doctors;
             return View();
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Doctors could not uploaded, please try again.");
+                return RedirectToAction("Index", "Home");
+            }
+
         }
     }
 }

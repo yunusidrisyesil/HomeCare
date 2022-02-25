@@ -4,6 +4,7 @@ using HomeTechRepair.Extensions;
 using HomeTechRepair.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace HomeTechRepair.Controllers.Apis
@@ -20,18 +21,26 @@ namespace HomeTechRepair.Controllers.Apis
         [HttpGet]
         public IActionResult Get(DataSourceLoadOptions loadOptions)
         {
-            var appoinmnetList = _dbContext.Appointments.Include(x => x.SupportTicket).Where(x => x.SupportTicket.UserId == HttpContext.GetUserId()).Select(x => new AppointmentViewModel
+            try
             {
-                Id = x.Id,
-                CreatedDate = x.SupportTicket.CreatedDate,
-                AppointmentDate = x.AppointmentDate,
-                Description = x.SupportTicket.Description,
-                ResolutionDate = x.SupportTicket.ResolutionDate,
-                DoctorId = x.SupportTicket.DoctorId,
-                isActive = (x.SupportTicket.ResolutionDate != null) ? true : false
-            }).ToList(); ;
+                var appoinmnetList = _dbContext.Appointments.Include(x => x.SupportTicket).Where(x => x.SupportTicket.UserId == HttpContext.GetUserId()).Select(x => new AppointmentViewModel
+                {
+                    Id = x.Id,
+                    CreatedDate = x.SupportTicket.CreatedDate,
+                    AppointmentDate = x.AppointmentDate,
+                    Description = x.SupportTicket.Description,
+                    ResolutionDate = x.SupportTicket.ResolutionDate,
+                    DoctorId = x.SupportTicket.DoctorId,
+                    isActive = (x.SupportTicket.ResolutionDate != null) ? true : false
+                }).ToList(); ;
 
-            return Ok(DataSourceLoader.Load(appoinmnetList, loadOptions));
+                return Ok(DataSourceLoader.Load(appoinmnetList, loadOptions));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
         }
         [HttpGet]
         public IActionResult GetScheduler(DataSourceLoadOptions loadOptions)
