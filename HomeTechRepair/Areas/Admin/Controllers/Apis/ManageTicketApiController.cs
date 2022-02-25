@@ -44,7 +44,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 ResolutionDate = x.ResolutionDate,
                 DoctorId = x.DoctorId,
                 isActive = (x.ResolutionDate != null) ? true : false
-            }).ToArray();
+            }).ToList();
             if (data == null)
                 return BadRequest(new JsonResponseViewModel()
                 {
@@ -65,7 +65,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                     IsSuccess = false,
                     ErrorMessage = ModelState.ToFullErrorString()
                 });
-            if(data.OperatorId==null)
+            if (data.OperatorId == null)
             {
                 data.OperatorId = HttpContext.GetUserId();
             }
@@ -82,7 +82,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 _dbContext.Appointments.Add(appointment);
                 _dbContext.SaveChanges();
 
-                var callbackUrl = Url.Action("Scheduler", "Doctor", new { Area = "Admin" } , protocol: Request.Scheme);
+                var callbackUrl = Url.Action("Scheduler", "Doctor", new { Area = "Admin" }, protocol: Request.Scheme);
 
                 var email = new EmailMessage()
                 {
@@ -138,6 +138,7 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                 });
             return Ok(new JsonResponseViewModel());
         }
+
         [HttpPost]
         public IActionResult Insert(string values)
         {

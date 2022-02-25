@@ -37,15 +37,17 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         {
             try
             {
-            var data = _dbContext.ReciptDetails.Include(x => x.Service).Where(x => x.ReciptMasterId == id).Select(x => new ReciptServiceViewModel
-            {
-                Id = x.Service.Id,
-                Name = x.Service.Name,
-                ReciptPrice = x.ServicePrice,
-                Description = x.Description,
-                Quantity = x.Quantity
-            }).ToList();
-            return Ok(DataSourceLoader.Load(data, loadOptions));
+                var data = _dbContext.ReciptDetails.Include(x => x.Service).Where(x => x.ReciptMasterId == id).Select(x => new ReciptServiceViewModel
+                {
+                    Id = x.Service.Id,
+                    Name = x.Service.Name,
+                    ReciptPrice = x.ServicePrice,
+                    Description = x.Description,
+                    Quantity = x.Quantity,
+                    Total = x.Quantity * x.ServicePrice,
+                    Price = x.ServicePrice
+                }).ToList();
+                return Ok(DataSourceLoader.Load(data, loadOptions));
             }
             catch (Exception)
             {
@@ -75,8 +77,10 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             {
                 reciptDetials.ServiceId = service.Id;
             }
-
-            reciptDetials.Quantity = service.Quantity;
+            if (service.Quantity != 0)
+            {
+                reciptDetials.Quantity = service.Quantity;
+            }
 
             if (service.Price != 0)
             {
@@ -152,9 +156,9 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
                     supportTicket.ResolutionDate = DateTime.UtcNow;
                 }
                 _dbContext.SaveChanges();
-                
+
                 var user = _userManager.Users.FirstOrDefault(x => x.Id == recipt.UserId);
-                var callbackUrl = Url.Action("Index", "Payment", new { id = recipt.Id}, protocol: Request.Scheme);
+                var callbackUrl = Url.Action("Index", "Payment", new { id = recipt.Id }, protocol: Request.Scheme);
 
                 var email = new EmailMessage()
                 {

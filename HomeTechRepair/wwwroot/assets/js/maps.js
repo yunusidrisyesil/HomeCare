@@ -1,6 +1,7 @@
 ﻿let marker = null;
 let map;
 let lat, lng;
+
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 10,
@@ -43,5 +44,11 @@ function getMarkerLocation() {
     if (marker != null) {
         lat = marker.getPosition().lat();
         lng = marker.getPosition().lng();
+    }
+}
+
+function centerMap(location) {
+    map = {
+        center: location
     }
 }
