@@ -32,14 +32,32 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
         public IActionResult LastMonthDaily()
         {
             var dailyList = _dbContext.ReciptMasters
-                .Where(x => (x.Date >= DateTime.Now.AddMonths(-1))).OrderBy(x => x.Date).ToList();
-                var dailyIncome = dailyList.GroupBy(a => new { day = a.Date.Day })
-                .Select(x => new ChartViewModel()
+            .Where(x => (x.Date >= DateTime.Now.AddMonths(-1))).OrderBy(x => x.Date).ToList();
+            var dailyIncome = dailyList.GroupBy(a => new { day = a.Date.Day })
+            .Select(x => new ChartViewModel()
+            {
+                y = x.Sum(x => x.TotalAmount).ToString(),
+                x = x.Key.day.ToString()
+            }).ToList();
+
+            for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year,DateTime.Now.Month); i++)
+            {
+                var day = dailyIncome.FirstOrDefault(x => x.x == i.ToString());
+                if (day == null)
                 {
-                    y = x.Sum(x => x.TotalAmount).ToString(),
-                    x = x.Key.day.ToString()
-                }).ToList();
-            return Ok(dailyIncome);
+                    dailyIncome.Add(new ChartViewModel
+                    {
+                        y = 0.ToString(),
+                        x = i.ToString()
+                    });
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            return Ok(dailyIncome.OrderBy(x => Convert.ToInt32(x.x)));
         }
         public IActionResult NumbersInMonthly()
         {
@@ -60,10 +78,26 @@ namespace HomeTechRepair.Areas.Admin.Controllers.Apis
             var dailyIncome = dailyList.GroupBy(a => new { day = a.Date.Day })
             .Select(x => new ChartViewModel()
             {
-                y = x.Sum(x => x.TotalAmount).ToString(),
+                y = x.Count().ToString(),
                 x = x.Key.day.ToString()
             }).ToList();
-            return Ok(dailyIncome);
+            for (int i = 1; i <= DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month); i++)
+            {
+                var day = dailyIncome.FirstOrDefault(x => x.x == i.ToString());
+                if (day == null)
+                {
+                    dailyIncome.Add(new ChartViewModel
+                    {
+                        y = 0.ToString(),
+                        x = i.ToString()
+                    });
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            return Ok(dailyIncome.OrderBy(x=>Convert.ToInt32(x.x)));
         }
     }
 }

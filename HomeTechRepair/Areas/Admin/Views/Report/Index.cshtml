@@ -28,7 +28,7 @@
                             <div id="chart"></div>
                             <button class="fc-button" id="Monthly">Montly</button>
                             <button class="fc-button" id="LastMonth">Last Month</button>
-                            <div id="chart2"></div>
+                            <div id="barChart"></div>
                         </div>
                     </div>
                 </div>
@@ -42,128 +42,138 @@
 
 @section Scripts
 {
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<script>
+    <script>
 
-            var options = {
-                chart: {
-                    height: 350,
-                    type: 'line',
-                    stacked: false
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                series: [
+        var lineOptions = {
+            chart: {
+                height: 350,
+                type: 'line',
+                stacked: false
+            },
+            dataLabels: {
+                enabled: false
+            },
+            series: [
 
-                ],
-                title: {
-                    text: 'Income',
-                },
-                noData: {
-                    text: 'Loading...'
-                }
+            ],
+            title: {
+                text: 'Numbers',
+            },
+            noData: {
+                text: 'Loading...'
             }
-
-            var chart = new ApexCharts(
-                document.querySelector("#chart"),
-                options
-            );
-
-            chart.render();
-            var url = '../../../api/reportapi/MonthlyIncome';
-            $.getJSON(url, function (response) {
-                chart.updateSeries([{
-                    name: '',
-                    data: response
-                }])
-            });
-
-            $(document).ready(function(){
-            $("#LastMonth").click(function(){
-                $.ajax({url: '../../../api/reportapi/LastMonthDaily', success: function(result){
-                            chart.updateSeries([{
-                            name: '',
-                            type:'line',
-                            data: result
-                    }]);
-                }});
-        });
-    });
-
-            $(document).ready(function(){
-            $("#Monthly").click(function(){
-                $.ajax({url: '../../../api/reportapi/MonthlyIncome', success: function(result){
-                            chart.updateSeries([{
-                            name: '',
-                            data: result
-                    }]);
-                }});
-        });
-    });
-
-</script>
-
-<script>
-
-        var options2 = {
-        chart: {
-            height: 350,
-            type: 'bar',
-            stacked: false
-        },
-        dataLabels: {
-            enabled: false
-        },
-        series: [
-
-        ],
-        title: {
-            text: 'Numbers',
-        },
-        noData: {
-            text: 'Loading...'
         }
-    }
 
-    var chart2 = new ApexCharts(
-        document.querySelector("#chart2"),
-        options
-    );
+        var lineChart = new ApexCharts(
+            document.querySelector("#chart"),
+            lineOptions
+        );
 
-    chart2.render();
-
-    var url2 = '../../../api/reportapi/NumbersInMonthly';
-    $.getJSON(url2, function (response) {
-        chart2.updateSeries([{
-            name: '',
-            data: response
-        }])
-    });
-                $(document).ready(function(){
-            $("#LastMonth").click(function(){
-                $.ajax({url: '../../../api/reportapi/NumbersInDaily', success: function(result){
-                            chart.updateSeries([{
-                            name: '',
-                            type:'line',
-                            data: result
-                    }]);
-                }});
+        lineChart.render();
+        var url = '../../../api/reportapi/MonthlyIncome';
+        $.getJSON(url, function (response) {
+            lineChart.updateSeries([{
+                name: 'Income in Monthly',
+                data: response
+            }])
         });
-    });
 
-            $(document).ready(function(){
-            $("#Monthly").click(function(){
-                $.ajax({url: '../../../api/reportapi/NumbersInMonthly', success: function(result){
-                            chart.updateSeries([{
-                            name: '',
+        $(document).ready(function () {
+            $("#LastMonth").click(function () {
+                $.ajax({
+                    url: '../../../api/reportapi/LastMonthDaily', success: function (result) {
+                        lineChart.updateSeries([{
+                            name: 'Income in Daily',
+                            type: 'line',
                             data: result
-                    }]);
-                }});
+                        }]);
+                    }
+                });
+            });
         });
-    });
-</script>
+
+        $(document).ready(function () {
+            $("#Monthly").click(function () {
+                $.ajax({
+                    url: '../../../api/reportapi/MonthlyIncome', success: function (result) {
+                        lineChart.updateSeries([{
+                            name: 'Income in Monthly',
+                            data: result
+                        }]);
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    <script>
+
+        var barOptions = {
+            chart: {
+                height: 350,
+                type: 'bar',
+                stacked: false
+            },
+            dataLabels: {
+                enabled: false
+            },
+            series: [
+
+            ],
+            title: {
+                text: 'Numbers',
+            },
+            noData: {
+                text: 'Loading...'
+            }
+        }
+
+        var barChart = new ApexCharts(
+            document.querySelector("#barChart"),
+            barOptions
+        );
+
+        barChart.render();
+
+
+        var url2 = '../../../api/reportapi/NumbersInMonthly';
+        $.getJSON(url2, function (response) {
+            barChart.updateSeries([{
+
+                name: 'Numbers in Monthly',
+                data: response
+            }])
+        });
+        $(document).ready(function () {
+            $("#LastMonth").click(function () {
+                $.ajax({
+                    url: '../../../api/reportapi/NumbersInDaily', success: function (result) {
+                        barChart.updateSeries([{
+                            name: 'Numbers in Daily',
+                            data: result
+                        }]);
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#Monthly").click(function () {
+                $.ajax({
+                    url: '../../../api/reportapi/NumbersInMonthly', success: function (result) {
+                        barChart.updateSeries([{
+                            name: 'Numbers in Monthly',
+                            type: 'column',
+                            data: result
+                        }]);
+                    }
+                });
+            });
+        });
+    </script>
 
 
 }
