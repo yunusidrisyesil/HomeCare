@@ -10,5 +10,6 @@ namespace HomeTechRepair.Areas.Admin.ViewModels
         public double Price { get; set; }
         public string Description { get; set; }
         public double ReciptPrice { get; set; }
+        public double Total { get; set; }
     }
 }

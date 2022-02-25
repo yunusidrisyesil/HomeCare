@@ -102,16 +102,26 @@
                     }
                 },
                 {
-                    dataField: "reciptPrice",
-                    caption: "Recipt Price",
-                    visible:true,
-                    formItem: {visible:false}
+                    dataField: "description",
+                    caption: "Description",
+                    visible: true,
+                    formItem: {visible: true}
                 },
                 {
                     dataField: "price",
                     caption: "Price",
                     visible: false,
-                    formItem: {visible: true}
+                    formItem: {
+                        visible: true,
+                        format: "currency"
+                    }
+                },
+                {
+                    dataField: "reciptPrice",
+                    caption: "Recipt Price",
+                    format: "currency",
+                    visible:true,
+                    formItem: {visible:false}
                 },
                 {
                     dataField: "quantity",
@@ -120,12 +130,23 @@
                     formItem: {visible: true}
                 },
                 {
-                    dataField: "description",
-                    caption: "Description",
+                    dataField: "total",
+                    caption: "Total",
                     visible: true,
-                    formItem: {visible: true}
+                    format: "currency",
+                    formItem: {visible: false}
                 }
-            ]
+
+            ],
+            summary: {
+                totalItems: [
+                {
+                    column: "total",
+                    summaryType: "sum",
+                    valueFormat: "currency",
+                    showInColumn: "TotalAmount",
+                }]
+            }
         }).dxDataGrid("instance");
     });
 
